@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+/*
+  Agriculture palette
+  Inspired by Rwandan hillside farmland: tea and banana greens, harvest gold,
+  terracotta soil and warm cream paper. Contrast was chosen for readable text
+  (body text meets WCAG AA on the cream background). Gold is used for fills and
+  highlights only, never for small text.
+*/
+@theme inline {
+  /* Brand greens */
+  --color-canopy: #1f4d2b; /* primary: headings, header, key actions */
+  --color-leaf: #3f7d3a; /* links, positive states, low risk */
+  --color-sprout: #dcebc8; /* soft highlight backgrounds */
+
+  /* Earth and harvest */
+  --color-harvest: #d9a441; /* moderate risk fill, highlights */
+  --color-soil: #5c3d23; /* secondary text accents, borders */
+  --color-clay: #b5562e; /* high risk and warnings */
+
+  /* Neutrals */
+  --color-cream: #faf6ec; /* page background */
+  --color-paper: #ffffff; /* cards and panels */
+  --color-ink: #1e2a21; /* body text */
+  --color-muted: #55645a; /* secondary text, meets AA on cream */
+  --color-line: #d9d3c2; /* borders and dividers */
+
+  /* Risk categories used by the dashboard and alerts */
+  --color-risk-low: #3f7d3a;
+  --color-risk-moderate: #d9a441;
+  --color-risk-high: #b5562e;
+  --color-risk-unavailable: #8a8f88;
+
+  /* Typography: Fraunces for headings, Source Sans 3 for reading and labels */
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-source-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    color: var(--color-canopy);
+    line-height: 1.2;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-harvest);
+    outline-offset: 2px;
+  }
+}

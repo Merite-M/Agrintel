@@ -1,0 +1,368 @@
+{
+  "siteName": "Rwanda Agro-Climatic Early Warning",
+  "tagline": "Earlier, clearer information for food-security decisions",
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "rw": "Ikinyarwanda"
+  },
+  "status": {
+    "bannerTitle": "Data status",
+    "verifiedCount": "verified sources connected",
+    "sampleCount": "sample sources",
+    "noneVerified": "No verified data source is connected yet. Every value in this demo is sample data and is labeled as such.",
+    "verifiedLabel": "Verified",
+    "sampleLabel": "Sample data",
+    "awaitingLabel": "Awaiting access",
+    "unavailableLabel": "Unavailable"
+  },
+  "welcome": {
+    "title": "Plan ahead with agricultural and market information",
+    "intro": "This platform links weather, soil, production and market information to help analysts, citizens, retailers and farmers make earlier, better-informed decisions.",
+    "disclaimer": "Outlooks are estimates that support decisions. They are not guarantees or policy advice.",
+    "latestUpdate": "Latest update",
+    "latestUpdateNone": "No data update yet",
+    "cards": {
+      "national": {
+        "title": "National outlook",
+        "body": "District risk signals for food security, with sources and dates."
+      },
+      "market": {
+        "title": "Market prices",
+        "body": "Price trends for tomatoes and Irish potatoes, with forecast periods marked."
+      },
+      "retailer": {
+        "title": "Retailer supply",
+        "body": "Compare production areas and market destinations for planning."
+      },
+      "farmer": {
+        "title": "Farmer advisory",
+        "body": "Local conditions and general guidance, with expert review where needed."
+      }
+    }
+  },
+  "skipToContent": "Skip to content",
+  "market": {
+    "title": "Market prices",
+    "intro": "Monthly average prices across monitored markets. Observed history and any validated forecast are shown separately.",
+    "selectCommodity": "Choose a crop",
+    "latestPrice": "Latest monthly average",
+    "trendTitle": "Recent trend",
+    "trend": {
+      "rising": "Rising",
+      "stable": "Stable",
+      "easing": "Easing",
+      "insufficient": "Insufficient data"
+    },
+    "trendHelp": "Compares the last 3 months with the 3 months before. Needs at least 6 months of observed prices.",
+    "changeLabel": "Change",
+    "dataStatus": "Data status",
+    "source": "Source",
+    "lastUpdated": "Last approved update",
+    "unitLabel": "RWF per kg",
+    "chartTitle": "Price history and outlook",
+    "chartCaption": "Solid line: observed monthly average. Dashed line: validated forecast, if available. Shaded band: forecast range.",
+    "chartAria": "Line chart of monthly average prices with observed history and forecast",
+    "legend": {
+      "observed": "Observed",
+      "forecast": "Forecast",
+      "range": "Forecast range",
+      "forecastStart": "Forecast starts"
+    },
+    "tableCaption": "Monthly values in table form",
+    "columns": {
+      "month": "Month",
+      "observed": "Observed (RWF/kg)",
+      "forecast": "Forecast (RWF/kg)",
+      "range": "Range (RWF/kg)",
+      "status": "Status"
+    },
+    "noForecast": "No validated forecast is available for this crop yet. The chart shows observed prices only.",
+    "forecastTitle": "Outlook",
+    "horizon": "Period covered",
+    "uncertainty": "Prices change with weather, harvests and transport. Treat any outlook as an estimate with a range, not a guaranteed price.",
+    "influenceTitle": "What may influence this outlook",
+    "influenceNone": "Linked supply and weather evidence for this crop is not yet connected, so no influences are shown.",
+    "noData": "No approved price data is available for this crop yet.",
+    "insufficient": "Not enough months of observed prices to describe a trend.",
+    "sampleNotice": "Some values on this page are sample data for demonstration. They are not official prices.",
+    "statusLabels": {
+      "observed": "Observed",
+      "estimated": "Estimated",
+      "sample": "Sample data",
+      "forecast": "Forecast",
+      "scenario": "Scenario"
+    },
+    "monthlyAverage": "monthly average"
+  },
+  "national": {
+    "title": "National food-security outlook",
+    "intro": "District market-price signals for each crop, with the source, date and evidence behind every signal. Districts without approved data show as unavailable rather than being guessed.",
+    "scopeNote": "This is a market-price signal only. Weather, soil and production signals are not yet connected, so they are not shown.",
+    "selectCommodity": "Choose a crop",
+    "summary": {
+      "monitored": "Districts with a signal",
+      "high": "High signal",
+      "moderate": "Moderate signal",
+      "low": "Low signal",
+      "unavailable": "Unavailable",
+      "latestData": "Latest data period"
+    },
+    "categories": {
+      "low": "Low",
+      "moderate": "Moderate",
+      "high": "High",
+      "unavailable": "Unavailable"
+    },
+    "tableCaption": "Districts and their current market signal",
+    "columns": {
+      "district": "District",
+      "province": "Province",
+      "signal": "Market signal",
+      "status": "Data status",
+      "detail": "Evidence"
+    },
+    "viewEvidence": "View evidence",
+    "ruleTitle": "How the market signal is calculated",
+    "ruleText": "The average price of the last 3 months is compared with the 3 months before. A rise of 10% or more is moderate; a rise of 20% or more is high. Any other change is low. A district needs at least 6 months of approved prices. Signals update only when new approved data is imported.",
+    "evidence": {
+      "title": "District evidence",
+      "select": "Choose a district in the table to see the evidence behind its signal.",
+      "noSignal": "No market signal for this district and crop yet. There is not enough approved price history.",
+      "driver": "What drives this signal",
+      "riseText": "The average price over the last 3 months is {percent} above the 3 months before.",
+      "fallText": "The average price over the last 3 months is {percent} below the 3 months before.",
+      "flatText": "The average price over the last 3 months is about the same as the 3 months before.",
+      "months": "Months of approved prices",
+      "latestAverage": "Latest monthly average (RWF/kg)",
+      "source": "Source",
+      "lastApproved": "Last approved update",
+      "status": "Data status",
+      "uncertainty": "This signal describes market prices only. It is not a forecast of production or a guarantee of future prices.",
+      "responseTitle": "Possible responses",
+      "responseNote": "No response is suggested automatically. Any response needs review by an expert before it is shared."
+    }
+  },
+  "advisory": {
+    "title": "Farmer and extension advisory",
+    "intro": "Local market conditions, the national price outlook and general guidance for one district and crop. Weather, soil and livestock data are not connected yet, so those show as unavailable rather than being estimated.",
+    "form": {
+      "district": "District",
+      "commodity": "Crop or animal",
+      "submit": "Show advisory"
+    },
+    "conditions": {
+      "title": "Current conditions",
+      "market": "Market price signal",
+      "priceAverage": "Recent 3-month average (RWF/kg)",
+      "weather": {
+        "title": "Weather",
+        "body": "Rainfall and temperature data are not yet connected for this district."
+      },
+      "soil": {
+        "title": "Soil",
+        "body": "No approved soil measurements exist for this district yet."
+      },
+      "livestock": {
+        "title": "Feed, water and milk",
+        "body": "No approved livestock data exists for this district yet."
+      }
+    },
+    "outlook": {
+      "title": "National price outlook",
+      "note": "This outlook is for the national average across monitored markets, not for your district.",
+      "none": "No validated outlook is available for this crop yet.",
+      "range": "Expected range"
+    },
+    "guidance": {
+      "title": "General guidance",
+      "note": "General information only. Expert review is needed before acting on any advice.",
+      "high": "Market prices for this crop have risen sharply in your district recently. Compare prices from more than one buyer before selling or buying in bulk.",
+      "moderate": "Market prices for this crop have risen recently in your district. Check local prices regularly and plan sales with current information.",
+      "low": "Market prices for this crop are stable or falling in your district. There is no market price alert right now.",
+      "unavailable": "There is not enough approved price history for your district yet. Ask your local extension office for current information.",
+      "livestock": "Weather, feed and milk information for dairy cattle is not yet connected. For feed, water and animal health, ask your local veterinary or extension officer."
+    },
+    "sms": {
+      "title": "SMS preview in English and Kinyarwanda",
+      "englishLabel": "English",
+      "kinyarwandaLabel": "Ikinyarwanda",
+      "withSignal": "[Early Warning] {district} | {crop} | Market signal: {signal} | {status}, {period}, updated {updated}. Preview only, not sent.",
+      "withSignalRw": "[Kuburira] {district} | {crop} | Ikimenyetso cy'isoko: {signal} | {status}, {period}, byavuguruwe {updated}. Icyerekezo gusa, ntiboherejwe.",
+      "noSignal": "[Early Warning] {district} | {crop} | No market signal yet. Preview only, not sent.",
+      "noSignalRw": "[Kuburira] {district} | {crop} | Nta kimenyetso cy'isoko kirahari. Icyerekezo gusa, ntiboherejwe.",
+      "nothingSent": "This is a preview only. Nothing is sent to any phone.",
+      "characters": "Characters",
+      "longWarning": "Longer than one SMS, so it may be sent as two."
+    },
+    "smsStatus": {
+      "sample": "sample data",
+      "observed": "approved data"
+    },
+    "disclaimer": "No fertilizer doses or veterinary treatments are given here. For those, consult a licensed agronomist or veterinarian."
+  },
+  "retailer": {
+    "title": "Retailer and trader supply view",
+    "intro": "Compare districts on the market price evidence that is currently approved, and see where supply and sourcing data is still missing.",
+    "readOnly": "Read-only view. It shows no private farmer, retailer or contact information.",
+    "selectCommodity": "Choose a crop",
+    "outlook": {
+      "title": "National price outlook",
+      "note": "National average across monitored markets, for context only.",
+      "none": "No validated outlook is available for this crop yet."
+    },
+    "tableTitle": "District comparison",
+    "comparable": "Price evidence is available for {count} of {total} districts.",
+    "columns": {
+      "district": "District",
+      "price": "Recent average price",
+      "priceSignal": "Price signal",
+      "supply": "Supply situation",
+      "sourcing": "Indicative sourcing"
+    },
+    "supplyUnavailable": "Unavailable: no approved production data yet",
+    "sourcingUnavailable": "Unavailable: needs production and logistics data",
+    "howToRead": {
+      "title": "How to read this table",
+      "body": "Price columns come from approved district prices. Supply and sourcing columns stay marked unavailable until approved production data is connected. Surplus or shortage labels are not shown, because the data does not yet support them. Routes are not optimised, because logistics data is not available."
+    }
+  },
+  "alerts": {
+    "title": "Alerts and simulator",
+    "intro": "Alerts tell farmers, extension workers and analysts when something needs attention. Right now every alert here is a simulation for demonstration. Nothing is sent to any phone.",
+    "severity": {
+      "info": "Information",
+      "watch": "Watch",
+      "warning": "Warning",
+      "critical": "Critical"
+    },
+    "status": {
+      "draft": "Draft",
+      "reviewed": "Reviewed",
+      "simulated": "Simulated",
+      "published": "Published"
+    },
+    "stepStatus": {
+      "done": "Done",
+      "skipped": "Skipped",
+      "failed": "Failed"
+    },
+    "simulatedBadge": "Simulated",
+    "listTitle": "Alerts",
+    "empty": "No alerts yet. Run the simulator below to see how an alert is produced.",
+    "validity": "Valid",
+    "sourceLabel": "Source",
+    "created": "Created",
+    "simulation": {
+      "title": "Simulate a data update",
+      "description": "Adds a clearly labelled sample price correction for one district and crop, then shows each step: update received, validation, signal preview and draft alert.",
+      "guarantee": "Public pages do not change. The update stays pending until it is reviewed and approved, and no message is sent.",
+      "button": "Simulate data update",
+      "latestTitle": "Latest simulation",
+      "none": "No simulation has been run yet.",
+      "notSent": "Simulated alert. Not sent to anyone.",
+      "steps": {
+        "received": "Update received",
+        "validated": "Validated",
+        "previewed": "Signal preview refreshed",
+        "drafted": "Draft alert created"
+      },
+      "details": {
+        "validatedPending": "Passed checks. Waiting for review, so it is not used in public outputs.",
+        "validationFailed": "Failed checks. The update was rejected and nothing else was created.",
+        "previewed": "Market signal would change from {before} to {after} (change {beforePct} to {afterPct}). Shown as a preview only.",
+        "drafted": "Alert {id} created as a simulation. It cannot be published."
+      },
+      "alertTemplate": "[SIMULATED] {district} · {crop}: market signal would change from {before} to {after} if the update is approved. Not sent to anyone.",
+      "explanationTemplate": "Simulation {id}: a sample price correction on the latest month. Public signals stay unchanged until the update is reviewed and approved.",
+      "sourceNote": "Sample data. Not official statistics. Not sent."
+    }
+  },
+  "methodology": {
+    "title": "Data sources and methodology",
+    "intro": "Where every number on this platform comes from, how it is produced, how accurate it has been, and what it cannot yet tell you.",
+    "sourcesTitle": "Source register",
+    "sourcesNote": "Each source is listed with its verification status. A source is only used in public outputs once it is verified or approved for demonstration.",
+    "lineageTitle": "Import history",
+    "lineageNote": "Each import is a file or feed that was registered, checked and reviewed before its values could appear. Checksums identify the exact file used.",
+    "noImports": "No imports have been recorded yet. Load the sample data to see the import history.",
+    "passed": "passed",
+    "failed": "failed",
+    "importStatus": {
+      "received": "Received",
+      "validated": "Validated, awaiting review",
+      "rejected": "Rejected",
+      "approved": "Approved"
+    },
+    "methodsTitle": "Methods",
+    "forecast": {
+      "title": "Price outlook",
+      "method": "Method",
+      "output": "Output",
+      "outputValue": "Monthly national average price with a range",
+      "horizon": "Horizon",
+      "horizonValue": "Up to 6 months ahead, only from the last approved month",
+      "interval": "Range",
+      "intervalValue": "About 80%, from the method's own errors on past data",
+      "note": "A baseline, not a claim of predictive skill. Accuracy is reported only from real backtests below."
+    },
+    "risk": {
+      "title": "District market signal",
+      "rule": "Rule",
+      "minimum": "Minimum history",
+      "months": "months of approved prices",
+      "moderate": "Moderate when the rise is",
+      "high": "High when the rise is",
+      "note": "Covers market prices only. Weather, soil and production signals are not yet connected."
+    },
+    "accuracyTitle": "Accuracy from past data",
+    "accuracyNote": "Errors come from re-running the method on past months, using only data available at each point. Lower is better. No accuracy figure is shown unless a backtest produced it.",
+    "noEvaluations": "No backtest results are recorded yet. Run the forecast pipeline to produce them.",
+    "unitsTitle": "Metrics, units and levels",
+    "limitsTitle": "Limitations",
+    "limits": [
+      "Only sample price data is loaded so far. No official NISR, MINAGRI or Meteo Rwanda dataset is connected, so no figure should be read as official.",
+      "The outlook is a national average across monitored markets. It does not describe any single district.",
+      "Market signals describe prices only. They do not measure weather, soil, production or livestock conditions.",
+      "Forecast ranges are based on a short history and can be wide. They are not guarantees.",
+      "Advisory guidance is general information. Fertilizer doses and veterinary treatment are out of scope and need expert review.",
+      "Kinyarwanda text is a draft until a fluent speaker has reviewed it."
+    ],
+    "columns": {
+      "source": "Source",
+      "owner": "Owner",
+      "status": "Status",
+      "coverage": "Coverage",
+      "frequency": "Update frequency",
+      "licence": "Licence and use",
+      "import": "Import",
+      "rows": "Rows",
+      "checks": "Checks",
+      "retrieved": "Retrieved",
+      "approved": "Approved",
+      "checksum": "Checksum (SHA-256)",
+      "crop": "Crop",
+      "method": "Method",
+      "holdout": "Test period",
+      "metric": "Metric",
+      "unit": "Unit",
+      "level": "Level",
+      "description": "Description"
+    },
+    "access": {
+      "verified": "Verified",
+      "awaiting_access": "Awaiting access",
+      "sample": "Sample data (not official)",
+      "unavailable": "Unavailable"
+    }
+  },
+  "nav": {
+    "overview": "Overview",
+    "market": "Market prices",
+    "national": "National outlook",
+    "farmer": "Farmer advice",
+    "retailer": "Retailer supply",
+    "alerts": "Alerts",
+    "methodology": "Sources & methods"
+  }
+}

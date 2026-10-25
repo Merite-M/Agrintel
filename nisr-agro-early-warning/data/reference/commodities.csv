@@ -1,0 +1,4 @@
+code,name_en,name_rw,category,notes
+TOMATO,Tomatoes,Inyanya,crop,MVP demonstration crop
+IRISH_POTATO,Irish potatoes,Ibirayi,crop,MVP demonstration crop
+DAIRY_CATTLE,Dairy cattle,Inka z'amata,livestock,Limited to weather/water/feed stress and milk indicators where data exists
