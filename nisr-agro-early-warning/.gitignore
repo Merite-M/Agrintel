@@ -20,3 +20,6 @@ Thumbs.db
 data/raw/*.zip
 data/raw/*.xlsx
 data/raw/*.parquet
+
+# Raw third-party downloads stay out of the repository (see README, "Data links")
+data/raw/

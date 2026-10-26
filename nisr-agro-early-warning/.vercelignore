@@ -1,12 +1,12 @@
 # Python pipeline runs on your computer or GitHub Actions, not on Vercel
-/pipeline/
+pipeline/
 
 # Reference and sample files are loaded into Neon by scripts, not by the app at runtime
-/data/
+data/
 
 # Database migrations are applied to Neon, not deployed
-/drizzle/
+drizzle/
 
-# Documentation stays out of the deployment
-/*.md
+# Documentation and secrets stay out of the deployment
+*.md
 .env*
