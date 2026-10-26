@@ -274,8 +274,8 @@
         "drafted": "Alert {id} created as a simulation. It cannot be published."
       },
       "alertTemplate": "[SIMULATED] {district} · {crop}: market signal would change from {before} to {after} if the update is approved. Not sent to anyone.",
-      "explanationTemplate": "Simulation {id}: a sample price correction on the latest month. Public signals stay unchanged until the update is reviewed and approved.",
-      "sourceNote": "Sample data. Not official statistics. Not sent."
+      "explanationTemplate": "Simulation {id}: a simulated price correction on the latest month. Public signals stay unchanged until the update is reviewed and approved.",
+      "sourceNote": "Simulated data. Not official statistics. Not sent."
     }
   },
   "methodology": {

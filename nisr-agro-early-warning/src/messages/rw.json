@@ -275,8 +275,8 @@
         "drafted": "Iburira {id} ryakozwe nk'icyigana. Ntirishobora gusohorwa."
       },
       "alertTemplate": "[ICYIGANA] {district} · {crop}: ikimenyetso cy'isoko cyahinduka kiva kuri {before} kijya kuri {after} niba ivugurura rimaze kwemezwa. Ntiriboherejwe.",
-      "explanationTemplate": "Icyigana {id}: ikosora ry'igiciro cy'icyitegererezo ku kwezi kwa vuba. Ibimenyetso rusange bigumaho kugeza ivugurura risuzumwe rigemewe.",
-      "sourceNote": "Amakuru y'icyitegererezo. Ntabwo ari imibare ya leta. Ntiriboherejwe."
+      "explanationTemplate": "Icyigana {id}: ikosora ry'igiciro ryigana ku kwezi kwa vuba. Ibimenyetso rusange bigumaho kugeza ivugurura risuzumwe rigemewe.",
+      "sourceNote": "Amakuru y'icyigana. Ntabwo ari imibare ya leta. Ntiriboherejwe."
     }
   },
   "methodology": {
