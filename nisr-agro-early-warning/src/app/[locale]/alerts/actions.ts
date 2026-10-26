@@ -11,9 +11,9 @@ import { RISK_RULE, RISK_RULE_VERSION, classifyChange, priceChange, severityFor 
 
 const { sources, observations, rawImports, validationResults, alerts, auditLog, districts, commodities } = schema;
 
-/** The demonstration target: the sample market in Gasabo, which has approved sample tomato prices. */
-const SIM_DISTRICT = "GASABO";
-const SIM_COMMODITY = "TOMATO";
+/** The demonstration target: a district with approved WFP potato prices. */
+const SIM_DISTRICT = "GISAGARA";
+const SIM_COMMODITY = "IRISH_POTATO";
 /** The simulated jump applied to the latest month. Labelled as a simulation everywhere it appears. */
 const SIM_MULTIPLIER = 1.25;
 
