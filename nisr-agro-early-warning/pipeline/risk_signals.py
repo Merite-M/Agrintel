@@ -78,6 +78,11 @@ def load_approved_district_prices(conn: psycopg.Connection) -> pd.DataFrame:
           AND o.district_code IS NOT NULL
           AND o.commodity_code IS NOT NULL
           AND r.status = 'approved'
+          AND (o.data_status <> 'sample' OR NOT EXISTS (
+                SELECT 1 FROM observations x
+                WHERE x.commodity_code = o.commodity_code
+                  AND x.metric_code = o.metric_code
+                  AND x.data_status <> 'sample'))
     """
     with conn.cursor() as cur:
         cur.execute(query, (PRICE_METRIC,))
