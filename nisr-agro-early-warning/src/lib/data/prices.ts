@@ -1,9 +1,23 @@
-import { and, asc, count, eq, isNull } from "drizzle-orm";
+import { and, asc, count, eq, isNull, sql } from "drizzle-orm";
 import { db, schema } from "@/db";
 
 const { observations, forecasts, rawImports, sources, commodities } = schema;
 
 export const PRICE_METRIC = "price_rwf_per_kg";
+
+/**
+ * Sample rows are dropped for any crop that already has observed (real) rows.
+ * This stops demonstration values from being averaged into real price series.
+ */
+export const excludeSampleWhereRealExists = sql`(
+  observations.data_status <> 'sample'
+  OR NOT EXISTS (
+    SELECT 1 FROM observations x
+    WHERE x.commodity_code = observations.commodity_code
+      AND x.metric_code = observations.metric_code
+      AND x.data_status <> 'sample'
+  )
+)`;
 
 /** Crops offered in the selector. Livestock is excluded from the price page. */
 export async function getCropOptions() {
@@ -40,6 +54,7 @@ export async function getApprovedPriceObservations(commodityCode: string) {
         eq(observations.commodityCode, commodityCode),
         eq(observations.metricCode, PRICE_METRIC),
         eq(rawImports.status, "approved"),
+        excludeSampleWhereRealExists,
       ),
     )
     .orderBy(asc(observations.periodStart));

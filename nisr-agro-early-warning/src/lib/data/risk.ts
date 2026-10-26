@@ -1,6 +1,6 @@
 import { and, asc, eq, isNotNull } from "drizzle-orm";
 import { db, schema } from "@/db";
-import { PRICE_METRIC } from "@/lib/data/prices";
+import { PRICE_METRIC, excludeSampleWhereRealExists } from "@/lib/data/prices";
 
 const { districts, riskSignals, observations, rawImports, sources } = schema;
 
@@ -77,6 +77,7 @@ export async function getDistrictPriceEvidence(districtCode: string, commodityCo
         eq(observations.metricCode, PRICE_METRIC),
         eq(rawImports.status, "approved"),
         isNotNull(observations.districtCode),
+        excludeSampleWhereRealExists,
       ),
     )
     .orderBy(asc(observations.periodStart));
