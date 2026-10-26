@@ -2,57 +2,108 @@
 
 **NISR Big Data Hackathon 2026 submission**
 
-A bilingual (English and Kinyarwanda) decision-support platform that helps government analysts, citizens, retailers and farmers see market conditions and food-security signals earlier, with the source, date and uncertainty of every number shown.
+A bilingual (English and Kinyarwanda) decision-support platform that helps government analysts, farmers, extension workers and traders see market conditions and food-security signals earlier. Every number shows its source, date and uncertainty.
 
 **Live app:** `[add Vercel URL]`
-**Demo video (3 minutes):** `demo/demo.webm` or `[add link]`
+**Demo video (3 minutes):** `demo/demo.webm` `[add file or link]`
 **Team:** `[name and university of member 1]`, `[name and university of member 2]`
 
 ---
 
 ## 1. What data the app uses
 
-| Dataset | Owner | Status in this submission | Where it lives |
+| Dataset | Owner | Status | Where it lives in this repository |
 |---|---|---|---|
-| Market price demonstration series (tomatoes and Irish potatoes, monthly, one sample market in Gasabo) | Project team | **Sample data. Not official.** Labelled as sample everywhere it appears | `data/sample/market_prices_sample.csv` |
-| District, province and commodity reference lists | Project team | Reference data | `data/reference/*.csv` |
-| Metric dictionary (units and geographic level) | Project team | Reference data | `data/reference/metrics.csv` |
-| NISR Agriculture Household Survey 2024 (microdata) | NISR | **Planned.** Not yet loaded. Access is requested through the NISR microdata portal | `[add link once access is granted]` |
-| Meteo Rwanda weather, MINAGRI production, E-Soko prices | Various | **Not connected.** Shown in the app as unavailable | None |
+| **Monthly retail prices, Irish potatoes and tomatoes, by market** | World Food Programme (WFP), published on HDX. Underlying sources: FPMA, Face2Face, MINAGRI, RATIN via FAO GIEWS, WFP RWA Market Database, WFP mVAM | **Real data.** Cleaned by `pipeline/prepare_wfp_prices.py`. Coverage: Irish potatoes 2008 to July 2026; tomatoes 2012 to December 2015 | `data/clean/wfp_prices_irish_potato_tomato_rwa.csv` |
+| **District, province and commodity reference lists** | Project team | Reference data | `data/reference/*.csv` |
+| **Metric dictionary** (units and geographic level) | Project team | Reference data | `data/reference/metrics.csv` |
+| **Labelled sample data** for Irish potatoes and tomatoes (one demonstration market in Gasabo) | Project team | **Sample. Not official.** Used only where no real data exists for that crop. Shown with a sample label on every page | `data/sample/market_prices_sample.csv` |
+| **NISR Agricultural Household Survey 2024** | NISR | Microdata received under the NISR access terms. Not committed to this repository (contains household identifiers). Aggregated results planned | Not in repository |
+| **MINAGRI Annual Report FY 2024/25** | MINAGRI | Official national production and area for Irish potatoes by season. Used as benchmark | Cited in the Sources and methods page |
+| **Meteo Rwanda rainfall and temperature** | Meteo Rwanda | **Not connected yet** | None |
+| **E-Soko market prices** | MINAGRI platform | **Not connected.** Access not yet granted | None |
 
-No official NISR, MINAGRI or Meteo Rwanda data is used in the current build. The app does not claim a live connection to any source it has not been granted access to. Where a value comes from sample data, the page says so.
+### Attribution (required by the WFP licence)
 
-## 2. What the app communicates
+> Source: World Food Programme (WFP) via the Humanitarian Data Exchange (HDX), "Rwanda – Food Prices". Underlying data from FPMA, Face2Face, MINAGRI, RATIN via FAO GIEWS, WFP RWA Market Database and WFP mVAM. Licensed under CC BY-IGO 3.0 (https://creativecommons.org/licenses/by/3.0/igo/). Changes: selected Irish potato and tomato prices, reformatted to the platform schema, and flagged refugee camp markets.
 
-- **Market prices:** monthly average prices for each crop, with a plain-language trend (rising, stable, easing, or insufficient data), an observed history, and a dashed forecast with a shaded range when a validated forecast exists.
-- **National outlook:** district market-price signals (low, moderate, high, or unavailable) with the rule that produced each one, the data behind it, and its source and date.
-- **Farmer and extension advice:** current conditions for a chosen district and crop, the national price outlook, general guidance marked for expert review, and an SMS preview in English and Kinyarwanda.
-- **Retailer supply view:** a district comparison of price evidence, with supply and sourcing clearly marked as unavailable until production data is connected.
-- **Alerts and simulator:** a clearly labelled simulated data update that shows each step of the pipeline. Simulated alerts can never be published, and nothing is sent to any phone.
-- **Sources and methods:** the source register, the import history with validation results and checksums, real backtest accuracy, metric units, and the limitations.
+## 2. How the WFP price data was prepared
+
+The raw file is not stored in this repository, because it is a large third-party download. To reproduce the cleaned file, download it from the HDX link in `data/raw/README.txt` and run the script below. The script applies these rules, in order:
+
+1. Keep only **Irish potatoes** and **tomatoes**.
+2. Match WFP's district name (`admin2`) to the 30 district codes in `data/reference/districts.csv`. Rows marked "Administrative unit not available" cannot be placed in a district, so they are dropped and counted.
+3. Keep **one price per market per month**. WFP dates are all the 15th of the month, so each row becomes a calendar month.
+4. **Flag refugee camp markets** (for example Kiziba (Camp), Mahama (Camp), Nyabiheke (Camp)). They are kept but marked with `is_camp = True`, so they can be filtered out with one condition.
+5. Reject missing or non-positive prices.
+6. Check for duplicate market-month-commodity rows.
+
+**Result of the last run:**
+
+| Step | Count |
+|---|---|
+| Raw rows read | 153,204 |
+| Irish potato and tomato rows | 8,323 |
+| Dropped: district not in our list | 132 |
+| Dropped: missing or non-positive price | 0 |
+| Duplicates | 0 |
+| **Rows written** | **8,191** |
+| of which refugee camp markets | 514 |
+
+Coverage after cleaning:
+
+- **Irish potatoes:** 6,099 rows, January 2008 to July 2026, across 28 districts. Since 2024, prices come from only six districts: Gatsibo, Gisagara, Karongi, Kirehe, Nyamagabe and Nyarugenge.
+- **Tomatoes:** 2,092 rows, January 2012 to December 2015, across 28 districts. There are no tomato prices after 2015.
+
+### Loading into the database
+
+`npm run db:load:wfp` loads the cleaned file into Neon:
+
+- Registers **WFP, via HDX** as its own source, with status **verified**, the CC BY-IGO licence, and the coverage dates.
+- Validates the file against the district, commodity and metric reference lists, and stores each check's result.
+- Stores every row as **observed** data, not sample.
+- **Excludes refugee camp markets** by default (514 rows). Add `-- --include-camps` to load them.
+- Writes an audit entry, and skips the load if the same file was already loaded.
+
+Run `npm run db:load:wfp -- --dry-run` first to see the validation results without writing anything.
+
+### How real and sample data are kept apart
+
+Sample rows are never mixed with real data. For any crop that has observed rows, the market page, the district signals, the forecast and the district evidence all ignore that crop's sample rows. Sample data is used only for crops and districts with no real data. Re-run the forecast and the district signals after loading, so the public figures reflect the real data.
+
+## 3. What the app communicates
+
+- **Market prices:** monthly average prices for each crop, with a plain-language trend (rising, stable, easing, or insufficient data), observed history, and a dashed forecast with a shaded range when a validated forecast exists.
+- **National outlook:** district market-price signals (low, moderate, high, or unavailable), with the rule behind each one, the data used, and its source and date.
+- **Farmer and extension advice:** conditions for a chosen district and crop, the national price outlook, general guidance marked for expert review, and an SMS preview in English and Kinyarwanda.
+- **Retailer supply view:** a district comparison of price evidence. Supply and sourcing stay marked unavailable until production data is connected.
+- **Alerts and simulator:** a clearly labelled simulated data update that shows each step. Simulated alerts cannot be published, and nothing is sent to any phone.
+- **Sources and methods:** the source register, import history with validation results and checksums, real backtest accuracy, metric units, and limitations.
 
 Every page shows a **data status banner** with the number of verified and sample sources.
 
-## 3. How users interact with it
+## 4. How users interact with it
 
-Open the app and choose a language at the top right (English or Ikinyarwanda). Then use the section bar:
+Choose a language at the top right (English or Ikinyarwanda), then use the section bar:
 
-1. **Overview:** start here. It shows the data status and the entry points.
-2. **Market prices:** choose a crop. Read the trend and the chart. Open the table below the chart for exact values.
-3. **National outlook:** choose a crop. Read the district table. Select **View evidence** on any district to see what drives its signal, from which source, and how recent it is.
+1. **Overview:** the data status and entry points.
+2. **Market prices:** choose a crop, read the trend and chart, and open the table for exact values.
+3. **National outlook:** choose a crop, read the district table, and select **View evidence** to see what drives a signal, its source and how recent it is.
 4. **Farmer advice:** choose a district and a crop or animal, then select **Show advisory**. Compare the English and Kinyarwanda SMS previews.
-5. **Retailer supply:** choose a crop. Compare districts on price evidence. Read the note on what is still unavailable.
-6. **Alerts:** select **Simulate data update** to run the simulation. Read each step in the list. Nothing public changes.
-7. **Sources and methods:** check where each number comes from, and read the limitations before relying on any figure.
+5. **Retailer supply:** choose a crop and compare districts on price evidence.
+6. **Alerts:** select **Simulate data update** and read each step. Nothing public changes.
+7. **Sources and methods:** check where each number comes from and read the limitations before relying on any figure.
 
-All core flows work without JavaScript. Forms use plain GET requests.
+Core flows work without JavaScript. Forms use plain GET requests.
 
-## 4. Data links
+## 5. Data links
 
-- Sample price data: `data/sample/market_prices_sample.csv` (included in this repository)
+- WFP Rwanda food prices (raw, licence CC BY-IGO): https://data.humdata.org/dataset/a4a84c1c-81d1-491b-9fbe-1955ae736508
+- Cleaned WFP prices: `data/clean/wfp_prices_irish_potato_tomato_rwa.csv` (included)
+- Sample price data: `data/sample/market_prices_sample.csv` (included)
 - Reference lists: `data/reference/` (included)
-- NISR microdata portal: https://microdata.statistics.gov.rw/index.php/catalog
-- Larger raw files, if any are added later, will be linked here instead of committed, as the webinar rules allow.
+- MINAGRI Annual Report FY 2024/25: cited in the Sources and methods page, with table numbers
+- NISR Agricultural Household Survey 2024 microdata: https://microdata.statistics.gov.rw/index.php/catalog (access granted under the NISR terms; not redistributed here)
 
 ---
 
@@ -64,7 +115,7 @@ All core flows work without JavaScript. Forms use plain GET requests.
 | Styling | Tailwind CSS v4, custom agriculture palette and fonts (Fraunces, Source Sans 3) |
 | Charts | Recharts |
 | Database | Neon Postgres, with Drizzle ORM and the Neon serverless driver |
-| Forecasting and risk pipeline | Python (pandas, numpy, psycopg) |
+| Data preparation and analysis | Python (pandas, numpy, psycopg) |
 | Translations | Resource files in `src/messages/` (English, Kinyarwanda draft) |
 | Hosting | Vercel (app), Neon (database) |
 
@@ -77,17 +128,25 @@ All core flows work without JavaScript. Forms use plain GET requests.
 │   ├── db/                    Schema, connection, reference seed, sample loader
 │   ├── lib/                   Trend rule, risk rule, advisory helpers, data access, i18n
 │   └── messages/              English and Kinyarwanda interface text
-├── pipeline/                  Python: forecast baseline, backtest, risk signals, tests
+├── pipeline/
+│   ├── prepare_wfp_prices.py  Cleans the WFP/HDX price file (this section 2)
+│   ├── run_price_forecast.py  Forecast baseline, backtest and writes to Neon
+│   ├── risk_signals.py        District market-price signals
+│   ├── forecast_core.py       Forecast method and interval rules (no database code)
+│   └── tests/                 Offline tests for the rules
 ├── data/
+│   ├── clean/                 Cleaned WFP prices (committed)
 │   ├── reference/             Districts, commodities, metrics
-│   └── sample/                Labelled sample price data
+│   ├── sample/                Labelled sample price data
+│   └── raw/                   Raw downloads (not committed; see data/raw/README.txt)
+├── drizzle/                   Database migration
 ├── drizzle.config.ts          Migration configuration
 └── next.config.ts             Routing configuration
 ```
 
 ## Setup (runs on any machine)
 
-**Requirements:** Node.js 20 or later, Python 3.11 or later, and a Neon Postgres database (the free plan is enough).
+**Requirements:** Node.js 20 or later, Python 3.11 or later, and a Neon Postgres database.
 
 ```bash
 # 1. Install JavaScript dependencies
@@ -97,19 +156,22 @@ npm install
 cp .env.example .env.local
 
 # 3. Create the database tables and load reference data
-npm run db:generate
 npm run db:migrate
 npm run db:seed
 
-# 4. Load the labelled sample price data
+# 4. Prepare the WFP price data (download the raw file from the HDX link first)
+pip install -r pipeline/requirements.txt
+python pipeline/prepare_wfp_prices.py --input data/raw/wfp_food_prices_rwa.csv
+npm run db:load:wfp
+
+# 5. Load the labelled sample data (used only where no real data exists)
 npm run db:seed:sample
 
-# 5. Build the forecasts and district signals (optional but recommended)
-pip install -r pipeline/requirements.txt
+# 6. Build the forecasts and district signals
 python pipeline/run_price_forecast.py
 python pipeline/risk_signals.py
 
-# 6. Start the app
+# 7. Start the app
 npm run dev
 ```
 
@@ -121,11 +183,7 @@ Then open http://localhost:3000 and choose a language.
 python -m pytest pipeline/tests
 ```
 
-The pipeline tests check the forecasting method, the backtest (which never trains on future values), the interval rules, and the market-price signal thresholds.
-
 ### Dry runs
-
-The pipeline can show its results without writing to the database:
 
 ```bash
 python pipeline/run_price_forecast.py --dry-run
@@ -135,18 +193,21 @@ python pipeline/risk_signals.py --dry-run
 ## Methods in brief
 
 - **Price outlook (`drift_last6` v1.0.0):** a straight line fitted to the last 6 months of the national average price, extended up to 6 months. The range comes from the method's own errors on past data (a rolling backtest), at roughly 80% confidence. It is a transparent baseline, not a claim of predictive skill.
-- **District market signal (`market_price_pressure` v1.0.0):** compares the average of the last 3 months with the 3 months before. A rise of 10% or more is moderate, 20% or more is high, and anything else is low. A district needs at least 6 months of approved prices. The signal covers market prices only.
-- **Data handling:** only approved imports reach public pages. Every observation and forecast records its source and import, and each import records its checksum and validation results.
+- **District market signal (`market_price_pressure` v1.0.0):** compares the average of the last 3 months with the 3 months before. A rise of 10% or more is moderate, 20% or more is high, anything else is low. A district needs at least 6 months of approved prices. The signal covers market prices only.
+- **Data handling:** only approved imports reach public pages. Every observation records its source and import, and each import records its checksum and validation results.
 
 ## Limitations
 
-- The current data is sample data. No figure in this build should be read as official.
-- The outlook is a national average, not a district forecast.
-- Market signals do not measure weather, soil, production or livestock conditions.
-- Forecast ranges are wide because the history is short.
-- Advisory guidance is general. Fertilizer doses and veterinary treatments are out of scope and need expert review.
-- Kinyarwanda text is a draft until a fluent speaker has reviewed it, especially agricultural terms.
-- The simulator demonstrates the process. It does not send messages.
+- **Irish potato prices are real but recent coverage is narrow.** Since 2024 they come from six districts only. Other districts show as unavailable.
+- **Tomato prices end in December 2015.** They are shown as historical reference only and are not used for current signals.
+- **Refugee camp markets** are included but flagged. Their prices may not reflect general retail markets.
+- **The national average can shift when the set of reporting markets changes.** A fixed set of markets is needed before the national series can be read as a true price trend.
+- **Sample data is used for crops and districts with no real data.** It is labelled on every page, and it is excluded wherever real data exists.
+- **Survey production estimates are not yet published.** The microdata harvest totals are about 37 to 44% of the official MINAGRI figures for Irish potato production, so they are not used for public outputs until corrected.
+- **Forecast ranges are wide** because the history is short.
+- **Advisory guidance is general.** Fertilizer doses and veterinary treatment are out of scope and need expert review.
+- **Kinyarwanda text is a draft** until a fluent speaker has reviewed it.
+- **The simulator demonstrates the process.** It does not send messages.
 
 ## Alignment with national priorities
 
@@ -154,10 +215,10 @@ The platform supports the agricultural productivity, food security and climate-r
 
 ## Next steps
 
-- Connect verified datasets as access is granted, starting with NISR microdata and market prices.
-- Add weather and production indicators, validated against the documented methods.
+- Add a fixed-market national price series, so the national trend is not distorted by changes in the market set.
+- Connect the official MINAGRI production benchmark and the NISR survey aggregates.
+- Request rainfall and temperature data from Meteo Rwanda.
 - Have a fluent Kinyarwanda speaker review all translated text.
-- Add a district map alongside the table.
 
 ---
 
@@ -169,6 +230,9 @@ The platform supports the agricultural productivity, food security and climate-r
 
 ### External sources, libraries and tools
 
+- WFP Rwanda Food Prices via HDX (CC BY-IGO)
+- MINAGRI Annual Report FY 2024/25
+- NISR Agricultural Household Survey 2024 microdata (under NISR access terms)
 - Next.js, React, TypeScript, Tailwind CSS, Recharts, Drizzle ORM, Neon serverless driver, Papa Parse, Zod
 - pandas, numpy, psycopg, python-dotenv, pytest
 - Google Fonts: Fraunces and Source Sans 3 (open licences)
