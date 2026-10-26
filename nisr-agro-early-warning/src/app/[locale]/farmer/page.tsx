@@ -10,8 +10,8 @@ import { getAllDistricts, getCurrentRiskSignals, parseDriver, type RiskCategory 
 // Reads approved data from Neon on each request.
 export const dynamic = "force-dynamic";
 
-/** Demo default: the district that has sample price data, so the page opens with real content. */
-const DEMO_DEFAULT_DISTRICT = "GASABO";
+/** Default district: one of the six with recent WFP potato prices, so the page opens with real data. */
+const DEMO_DEFAULT_DISTRICT = "GISAGARA";
 
 const percent = (value: number) =>
   new Intl.NumberFormat("en-GB", { style: "percent", maximumFractionDigits: 1 }).format(Math.abs(value));
