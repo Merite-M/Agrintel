@@ -39,6 +39,12 @@
         "title": "Farmer advisory",
         "body": "Local conditions and general guidance, with expert review where needed."
       }
+    },
+    "farmerHero": {
+      "title": "Direct Farmer Advisory & Actions",
+      "subtitle": "Designed for rural farmers: visual photo cards, audio guidance in Kinyarwanda, and clear Sell/Store badges.",
+      "cta": "Open Farmer Advisory",
+      "quickCrops": "Select your crop:"
     }
   },
   "skipToContent": "Skip to content",
@@ -199,7 +205,46 @@
       "sample": "sample data",
       "observed": "approved data"
     },
-    "disclaimer": "No fertilizer doses or veterinary treatments are given here. For those, consult a licensed agronomist or veterinarian."
+    "disclaimer": "No fertilizer doses or veterinary treatments are given here. For those, consult a licensed agronomist or veterinarian.",
+    "audio": {
+      "listen": "Listen to audio advisory",
+      "playing": "Playing advisory audio...",
+      "paused": "Audio paused",
+      "pause": "Pause",
+      "resume": "Resume",
+      "stop": "Stop",
+      "replay": "Replay",
+      "tapToPlay": "Tap to listen in spoken audio (automated voice)",
+      "notSupported": "Audio playback is not supported on this browser. Please read the guidance below."
+    },
+    "action": {
+      "title": "Action Recommendation",
+      "subtitle": "Clear market decision based on current price changes",
+      "sell": "SELL NOW",
+      "sellSub": "Favorable high price for sellers",
+      "sellAdvice": "Market prices in your district are rising strongly (+{percent}). This is an advantageous window for farmers to sell and lock in higher returns.",
+      "store": "STORE & WAIT",
+      "storeSub": "Market dip: avoid selling at a loss",
+      "storeAdvice": "Market prices are falling ({percent}). If you have proper dry and ventilated storage, store your crop and wait for prices to stabilize.",
+      "monitor": "REGULAR SALE / MONITOR",
+      "monitorSub": "Prices are stable",
+      "monitorAdvice": "Prices are currently stable (slight change of {percent}). Continue standard harvesting and regular marketing without rushing.",
+      "consult": "CONSULT AGRONOMIST",
+      "consultSub": "Price data is pending verification",
+      "consultAdvice": "Sufficient approved market price history is not yet recorded for this commodity in your district. Contact your local sector agronomist for guidance.",
+      "currentPrice": "Current Average Price",
+      "previousPrice": "Previous 3-Month Average",
+      "priceChange": "Price Change",
+      "rwfUnit": "RWF / kg"
+    },
+    "cropCards": {
+      "title": "Select Crop by Photo",
+      "subtitle": "Tap any crop below to view localized price trends and audio advice",
+      "selected": "Selected",
+      "categoryAll": "All Crops",
+      "categoryCrops": "Food Crops",
+      "categoryLivestock": "Livestock"
+    }
   },
   "retailer": {
     "title": "Retailer and trader supply view",

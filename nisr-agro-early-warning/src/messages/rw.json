@@ -40,6 +40,12 @@
         "title": "Inama ku bahinzi",
         "body": "Imiterere y'aho uri n'inama rusange, hamwe no kugenzura n'inzobere aho bikenewe."
       }
+    },
+    "farmerHero": {
+      "title": "Ubufasha bw'Ibanze ku Bahinzi",
+      "subtitle": "Byateguriwe abaturage n'abahinzi: amafoto manini, inama isomwa mu majwi, n'ikimenyetso cyoroshye cyo kugurisha cyangwa kubika.",
+      "cta": "Injira mu Nama z'Abahinzi",
+      "quickCrops": "Hitamo igihingwa cyawe:"
     }
   },
   "skipToContent": "Jump to content [DRAFT: review]",
@@ -200,7 +206,46 @@
       "sample": "amakuru y'icyitegererezo",
       "observed": "amakuru yemejwe"
     },
-    "disclaimer": "Nta dosiye z'ifumbire cyangwa imiti y'amatungo zitangwa hano. Ku byo, baza umuhinzi cyangwa umuganga w'amatungo wemewe."
+    "disclaimer": "Nta dosiye z'ifumbire cyangwa imiti y'amatungo zitangwa hano. Ku byo, baza umuhinzi cyangwa umuganga w'amatungo wemewe.",
+    "audio": {
+      "listen": "Umva inama mu majwi",
+      "playing": "Irimo gusoma inama mu majwi...",
+      "paused": "Amajwi yahagaze gato",
+      "pause": "Hagarika gato",
+      "resume": "Komeza",
+      "stop": "Hagarika burundu",
+      "replay": "Ongera wumve",
+      "tapToPlay": "Kanda hano wumve inama isomwa mu Kinyarwanda",
+      "notSupported": "Gusoma mu majwi ntibikora kuri iyi telefone cyangwa mudasobwa. Soma inyandiko iri hepfo."
+    },
+    "action": {
+      "title": "Icyemezo cyo Gufata ku Isoko",
+      "subtitle": "Inama yoroshye yo kumenya niba wagurisha, wabika cyangwa wagura",
+      "sell": "GURISHA UBU",
+      "sellSub": "Ibiciro biri hejuru, ni igihe cyiza cyo kugurisha",
+      "sellAdvice": "Ibiciro by'iki gihingwa mu karere kawe byazamutse cyane (+{percent}). Ni umwanya mwiza wo gusarura no kugurisha kugira ngo winjize inyungu nziza.",
+      "store": "BIKA UMUSARURO",
+      "storeSub": "Ibiciro byaragabanutse, irinde guhomba",
+      "storeAdvice": "Ibiciro byaragabanutse ku masoko ({percent}). Niba ufite ubwanikiro bwiza kandi bwumye, bika umusaruro witegereze ko ibiciro byongera kuzamuka.",
+      "monitor": "TEGEREZA CYANGWA GURISHA GAKONDO",
+      "monitorSub": "Ibiciro biratuje ku masoko",
+      "monitorAdvice": "Ibiciro biratuje ku masoko ubu (impinduka ntoya ya {percent}). Komeza kugurisha no kugura bisanzwe bitagutwaye umwanya munini.",
+      "consult": "GISHA INAMA AGRONOME",
+      "consultSub": "Amakuru y'isoko aracyegeranywa",
+      "consultAdvice": "Nta makuru ahagije y'isoko yemejwe kuri iki gihingwa muri aka karere kugeza ubu. Gisha inama agronome w'umurenge cyangwa koperative yanyu.",
+      "currentPrice": "Igiciro cy'Isoko Ubu",
+      "previousPrice": "Impuzandengo y'amezi 3 abanza",
+      "priceChange": "Impinduka ku giciro",
+      "rwfUnit": "RWF kuri kg"
+    },
+    "cropCards": {
+      "title": "Hitamo Igihingwa mu Mafoto",
+      "subtitle": "Kanda ku ifoto y'igihingwa wifuza kureba ibiciro n'inama mu majwi",
+      "selected": "Bihiswemo",
+      "categoryAll": "Ibyose",
+      "categoryCrops": "Ibihingwa",
+      "categoryLivestock": "Amatungo"
+    }
   },
   "retailer": {
     "title": "Icyerekezo cy'itangwa ry'abacuruzi n'abacuruzi b'ibicuruzwa",
