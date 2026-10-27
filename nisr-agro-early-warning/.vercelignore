@@ -1,11 +1,15 @@
 # Python pipeline runs on your computer or GitHub Actions, not on Vercel
 pipeline/
 
-# Reference and sample files are loaded into Neon by scripts, not by the app at runtime
-data/
-
 # Database migrations are applied to Neon, not deployed
 drizzle/
+
+# Reference CSV data (do not ignore TypeScript modules in src/lib/data)
+/data/
+/nisr-agro-early-warning/data/
+!/src/lib/data/**
+!src/lib/data/**
+!**/src/lib/data/**
 
 # Documentation and secrets stay out of the deployment
 *.md

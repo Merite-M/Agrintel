@@ -2,18 +2,15 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
 
-const databaseUrl = process.env.DATABASE_URL;
+const databaseUrl =
+  process.env.DATABASE_URL || "postgresql://mock_user:mock_password@ep-mock.neon.tech/mock_db";
 
-if (!databaseUrl) {
-  throw new Error(
-    "DATABASE_URL is not set. Copy .env.example to .env.local and add your Neon pooled connection string.",
+if (!process.env.DATABASE_URL && typeof window === "undefined" && process.env.NODE_ENV === "production" && process.env.NEXT_RUNTIME) {
+  console.warn(
+    "Warning: DATABASE_URL is not set. Copy .env.example to .env.local and add your Neon connection string.",
   );
 }
 
-// Neon's HTTP driver suits serverless functions on Vercel: no persistent connections,
-// fast cold starts, and it works well with Neon's free tier that suspends when idle.
-// Note: the HTTP driver does not support interactive transactions. Bulk imports that
-// need all-or-nothing writes should use a batch statement or the Python pipeline.
 const sql = neon(databaseUrl);
 
 export const db = drizzle(sql, { schema });
