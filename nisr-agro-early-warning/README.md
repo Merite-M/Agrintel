@@ -17,11 +17,12 @@ A bilingual (English and Kinyarwanda) decision-support platform that helps gover
 | **Monthly retail prices, Irish potatoes and tomatoes, by market** | World Food Programme (WFP), published on HDX. Underlying sources: FPMA, Face2Face, MINAGRI, RATIN via FAO GIEWS, WFP RWA Market Database, WFP mVAM | **Real data.** Cleaned by `pipeline/prepare_wfp_prices.py`. Coverage: Irish potatoes 2008 to July 2026; tomatoes 2012 to December 2015 | `data/clean/wfp_prices_irish_potato_tomato_rwa.csv` |
 | **District, province and commodity reference lists** | Project team | Reference data | `data/reference/*.csv` |
 | **Metric dictionary** (units and geographic level) | Project team | Reference data | `data/reference/metrics.csv` |
+| **E-Soko farm-gate prices (daily reports via TangaBid, 2025 to October 2026)** | E-Soko Rwanda, with written permission. Collected from E-Soko reports and distributed through TangaBid | **Real data.** 13 food-security crops, 28 districts, monthly district averages. Cleaned by `pipeline/prepare_tangabid_prices.py` | `data/clean/tangabid_farmgate_monthly_district.csv` |
 | **Labelled sample data** for Irish potatoes and tomatoes (one demonstration market in Gasabo) | Project team | **Sample. Not official.** Used only where no real data exists for that crop. Shown with a sample label on every page | `data/sample/market_prices_sample.csv` |
 | **NISR Agricultural Household Survey 2024** | NISR | Microdata received under the NISR access terms. Not committed to this repository (contains household identifiers). Aggregated results planned | Not in repository |
 | **MINAGRI Annual Report FY 2024/25** | MINAGRI | Official national production and area for Irish potatoes by season. Used as benchmark | Cited in the Sources and methods page |
 | **Meteo Rwanda rainfall and temperature** | Meteo Rwanda | **Not connected yet** | None |
-| **E-Soko market prices** | MINAGRI platform | **Not connected.** Access not yet granted | None |
+| **E-Soko official price feed** | E-Soko Rwanda | **Not connected.** The farm-gate data above comes through TangaBid with permission. The official feed is still to be requested | None |
 
 ### Attribution (required by the WFP licence)
 
@@ -66,6 +67,24 @@ Coverage after cleaning:
 - Writes an audit entry, and skips the load if the same file was already loaded.
 
 Run `npm run db:load:wfp -- --dry-run` first to see the validation results without writing anything.
+
+### E-Soko farm-gate prices
+
+`pipeline/prepare_tangabid_prices.py` turns the daily export into monthly district averages. Its rules:
+
+1. Keep only products priced per **kilogram**. Eggs (per piece), milk (per litre) and other units are left out of this version.
+2. Map product names to 13 crops. Flours, feeds, meat, fish and fresh vegetables that share a crop word are excluded by name. Example: "Soya-Bean" maps to soya, not beans.
+3. Map each region to one of our 30 districts.
+4. Remove exact repeats from repeated scrapes (9,485 rows).
+5. For the same date and product at the same market with different prices, keep the latest scrape (53 rows).
+6. Exclude daily prices outside one third to three times the crop's monthly median across districts (104 rows).
+7. Average the remaining daily prices per crop, district and month. Publish a month only if it has at least 5 daily prices. 2,006 crop-district-months fall below this and are not published.
+
+Result: 2,835 district-months across 13 crops and 28 districts, from January 2025 to October 2026. Varieties (for example Kinigi Grade 1 and Grade 2) are averaged together within a crop.
+
+Loading: `npm run db:load:tangabid` registers the source as verified, with the written permission from E-Soko, and stores each row as **observed farm-gate** data. Use `-- --dry-run` first. The farm-gate price is the price producers receive, and the app labels it that way. It is not a selling recommendation.
+
+Scope: the farm-gate series is stored, but the public pages still show only the WFP retail series. Showing the farm-gate series needs a further change, to the market page and to the district signals, which is the next step.
 
 ### How real and sample data are kept apart
 
@@ -164,6 +183,10 @@ pip install -r pipeline/requirements.txt
 python pipeline/prepare_wfp_prices.py --input data/raw/wfp_food_prices_rwa.csv
 npm run db:load:wfp
 
+# Farm-gate prices from E-Soko (raw export kept locally, see data/raw/README.txt)
+python pipeline/prepare_tangabid_prices.py --input data/raw/tangabid_market_prices.csv
+npm run db:load:tangabid
+
 # 5. Load the labelled sample data (used only where no real data exists)
 npm run db:seed:sample
 
@@ -203,6 +226,9 @@ python pipeline/risk_signals.py --dry-run
 - **Refugee camp markets** are included but flagged. Their prices may not reflect general retail markets.
 - **The national average can shift when the set of reporting markets changes.** A fixed set of markets is needed before the national series can be read as a true price trend.
 - **Sample data is used for crops and districts with no real data.** It is labelled on every page, and it is excluded wherever real data exists.
+- **Farm-gate prices are not retail prices.** They are what producers receive, so they are usually lower than market prices. The app labels them as farm-gate and does not recommend when to sell.
+- **Many district-months are not published.** 2,006 crop-district-months had too few daily reports and are excluded, so some districts show gaps.
+- **Farm-gate data is not yet shown on the public pages.** It is stored, and the next step is to add it to the market page and the district signals.
 - **Survey production estimates are not yet published.** The microdata harvest totals are about 37 to 44% of the official MINAGRI figures for Irish potato production, so they are not used for public outputs until corrected.
 - **Forecast ranges are wide** because the history is short.
 - **Advisory guidance is general.** Fertilizer doses and veterinary treatment are out of scope and need expert review.
@@ -216,6 +242,8 @@ The platform supports the agricultural productivity, food security and climate-r
 ## Next steps
 
 - Add a fixed-market national price series, so the national trend is not distorted by changes in the market set.
+- Show the farm-gate series on the market page and the district signals (this needs a metric column on the signal table).
+- Add the E-Soko egg and milk prices as their own metrics, using their units.
 - Connect the official MINAGRI production benchmark and the NISR survey aggregates.
 - Request rainfall and temperature data from Meteo Rwanda.
 - Have a fluent Kinyarwanda speaker review all translated text.
