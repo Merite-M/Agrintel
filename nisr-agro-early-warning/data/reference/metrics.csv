@@ -8,3 +8,4 @@ temp_max_c,Maximum temperature,°C,district,Mean daily maximum temperature for t
 soil_moisture_pct,Soil moisture,%,district,Volumetric soil moisture where measured
 milk_litres_per_day,Milk production,litres/day,district,Average daily milk yield per reporting unit
 water_stress_index,Water stress index,index 0-1,district,Derived index from rainfall and evapotranspiration; documented method required
+farmgate_price_rwf_per_kg,Farm-gate price,RWF/kg,district,Average price received by producers at farm gate. Monthly average of daily market reports from E-Soko (via TangaBid)
