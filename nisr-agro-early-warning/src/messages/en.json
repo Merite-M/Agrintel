@@ -124,7 +124,7 @@
     },
     "viewEvidence": "View evidence",
     "ruleTitle": "How the market signal is calculated",
-    "ruleText": "The average price of the last 3 months is compared with the 3 months before. A rise of 10% or more is moderate; a rise of 20% or more is high. Any other change is low. A district needs at least 6 months of approved prices. Signals update only when new approved data is imported.",
+    "ruleText": "The average price of the last 3 observed months is compared with the 3 observed months before. A rise of 10% or more is moderate; a rise of 20% or more is high. Any other change is low. The rule looks at the last 9 calendar months. A district needs at least 6 observed months in that window, and its latest price must be no more than 4 months old. Older data never produces a signal.",
     "evidence": {
       "title": "District evidence",
       "select": "Choose a district in the table to see the evidence behind its signal.",
