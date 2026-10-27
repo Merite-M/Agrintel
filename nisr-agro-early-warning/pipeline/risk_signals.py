@@ -39,6 +39,8 @@ RULE = "market_price_pressure"
 RULE_VERSION = "1.0.0"
 PRICE_METRIC = "price_rwf_per_kg"
 MIN_MONTHS = 6
+WINDOW_MONTHS = 9  # the rule looks at the last 9 calendar months, where reports can have gaps
+MAX_MONTHS_OLD = 4  # the latest month must be no more than this many months before the run date
 MODERATE_RISE = 0.10
 HIGH_RISE = 0.20
 
@@ -90,8 +92,18 @@ def load_approved_district_prices(conn: psycopg.Connection) -> pd.DataFrame:
     return pd.DataFrame(rows, columns=["district_code", "commodity_code", "period_start", "value", "data_status", "import_id"])
 
 
-def build_signals(df: pd.DataFrame) -> list[dict]:
-    """One result per district and crop that has enough history. Pure function, easy to test."""
+def month_index(period: pd.Period) -> int:
+    return period.year * 12 + period.month
+
+
+def build_signals(df: pd.DataFrame, as_of: date) -> list[dict]:
+    """
+    One result per district and crop that has a current, unbroken history. Pure function, easy to test.
+    Rule: take the last WINDOW_MONTHS calendar months ending at the latest observed month.
+    Publish only if the window holds at least MIN_MONTHS observed months and the latest
+    observation is no more than MAX_MONTHS_OLD months before as_of (stale data is never shown).
+    The change compares the latest three observed months with the three observed months before them.
+    """
     if df.empty:
         return []
 
@@ -108,8 +120,19 @@ def build_signals(df: pd.DataFrame) -> list[dict]:
         if change is None:
             continue
 
+        latest_index = month_index(monthly.index[-1])
+        if (as_of.year * 12 + as_of.month) - latest_index > MAX_MONTHS_OLD:
+            continue  # stale: the latest data is too old to describe the market now
+
+        in_window = [m for m in monthly.index if latest_index - month_index(m) < WINDOW_MONTHS]
+        monthly = monthly.loc[in_window]
+        values = monthly["value"].tolist()
+        change = price_change(values)
+        if change is None:
+            continue  # fewer than MIN_MONTHS observed months in the window
+
         last_month = monthly.index[-1]
-        first_month = monthly.index[-6]
+        first_month = monthly.index[0]
         period_start, _ = month_bounds(first_month.year, first_month.month)
         _, period_end = month_bounds(last_month.year, last_month.month)
 
@@ -141,7 +164,7 @@ def build_signals(df: pd.DataFrame) -> list[dict]:
     return results
 
 
-def run(dry_run: bool) -> None:
+def run(dry_run: bool, as_of: date) -> None:
     load_dotenv(".env.local")
     database_url = os.environ.get("DATABASE_URL")
     if not database_url:
@@ -149,7 +172,7 @@ def run(dry_run: bool) -> None:
 
     with psycopg.connect(database_url) as conn:
         df = load_approved_district_prices(conn)
-        signals = build_signals(df)
+        signals = build_signals(df, as_of)
 
         if not signals:
             print("No district has enough approved price history for a signal yet. Database unchanged.")
@@ -166,15 +189,9 @@ def run(dry_run: bool) -> None:
         now = datetime.now(timezone.utc)
         with conn.transaction():
             with conn.cursor() as cur:
+                # Each run replaces the whole current set, so stale signals from earlier runs stop showing
+                cur.execute("UPDATE risk_signals SET is_current = false WHERE is_current = true")
                 for s in signals:
-                    cur.execute(
-                        """
-                        UPDATE risk_signals
-                        SET is_current = false
-                        WHERE district_code = %s AND commodity_code = %s AND is_current = true
-                        """,
-                        (s["district_code"], s["commodity_code"]),
-                    )
                     cur.execute(
                         """
                         INSERT INTO risk_signals
@@ -213,8 +230,10 @@ def run(dry_run: bool) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--as-of", type=date.fromisoformat, default=date.today(),
+                        help="Date the signals describe, YYYY-MM-DD. Default: today.")
     args = parser.parse_args()
-    run(dry_run=args.dry_run)
+    run(dry_run=args.dry_run, as_of=args.as_of)
 
 
 if __name__ == "__main__":
