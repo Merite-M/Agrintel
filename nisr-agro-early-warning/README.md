@@ -216,7 +216,7 @@ python pipeline/risk_signals.py --dry-run
 ## Methods in brief
 
 - **Price outlook (`drift_last6` v1.0.0):** a straight line fitted to the last 6 months of the national average price, extended up to 6 months. The range comes from the method's own errors on past data (a rolling backtest), at roughly 80% confidence. It is a transparent baseline, not a claim of predictive skill.
-- **District market signal (`market_price_pressure` v1.0.0):** compares the average of the last 3 months with the 3 months before. A rise of 10% or more is moderate, 20% or more is high, anything else is low. A district needs at least 6 months of approved prices. The signal covers market prices only.
+- **District market signal (`market_price_pressure` v1.0.0):** takes the last 9 calendar months of approved retail prices for a district and crop. It needs at least 6 observed months in that window, and the latest observation must be no more than 4 months old, so stale data never produces a signal. It compares the latest 3 observed months with the 3 observed months before: a rise of 10% or more is moderate, 20% or more is high, anything else is low. Gaps in reporting are allowed, because the rule works on observed months. The signal covers market prices only.
 - **Data handling:** only approved imports reach public pages. Every observation records its source and import, and each import records its checksum and validation results.
 
 ## Limitations
