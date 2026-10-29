@@ -59,7 +59,12 @@ export default async function NationalDashboardPage({
     : auditRecords[0];
 
   // Market Price Signals Data
-  const signals = await getCurrentRiskSignals(crop.code);
+  let signals: any[] = [];
+  try {
+    signals = await getCurrentRiskSignals(crop.code);
+  } catch {
+    signals = [];
+  }
   const signalByDistrict = new Map(signals.map((s) => [s.districtCode, s]));
 
   const categoryFor = (code: string): RiskCategory =>
@@ -76,9 +81,14 @@ export default async function NationalDashboardPage({
 
   // Selected district market evidence
   const selectedDistrict = districts.find((d) => d.code === query.district) ?? null;
-  const evidenceRows = selectedDistrict
-    ? await getDistrictPriceEvidence(selectedDistrict.code, crop.code)
-    : [];
+  let evidenceRows: any[] = [];
+  try {
+    if (selectedDistrict) {
+      evidenceRows = await getDistrictPriceEvidence(selectedDistrict.code, crop.code);
+    }
+  } catch {
+    evidenceRows = [];
+  }
   const evidenceMonthly = monthlyAverages(
     evidenceRows.map((r) => ({ periodStart: r.periodStart, value: r.value })),
   );

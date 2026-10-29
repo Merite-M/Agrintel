@@ -31,36 +31,45 @@ export default async function AlertsPage({
   const t = getDictionary(locale);
   const counts = await getSourceCounts();
 
-  const alertRows = await db
-    .select({
-      id: alerts.id,
-      severity: alerts.severity,
-      status: alerts.status,
-      isSimulated: alerts.isSimulated,
-      validFrom: alerts.validFrom,
-      validTo: alerts.validTo,
-      messageEn: alerts.messageEn,
-      messageRw: alerts.messageRw,
-      explanation: alerts.explanation,
-      sourceNote: alerts.sourceNote,
-      createdAt: alerts.createdAt,
-      districtEn: districts.nameEn,
-      districtRw: districts.nameRw,
-      cropEn: commodities.nameEn,
-      cropRw: commodities.nameRw,
-    })
-    .from(alerts)
-    .leftJoin(districts, eq(alerts.districtCode, districts.code))
-    .leftJoin(commodities, eq(alerts.commodityCode, commodities.code))
-    .orderBy(desc(alerts.createdAt))
-    .limit(20);
+  let alertRows: any[] = [];
+  let latestSimulation: any = null;
 
-  const [latestSimulation] = await db
-    .select()
-    .from(auditLog)
-    .where(eq(auditLog.action, "simulated_update"))
-    .orderBy(desc(auditLog.createdAt))
-    .limit(1);
+  try {
+    alertRows = await db
+      .select({
+        id: alerts.id,
+        severity: alerts.severity,
+        status: alerts.status,
+        isSimulated: alerts.isSimulated,
+        validFrom: alerts.validFrom,
+        validTo: alerts.validTo,
+        messageEn: alerts.messageEn,
+        messageRw: alerts.messageRw,
+        explanation: alerts.explanation,
+        sourceNote: alerts.sourceNote,
+        createdAt: alerts.createdAt,
+        districtEn: districts.nameEn,
+        districtRw: districts.nameRw,
+        cropEn: commodities.nameEn,
+        cropRw: commodities.nameRw,
+      })
+      .from(alerts)
+      .leftJoin(districts, eq(alerts.districtCode, districts.code))
+      .leftJoin(commodities, eq(alerts.commodityCode, commodities.code))
+      .orderBy(desc(alerts.createdAt))
+      .limit(20);
+
+    const [latest] = await db
+      .select()
+      .from(auditLog)
+      .where(eq(auditLog.action, "simulated_update"))
+      .orderBy(desc(auditLog.createdAt))
+      .limit(1);
+    latestSimulation = latest ?? null;
+  } catch {
+    alertRows = [];
+    latestSimulation = null;
+  }
 
   const simSteps = (latestSimulation?.payload as { steps?: SimStep[] } | null)?.steps ?? [];
 
