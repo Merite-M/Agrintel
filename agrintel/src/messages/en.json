@@ -252,6 +252,28 @@
         "body": "No approved livestock data exists for this district yet."
       }
     },
+    "agronomic": {
+      "title": "NISR SAS Production & Input Adoption Audit",
+      "seasonLabel": "Official Season",
+      "cultivatedArea": "Cultivated Area",
+      "production": "Harvested Production",
+      "yieldObserved": "Observed Yield",
+      "yieldExpected": "Expected Yield Frontier",
+      "yieldGap": "Yield Gap",
+      "seedAdoption": "Certified Seed Adoption",
+      "fertAdoption": "Inorganic Fertilizer Adoption",
+      "irrigation": "Marshland / Irrigation",
+      "antiErosion": "Anti-Erosion Terraces",
+      "leakageTitle": "Input Quality & Seed Pathogen Alert",
+      "leakageAdvice": "Yield underperformed climate & input expectations (z < -1.75). When certified seed prices spike, substitution with uninspected farm-saved seed increases pathogen risks (bacterial wilt, degeneration). Verify RAB certification tags and avoid unsealed agro-dealer packets.",
+      "climateTitle": "Moisture Deficit & Irrigation Alert",
+      "climateAdvice": "Yield constrained by rainfall deficit. Prioritize coordinated furrow irrigation in marshland networks, apply organic mulch to limit soil evaporation, and stagger planting cycles.",
+      "intensificationTitle": "High-Yield Intensification Frontier",
+      "intensificationAdvice": "Strong synergy between certified seeds, balanced fertilizer, and hillside erosion control. Maintain post-harvest drying standards to prevent aflatoxin contamination.",
+      "nominalTitle": "Nominal Agronomic Conditions",
+      "nominalAdvice": "Yield and input utilization align with historical structural baselines. Continue standard agronomic practices and cooperative market aggregation.",
+      "noData": "NISR SAS input-to-yield baseline is not recorded for this specific crop and district combination."
+    },
     "outlook": {
       "title": "National price outlook",
       "note": "This outlook is for the national average across monitored markets, not for your district.",

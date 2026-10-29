@@ -9527,3 +9527,14 @@ export function getNationalAuditSummary() {
     totalFiscalExposureRwf,
   };
 }
+
+export function getAuditRecordForDistrictAndCommodity(
+  districtCode: string,
+  commodityCode: string
+): DistrictAuditRecord | null {
+  const records = ECONOMETRIC_AUDIT_DATA.filter(
+    (r) => r.district_code === districtCode && r.commodity_code === commodityCode
+  );
+  if (records.length === 0) return null;
+  return [...records].sort((a, b) => b.period_start.localeCompare(a.period_start))[0];
+}

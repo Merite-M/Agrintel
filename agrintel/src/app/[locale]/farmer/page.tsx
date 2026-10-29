@@ -10,6 +10,8 @@ import { getAllCommodities } from "@/lib/data/advisory";
 import { getCurrentNationalPriceForecasts, getSourceCounts } from "@/lib/data/prices";
 import { getAllDistricts, getCurrentRiskSignals, parseDriver, type RiskCategory } from "@/lib/data/risk";
 import { getLatestClimateForDistrict } from "@/lib/data/agro-climate";
+import { getAuditRecordForDistrictAndCommodity } from "@/lib/data/econometric-audit";
+import { DistrictAgronomicCard } from "@/components/district-agronomic-card";
 
 export const dynamic = "force-dynamic";
 
@@ -63,6 +65,7 @@ export default async function FarmerAdvisoryPage({
 
   // Retrieve agro-climatic data for this district
   const climate = getLatestClimateForDistrict(district.code);
+  const auditRecord = isLivestock ? null : getAuditRecordForDistrictAndCommodity(district.code, commodity.code);
 
   const [signals, forecasts] = await Promise.all([
     isLivestock ? Promise.resolve([]) : getCurrentRiskSignals(commodity.code),
@@ -309,14 +312,34 @@ export default async function FarmerAdvisoryPage({
               {t.advisory.conditions.soil.title} & Marshlands
             </span>
             <div className="mt-2 text-sm text-ink flex flex-col gap-1.5">
-              <span className="font-bold text-canopy">Anti-Erosion: 92.4%</span>
-              <p className="text-xs text-muted">
+              <div>
+                <span className="font-bold text-canopy">
+                  {auditRecord ? `Irrigation: ${auditRecord.irrigation_pct.toFixed(1)}%` : "Marshland Irrigation: Active"}
+                </span>
+                <span className="text-xs text-muted ml-1.5">
+                  ({auditRecord ? `Seed adoption: ${auditRecord.improved_seed_pct.toFixed(1)}%` : "Classified network"})
+                </span>
+              </div>
+              <div className="text-xs text-muted">
+                Anti-Erosion: <span className="font-mono font-semibold text-ink">92.4%</span> terraced coverage
+              </div>
+              <p className="text-xs text-muted mt-0.5">
                 Terraced hillside coverage protects against topsoil run-off. Marshland networks provide dry-season water cushioning.
               </p>
             </div>
           </div>
         </div>
       </section>
+
+      {/* 5. Comprehensive District Agronomic & Input Adoption Audit */}
+      {!isLivestock && (
+        <DistrictAgronomicCard
+          auditRecord={auditRecord}
+          cropName={cropName}
+          districtName={districtName}
+          labels={t.advisory.agronomic}
+        />
+      )}
 
       {/* National Outlook */}
       <section aria-labelledby="outlook-title" className="rounded-2xl border border-line bg-paper p-6 shadow-xs">

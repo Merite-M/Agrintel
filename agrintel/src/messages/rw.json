@@ -253,6 +253,28 @@
         "body": "Nta makuru y'amatungo yemejwe araboneka kuri aka karere."
       }
     },
+    "agronomic": {
+      "title": "Ibarurishamibare rya SAS ku Musaruro n'Ifumbire",
+      "seasonLabel": "Igihe cy'ihinga",
+      "cultivatedArea": "Ubuso buhinze",
+      "production": "Umusaruro wose",
+      "yieldObserved": "Umusaruro wabonetse",
+      "yieldExpected": "Umusaruro wari witezwe",
+      "yieldGap": "Itandukaniro ry'umusaruro",
+      "seedAdoption": "Imbuto z'indobanure",
+      "fertAdoption": "Ifumbire mvaruganda",
+      "irrigation": "Kuhira / Ibishanga",
+      "antiErosion": "Kurwanya isuri",
+      "leakageTitle": "Iburira ku buziranenge bw'imbuto n'ifumbire",
+      "leakageAdvice": "Umusaruro uri hasi y'ibyagombaga kuboneka hakurikijwe ikirere n'ifumbire byakoreshejwe (z < -1.75). Iyo ibiciro by'imbuto z'indobanure byazamutse, abahinzi bagura imbuto zidapimwe bikazana indwara z'ibihingwa (nko kubora k'ibirayi). Reba niba umufuka ufite ikimenyetso cya RAB kandi wirinde ifumbire itizewe.",
+      "climateTitle": "Inama ku mikoreshereze y'amazi mu gihe cy'amapfa",
+      "climateAdvice": "Umusaruro wagabanutse bitewe n'imvura nkeya. Shyira imbaraga mu kuhira mu bishanga, shorera ibitiro birinda amazi gukama mu butaka, kandi utegure igihe cy'ihinga hakiri kare.",
+      "intensificationTitle": "Intangarugero mu musaruro mwinshi",
+      "intensificationAdvice": "Ubufatanye bwiza hagati y'imbuto z'indobanure, ifumbire, no kurwanya isuri byatanze umusaruro mwinshi. Komeza kwanika neza umusaruro no kuwurinda ibihumyo.",
+      "nominalTitle": "Ubuhinzi bufite ubuziranenge busanzwe",
+      "nominalAdvice": "Umusaruro n'ikoreshwa ry'ifumbire bihuje n'ibisanzwe byitezwe. Komeza amabwiriza asanzwe y'ubuhinzi no gushyira hamwe umusaruro muri koperative.",
+      "noData": "Nta makuru y'ibarura rya SAS arandikwa kuri iki gihingwa muri aka karere."
+    },
     "outlook": {
       "title": "Icyerekezo cy'ibiciro mu gihugu",
       "note": "Iki cyerekezo kireba impuzandengo y'igihugu ku masoko akurikiranwa, si akarere kawe.",
