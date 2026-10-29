@@ -2,12 +2,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DataStatusBanner } from "@/components/data-status-banner";
 import { PriceChart, type ChartPoint } from "@/components/price-chart";
+import { SmartFoodBasket } from "@/components/smart-basket";
 import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
 import { calculateTrend, monthlyAverages } from "@/lib/trend";
 import {
   getApprovedPriceObservations,
   getCropOptions,
   getCurrentNationalPriceForecasts,
+  getLatestCommodityPrices,
   getSourceCounts,
 } from "@/lib/data/prices";
 
@@ -51,10 +53,11 @@ export default async function MarketPricesPage({
   const crops = await getCropOptions();
   const selected = crops.find((c) => c.code === requestedCommodity) ?? crops[0];
 
-  const [counts, observed, forecastRows] = await Promise.all([
+  const [counts, observed, forecastRows, commodityPrices] = await Promise.all([
     getSourceCounts(),
     selected ? getApprovedPriceObservations(selected.code) : Promise.resolve([]),
     selected ? getCurrentNationalPriceForecasts(selected.code) : Promise.resolve([]),
+    getLatestCommodityPrices(),
   ]);
 
   const cropName = (crop: { nameEn: string; nameRw: string }) =>
@@ -310,6 +313,13 @@ export default async function MarketPricesPage({
             )}
             <p className="mt-4 text-sm text-muted">{t.market.uncertainty}</p>
           </section>
+
+          {/* Smart Food Basket & Inflation Shield */}
+          <SmartFoodBasket
+            prices={commodityPrices}
+            labels={t.market.smartBasket}
+            locale={locale}
+          />
 
           {/* Influences: only shown once linked evidence exists */}
           <section aria-labelledby="influence-title" className="rounded-xl border border-line bg-paper p-6">

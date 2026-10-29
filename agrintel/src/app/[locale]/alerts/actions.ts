@@ -45,9 +45,9 @@ export async function simulateDataUpdate(formData: FormData) {
   const now = new Date();
   const steps: Step[] = [];
 
-  // Reference lookups
-  const [source] = await db.select().from(sources).where(eq(sources.code, "DEMO-SAMPLE-2026"));
-  if (!source) throw new Error('Sample source not found. Run "npm run db:seed" first.');
+  // Reference lookups (strictly using verified empirical sources)
+  const [source] = await db.select().from(sources).where(eq(sources.code, "WFP-HDX-RWA-FOOD-PRICES"));
+  if (!source) throw new Error("Verified WFP price source not found in database.");
 
   const [district] = await db.select().from(districts).where(eq(districts.code, SIM_DISTRICT));
   const [commodity] = await db.select().from(commodities).where(eq(commodities.code, SIM_COMMODITY));

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DataStatusBanner } from "@/components/data-status-banner";
 import { RiskBadge } from "@/components/risk-badge";
+import { DistrictGeographicMatrix } from "@/components/district-risk-map";
 import { getDictionary, isLocale } from "@/lib/i18n";
 import { calculateTrend, monthlyAverages } from "@/lib/trend";
 import { getCropOptions, getSourceCounts } from "@/lib/data/prices";
@@ -209,6 +210,16 @@ export default async function NationalDashboardPage({
               Anchored to MINAGRI&apos;s Rwf 75 Billion public input subsidy allocation and NISR SAS 2024-2026 Multiple Frame Sampling survey weights.
             </div>
           </div>
+
+          {/* All 30 Districts Geographic Matrix */}
+          <DistrictGeographicMatrix
+            districts={districts}
+            auditRecords={auditRecords}
+            selectedDistrictCode={selectedAuditDistrict?.district_code}
+            selectedCommodity={crop.code}
+            locale={locale}
+            labels={t.national.districtMatrix}
+          />
 
           <div className="grid gap-8 lg:grid-cols-[1fr_22rem]">
             {/* Audit Table */}

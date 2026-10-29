@@ -100,7 +100,27 @@
       "forecast": "Iteganyagihe",
       "scenario": "Icyerekezo"
     },
-    "monthlyAverage": "impuzandengo y'ukwezi"
+    "monthlyAverage": "impuzandengo y'ukwezi",
+    "smartBasket": {
+      "title": "Iteguriro ry'Ibiribwa n'Uburyo bwo Kuzigama ku Biribwa Bihenze",
+      "intro": "Ibiciro by'ibiribwa byazamutseho 17.2% mu Rwanda. Genzura igiciro cy'ibiribwa by'urugo by'ukwezi no gushaka ibiribwa bisimbura bihendutse bifite intungamubiri zihwanye.",
+      "householdSize": "Umubare w'abantu mu rugo",
+      "persons": "abantu",
+      "monthlyTotal": "Igiciro cy'Ibiribwa By'ibanze By'ukwezi",
+      "potentialSavings": "Amafaranga Ushobora Kuzigama ku Kwezi",
+      "withSubstitutions": "ugendeye ku gusimbuza ibiribwa bifite intungamubiri zisa",
+      "itemsTitle": "Ibigize Ibiribwa By'urugo By'ukwezi",
+      "substitutionsTitle": "Gusimbuza Ibiribwa Byazamutse Ibiciro",
+      "substitutionsSubtitle": "Komeza kubona intungamubiri, amakaroni na poroteyine zihagije uzigama amafaranga:",
+      "primaryCommodity": "Icyazamutse Igiciro",
+      "recommendedAlternative": "Igiciro Cyiza Gisimbuza",
+      "savingsPerKg": "Kuzigama kuri buri kilo",
+      "monthlySavings": "Ayo Urugorwazigama ku Kwezi",
+      "nutritionalNote": "Intungamubiri Zirimo",
+      "substituteAction": "Koresha Iri Simbura",
+      "applied": "Byakoreshejwe",
+      "notApplied": "Birahari"
+    }
   },
   "national": {
     "title": "Icyerekezo cy'igihugu ku kubona ibiribwa",
@@ -189,6 +209,23 @@
         "totalProduction": "Umusaruro Wose Hamwe",
         "rationaleTitle": "Ibisobanuro by'Icyavuye mu Igenzura"
       }
+    },
+    "districtMatrix": {
+      "title": "Imbonerahamwe y'Isuzuma ry'Uturere Twose 30",
+      "subtitle": "Isuzuma ry'umusaruro ku turere twose 30 tugabanyije mu ntara. Hitamo kureba ahashobora kuba ikibazo cy'imbuto n'ifumbire cyangwa umusaruro wazamutse cyane.",
+      "allDistricts": "Uturere Twose",
+      "leakageFilter": "Ahashobora Kuba Ikibazo",
+      "climateFilter": "Izamuka ry'Icyatsi/Ikirere",
+      "intensificationFilter": "Umusaruro Mwinshi",
+      "nominalFilter": "Bisanzwe",
+      "viewEvidence": "Suzuma",
+      "residualScore": "Amanota z-Score",
+      "yieldLabel": "Umusaruro Wabonywe",
+      "inputsLabel": "Ifumbire/Imbuto",
+      "leakageBadge": "Icyitonderwa",
+      "climateBadge": "Ikibazo cy'Imvura",
+      "highBadge": "Byazamutse",
+      "nominalBadge": "Bisanzwe"
     }
   },
   "advisory": {

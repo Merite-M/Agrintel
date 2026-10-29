@@ -99,7 +99,27 @@
       "forecast": "Forecast",
       "scenario": "Scenario"
     },
-    "monthlyAverage": "monthly average"
+    "monthlyAverage": "monthly average",
+    "smartBasket": {
+      "title": "Smart Household Basket & Inflation Shield",
+      "intro": "Rwanda's CPI recorded 17.2% year-on-year food inflation. Calculate your monthly staple basket cost and find nutrition-equivalent lower-cost substitutions to buffer household expenditure.",
+      "householdSize": "Household Size",
+      "persons": "persons",
+      "monthlyTotal": "Estimated Monthly Staples Cost",
+      "potentialSavings": "Potential Monthly Inflation Savings",
+      "withSubstitutions": "with recommended nutritional substitutions",
+      "itemsTitle": "Monthly Household Basket Composition",
+      "substitutionsTitle": "Smart Inflation Substitutions",
+      "substitutionsSubtitle": "Maintain identical calories, protein, and micro-nutrients while reducing expenditure:",
+      "primaryCommodity": "Rising Price Staple",
+      "recommendedAlternative": "Affordable Substitute",
+      "savingsPerKg": "Savings per kg",
+      "monthlySavings": "Monthly Savings",
+      "nutritionalNote": "Nutritional Value Parity",
+      "substituteAction": "Apply Substitution",
+      "applied": "Applied in basket",
+      "notApplied": "Available"
+    }
   },
   "national": {
     "title": "National food-security outlook",
@@ -188,6 +208,23 @@
         "totalProduction": "Harvested Production",
         "rationaleTitle": "Diagnostic Attribution Rationale"
       }
+    },
+    "districtMatrix": {
+      "title": "National District Econometric Matrix",
+      "subtitle": "Geographic diagnostic status across all 30 districts grouped by province. Filter by structural input leakage risk, intensification, or nominal status.",
+      "allDistricts": "All Districts",
+      "leakageFilter": "Leakage / Quality Risk",
+      "climateFilter": "Agro-Climatic Deficit",
+      "intensificationFilter": "High Intensification",
+      "nominalFilter": "Nominal",
+      "viewEvidence": "Inspect",
+      "residualScore": "Residual z-Score",
+      "yieldLabel": "Observed Yield",
+      "inputsLabel": "Inputs",
+      "leakageBadge": "Leakage Risk",
+      "climateBadge": "Water Deficit",
+      "highBadge": "Intensified",
+      "nominalBadge": "Nominal"
     }
   },
   "advisory": {
