@@ -1,0 +1,28 @@
+# Dependencies and build output
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# Secrets: never commit real credentials
+.env
+.env.local
+.env*.local
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Python virtual environment & cache
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Large raw data
+data/raw/
+*.zip
+*.parquet

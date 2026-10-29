@@ -1,0 +1,479 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { DataStatusBanner } from "@/components/data-status-banner";
+import { RiskBadge } from "@/components/risk-badge";
+import { getDictionary, isLocale } from "@/lib/i18n";
+import { calculateTrend, monthlyAverages } from "@/lib/trend";
+import { getCropOptions, getSourceCounts } from "@/lib/data/prices";
+import {
+  getAllDistricts,
+  getCurrentRiskSignals,
+  getDistrictPriceEvidence,
+  parseDriver,
+  type RiskCategory,
+} from "@/lib/data/risk";
+import {
+  getLatestAuditRecords,
+  getNationalAuditSummary,
+  getAuditRecordsForCrop,
+  type DistrictAuditRecord,
+} from "@/lib/data/econometric-audit";
+
+export const dynamic = "force-dynamic";
+
+const percent = (value: number) =>
+  new Intl.NumberFormat("en-GB", { style: "percent", maximumFractionDigits: 1 }).format(Math.abs(value));
+
+const shortDate = (value: Date | string) =>
+  new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeZone: "Africa/Kigali" }).format(new Date(value));
+
+const numFormat = (value: number) =>
+  new Intl.NumberFormat("en-GB", { maximumFractionDigits: 0 }).format(value);
+
+export default async function NationalDashboardPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ commodity?: string; district?: string; tab?: string }>;
+}) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+
+  const t = getDictionary(locale);
+  const query = await searchParams;
+
+  const [crops, districts, counts] = await Promise.all([getCropOptions(), getAllDistricts(), getSourceCounts()]);
+  const crop = crops.find((c) => c.code === query.commodity) ?? crops[0];
+  if (!crop) notFound();
+
+  const activeTab = query.tab ?? "audit";
+
+  // Econometric Audit Data
+  const auditSummary = getNationalAuditSummary();
+  const cropAuditRecords = getAuditRecordsForCrop(crop.code);
+  const auditRecords = cropAuditRecords.length > 0 ? cropAuditRecords : getLatestAuditRecords();
+
+  const selectedAuditDistrict = query.district
+    ? auditRecords.find((r) => r.district_code === query.district)
+    : auditRecords[0];
+
+  // Market Price Signals Data
+  const signals = await getCurrentRiskSignals(crop.code);
+  const signalByDistrict = new Map(signals.map((s) => [s.districtCode, s]));
+
+  const categoryFor = (code: string): RiskCategory =>
+    (signalByDistrict.get(code)?.category as RiskCategory | undefined) ?? "unavailable";
+
+  const tally = { low: 0, moderate: 0, high: 0, unavailable: 0 } as Record<RiskCategory, number>;
+  for (const d of districts) tally[categoryFor(d.code)] += 1;
+  const monitored = tally.low + tally.moderate + tally.high;
+
+  const latestPeriodEnd = signals.reduce<string | null>(
+    (latest, s) => (!latest || s.periodEnd > latest ? s.periodEnd : latest),
+    null,
+  );
+
+  // Selected district market evidence
+  const selectedDistrict = districts.find((d) => d.code === query.district) ?? null;
+  const evidenceRows = selectedDistrict
+    ? await getDistrictPriceEvidence(selectedDistrict.code, crop.code)
+    : [];
+  const evidenceMonthly = monthlyAverages(
+    evidenceRows.map((r) => ({ periodStart: r.periodStart, value: r.value })),
+  );
+  const evidenceTrend = calculateTrend(evidenceMonthly);
+  const selectedSignal = selectedDistrict ? signalByDistrict.get(selectedDistrict.code) : undefined;
+  const driver = parseDriver(selectedSignal?.driverSummary ?? null);
+  const driverText = driver
+    ? driver.changePct > 0.02
+      ? t.national.evidence.riseText.replace("{percent}", `${Math.round(driver.changePct * 100)}%`)
+      : driver.changePct < -0.02
+      ? t.national.evidence.fallText.replace("{percent}", `${Math.abs(Math.round(driver.changePct * 100))}%`)
+      : t.national.evidence.flatText
+    : "";
+
+  const cropName = (c: { nameEn: string; nameRw: string }) => (locale === "rw" ? c.nameRw : c.nameEn);
+  const districtName = (d: { nameEn: string; nameRw: string }) => (locale === "rw" ? d.nameRw : d.nameEn);
+
+  return (
+    <div className="flex flex-col gap-8">
+      <DataStatusBanner verifiedCount={counts.verified} sampleCount={counts.sample} labels={t.status} />
+
+      <section className="max-w-3xl">
+        <h1 className="text-4xl font-semibold md:text-5xl">{t.national.title}</h1>
+        <p className="mt-4 text-lg text-ink">{t.national.intro}</p>
+        <p className="mt-2 text-sm text-muted">{t.national.scopeNote}</p>
+      </section>
+
+      {/* Commodity Selector Bar */}
+      <nav aria-label={t.national.selectCommodity} className="flex flex-col gap-2">
+        <span className="text-sm font-semibold text-canopy">{t.national.selectCommodity}</span>
+        <div className="flex flex-wrap gap-2">
+          {crops.map((c) => {
+            const active = c.code === crop.code;
+            return (
+              <Link
+                key={c.code}
+                href={`/${locale}/national?commodity=${c.code}&tab=${activeTab}`}
+                aria-current={active ? "page" : undefined}
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                  active ? "bg-canopy text-cream shadow" : "border border-line bg-paper text-canopy hover:border-leaf"
+                }`}
+              >
+                {cropName(c)}
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
+
+      {/* Mode Navigation Tabs */}
+      <div className="flex border-b border-line gap-4 text-sm font-semibold">
+        <Link
+          href={`/${locale}/national?commodity=${crop.code}&tab=audit`}
+          className={`pb-3 transition-colors ${
+            activeTab === "audit"
+              ? "border-b-2 border-canopy text-canopy font-bold"
+              : "text-muted hover:text-ink"
+          }`}
+        >
+          {t.national.audit.tabAudit}
+        </Link>
+        <Link
+          href={`/${locale}/national?commodity=${crop.code}&tab=price`}
+          className={`pb-3 transition-colors ${
+            activeTab === "price"
+              ? "border-b-2 border-canopy text-canopy font-bold"
+              : "text-muted hover:text-ink"
+          }`}
+        >
+          {t.national.audit.tabPrice}
+        </Link>
+      </div>
+
+      {activeTab === "audit" ? (
+        /* Primary View: MINAGRI Input Subsidy & Yield Residual Audit */
+        <div className="flex flex-col gap-8">
+          {/* Headline Audit Indicators */}
+          <section
+            aria-label={t.national.audit.title}
+            className="grid gap-4 grid-cols-2 md:grid-cols-5"
+          >
+            <Stat label={t.national.audit.monitoredTotal} value={auditSummary.totalMonitored} />
+            <Stat
+              label={t.national.audit.leakageCount}
+              value={auditSummary.leakageRiskCount}
+              highlightClass="text-clay"
+            />
+            <Stat
+              label={t.national.audit.climateStressCount}
+              value={auditSummary.climateStressCount}
+              highlightClass="text-harvest"
+            />
+            <Stat
+              label={t.national.audit.highPerfCount}
+              value={auditSummary.highPerformanceCount}
+              highlightClass="text-leaf"
+            />
+            <Stat
+              label={t.national.audit.nominalCount}
+              value={auditSummary.nominalCount}
+            />
+          </section>
+
+          {/* Subsidized Fiscal Exposure Banner */}
+          <div className="rounded-2xl border border-clay/30 bg-clay/10 p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <span className="text-xs uppercase tracking-wider font-bold text-clay">
+                {t.national.audit.totalFiscalExposure}
+              </span>
+              <div className="text-2xl md:text-3xl font-extrabold text-clay mt-1">
+                Rwf {numFormat(auditSummary.totalFiscalExposureRwf)}
+              </div>
+              <p className="text-xs text-muted mt-1">
+                Quantified fiscal risk from substandard seed germinability, informal pathogen substitution, or diverted subsidized fertilizers.
+              </p>
+            </div>
+            <div className="text-xs text-muted max-w-sm">
+              Anchored to MINAGRI&apos;s Rwf 75 Billion public input subsidy allocation and NISR SAS 2024-2026 Multiple Frame Sampling survey weights.
+            </div>
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-[1fr_22rem]">
+            {/* Audit Table */}
+            <section aria-label={t.national.audit.title} className="min-w-0">
+              <h2 className="text-2xl font-semibold text-canopy">{t.national.audit.title}</h2>
+              <p className="mt-1 text-sm text-muted">{t.national.audit.intro}</p>
+
+              <div className="mt-4 overflow-x-auto rounded-2xl border border-line bg-paper shadow-sm">
+                <table className="w-full min-w-[48rem] text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-line bg-cream/20 text-muted font-semibold">
+                      <th scope="col" className="px-4 py-3">{t.national.audit.columns.district}</th>
+                      <th scope="col" className="px-4 py-3">{t.national.audit.columns.season}</th>
+                      <th scope="col" className="px-4 py-3">{t.national.audit.columns.observedYield}</th>
+                      <th scope="col" className="px-4 py-3">{t.national.audit.columns.expectedYield}</th>
+                      <th scope="col" className="px-4 py-3">{t.national.audit.columns.zScore}</th>
+                      <th scope="col" className="px-4 py-3">{t.national.audit.columns.inputs}</th>
+                      <th scope="col" className="px-4 py-3">{t.national.audit.columns.diagnostic}</th>
+                      <th scope="col" className="px-4 py-3"><span className="sr-only">Details</span></th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-line/60">
+                    {auditRecords.map((r) => {
+                      const isLeakage = r.classification === "LEAKAGE_OR_SEED_QUALITY_RISK";
+                      const isClimate = r.classification === "CLIMATIC_OR_WATER_STRESS";
+                      const isHigh = r.classification === "HIGH_PERFORMING_INTENSIFICATION";
+                      const isSelected = selectedAuditDistrict?.district_code === r.district_code;
+
+                      return (
+                        <tr
+                          key={`${r.district_code}_${r.season}`}
+                          className={`hover:bg-cream/30 transition-colors ${
+                            isSelected ? "bg-cream/40 font-medium" : ""
+                          }`}
+                        >
+                          <th scope="row" className="px-4 py-3.5 font-semibold text-canopy">
+                            {r.district_code}
+                          </th>
+                          <td className="px-4 py-3 text-ink font-mono text-xs">{r.season}</td>
+                          <td className="px-4 py-3 text-ink font-mono">
+                            {numFormat(r.observed_yield_kg_per_ha)}
+                          </td>
+                          <td className="px-4 py-3 text-muted font-mono">
+                            {numFormat(r.expected_yield_kg_per_ha)}
+                          </td>
+                          <td className="px-4 py-3 font-mono font-semibold">
+                            <span
+                              className={
+                                isLeakage
+                                  ? "text-clay"
+                                  : isClimate
+                                  ? "text-harvest"
+                                  : isHigh
+                                  ? "text-leaf"
+                                  : "text-ink"
+                              }
+                            >
+                              {r.residual_z_score > 0 ? `+${r.residual_z_score.toFixed(2)}` : r.residual_z_score.toFixed(2)}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-xs text-muted">
+                            {r.improved_seed_pct.toFixed(0)}% seed / {r.inorganic_fert_pct.toFixed(0)}% fert
+                          </td>
+                          <td className="px-4 py-3">
+                            <span
+                              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold ${
+                                isLeakage
+                                  ? "bg-clay/15 text-clay"
+                                  : isClimate
+                                  ? "bg-harvest/20 text-soil"
+                                  : isHigh
+                                  ? "bg-sprout text-leaf"
+                                  : "bg-cream text-muted"
+                              }`}
+                            >
+                              {t.national.audit.classifications[r.classification]}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-right">
+                            <Link
+                              href={`/${locale}/national?commodity=${crop.code}&district=${r.district_code}&tab=audit`}
+                              className="text-xs font-semibold text-leaf hover:underline"
+                            >
+                              {t.national.viewEvidence}
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            {/* Audit Evidence Decomposition Panel */}
+            <aside aria-label={t.national.audit.evidence.title} className="flex flex-col gap-4">
+              <div className="rounded-2xl border border-line bg-paper p-6 shadow-sm">
+                <h3 className="text-xl font-semibold text-canopy">
+                  {selectedAuditDistrict ? selectedAuditDistrict.district_code : "National"} {t.national.audit.evidence.title}
+                </h3>
+
+                {selectedAuditDistrict ? (
+                  <div className="mt-4 flex flex-col gap-4 text-sm text-ink">
+                    <div className="rounded-xl bg-cream/40 p-4 border border-line/60">
+                      <span className="text-xs font-semibold text-muted uppercase tracking-wider block">
+                        {t.national.audit.evidence.rationaleTitle}
+                      </span>
+                      <p className="mt-1 text-sm font-medium leading-relaxed text-ink">
+                        {selectedAuditDistrict.diagnostic_rationale}
+                      </p>
+                    </div>
+
+                    <dl className="divide-y divide-line/60 text-sm">
+                      <div className="py-2.5 flex justify-between">
+                        <dt className="text-muted">{t.national.audit.evidence.climateCushion}:</dt>
+                        <dd className="font-mono font-semibold">{selectedAuditDistrict.climate_factor.toFixed(2)}x</dd>
+                      </div>
+                      <div className="py-2.5 flex justify-between">
+                        <dt className="text-muted">{t.national.audit.evidence.inputResponse}:</dt>
+                        <dd className="font-mono font-semibold">{selectedAuditDistrict.input_factor.toFixed(2)}x</dd>
+                      </div>
+                      <div className="py-2.5 flex justify-between">
+                        <dt className="text-muted">{t.national.audit.evidence.rainfallAnomaly}:</dt>
+                        <dd className="font-mono font-semibold">{selectedAuditDistrict.rainfall_anomaly_ratio.toFixed(2)}x</dd>
+                      </div>
+                      <div className="py-2.5 flex justify-between">
+                        <dt className="text-muted">{t.national.audit.evidence.irrigationCoverage}:</dt>
+                        <dd className="font-mono font-semibold">{selectedAuditDistrict.irrigation_pct.toFixed(1)}%</dd>
+                      </div>
+                      <div className="py-2.5 flex justify-between">
+                        <dt className="text-muted">{t.national.audit.evidence.certifiedSeed}:</dt>
+                        <dd className="font-mono font-semibold">{selectedAuditDistrict.improved_seed_pct.toFixed(1)}%</dd>
+                      </div>
+                      <div className="py-2.5 flex justify-between">
+                        <dt className="text-muted">{t.national.audit.evidence.fertilizerUsage}:</dt>
+                        <dd className="font-mono font-semibold">{selectedAuditDistrict.inorganic_fert_pct.toFixed(1)}%</dd>
+                      </div>
+                      <div className="py-2.5 flex justify-between">
+                        <dt className="text-muted">{t.national.audit.evidence.plantedArea}:</dt>
+                        <dd className="font-mono font-semibold">{numFormat(selectedAuditDistrict.planted_area_ha)} ha</dd>
+                      </div>
+                      {selectedAuditDistrict.estimated_fiscal_exposure_rwf > 0 && (
+                        <div className="py-2.5 flex justify-between text-clay font-bold">
+                          <dt>{t.national.audit.columns.fiscalExposure}:</dt>
+                          <dd className="font-mono">Rwf {numFormat(selectedAuditDistrict.estimated_fiscal_exposure_rwf)}</dd>
+                        </div>
+                      )}
+                    </dl>
+                  </div>
+                ) : (
+                  <p className="mt-4 text-sm text-muted">Select a district to inspect its econometric decomposition.</p>
+                )}
+              </div>
+            </aside>
+          </div>
+        </div>
+      ) : (
+        /* Secondary View: Market Price Signals */
+        <div className="flex flex-col gap-8">
+          <section aria-label={t.national.summary.monitored} className="grid gap-4 grid-cols-2 md:grid-cols-5">
+            <Stat label={t.national.summary.monitored} value={monitored} />
+            <Stat label={t.national.summary.high} value={tally.high} />
+            <Stat label={t.national.summary.moderate} value={tally.moderate} />
+            <Stat label={t.national.summary.low} value={tally.low} />
+            <Stat label={t.national.summary.unavailable} value={tally.unavailable} />
+          </section>
+          <p className="text-sm text-ink">
+            <span className="font-semibold">{t.national.summary.latestData}:</span>{" "}
+            {latestPeriodEnd ? shortDate(latestPeriodEnd) : t.welcome.latestUpdateNone}
+          </p>
+
+          <div className="grid gap-8 lg:grid-cols-[1fr_22rem]">
+            <section aria-labelledby="district-table-title" className="min-w-0">
+              <h2 id="district-table-title" className="text-2xl font-semibold">
+                {t.national.tableCaption}
+              </h2>
+              <div className="mt-4 overflow-x-auto rounded-2xl border border-line bg-paper shadow-sm">
+                <table className="w-full min-w-[40rem] text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-line bg-cream/20 text-muted font-semibold">
+                      <th scope="col" className="px-4 py-3">{t.national.columns.district}</th>
+                      <th scope="col" className="px-4 py-3">{t.national.columns.province}</th>
+                      <th scope="col" className="px-4 py-3">{t.national.columns.signal}</th>
+                      <th scope="col" className="px-4 py-3">{t.national.columns.status}</th>
+                      <th scope="col" className="px-4 py-3">
+                        <span className="sr-only">{t.national.columns.detail}</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-line/60">
+                    {districts.map((d) => {
+                      const signal = signalByDistrict.get(d.code);
+                      const category = categoryFor(d.code);
+                      const isSelected = selectedDistrict?.code === d.code;
+                      const hasSample = signal ? parseDriver(signal.driverSummary)?.basedOnSample : false;
+
+                      return (
+                        <tr
+                          key={d.code}
+                          className={`hover:bg-cream/30 transition-colors ${
+                            isSelected ? "bg-cream/40 font-medium" : ""
+                          }`}
+                        >
+                          <th scope="row" className="px-4 py-3 text-canopy font-semibold">
+                            {districtName(d)}
+                          </th>
+                          <td className="px-4 py-3 text-muted">{d.province}</td>
+                          <td className="px-4 py-3">
+                            <RiskBadge category={category} label={t.national.categories[category]} />
+                          </td>
+                          <td className="px-4 py-3 text-xs text-muted">
+                            {category === "unavailable"
+                              ? t.status.unavailableLabel
+                              : hasSample
+                              ? t.status.sampleLabel
+                              : t.status.verifiedLabel}
+                          </td>
+                          <td className="px-4 py-3 text-right">
+                            <Link
+                              href={`/${locale}/national?commodity=${crop.code}&district=${d.code}&tab=price`}
+                              className="text-xs font-semibold text-leaf hover:underline"
+                            >
+                              {t.national.viewEvidence}
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <aside aria-label={t.national.evidence.title} className="flex flex-col gap-4">
+              <div className="rounded-2xl border border-line bg-paper p-6 shadow-sm">
+                <h3 className="text-xl font-semibold text-canopy">{t.national.evidence.title}</h3>
+                {selectedDistrict ? (
+                  <div className="mt-4 flex flex-col gap-4 text-sm text-ink">
+                    <p className="font-semibold text-base text-canopy">{districtName(selectedDistrict)}</p>
+                    {driver ? (
+                      <div className="rounded-xl bg-cream/40 p-4 border border-line/60">
+                        <span className="text-xs font-semibold text-muted uppercase tracking-wider block">
+                          {t.national.evidence.driver}
+                        </span>
+                        <p className="mt-1 font-medium">{driverText}</p>
+                      </div>
+                    ) : (
+                      <p className="text-muted">{t.national.evidence.noSignal}</p>
+                    )}
+                  </div>
+                ) : (
+                  <p className="mt-4 text-sm text-muted">{t.national.evidence.select}</p>
+                )}
+              </div>
+            </aside>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Stat({
+  label,
+  value,
+  highlightClass = "text-canopy",
+}: {
+  label: string;
+  value: number;
+  highlightClass?: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-line bg-paper p-5 shadow-sm text-center">
+      <span className="block text-xs font-medium uppercase tracking-wider text-muted">{label}</span>
+      <span className={`mt-2 block text-3xl font-extrabold ${highlightClass}`}>{value}</span>
+    </div>
+  );
+}
