@@ -1,6 +1,6 @@
 import { and, asc, eq, isNotNull } from "drizzle-orm";
 import { db, schema } from "@/db";
-import { PRICE_METRIC, excludeSampleWhereRealExists } from "@/lib/data/prices";
+import { PRICE_METRIC, verifiedObservationsOnly } from "@/lib/data/prices";
 
 const { districts, riskSignals, observations, rawImports, sources } = schema;
 
@@ -29,55 +29,17 @@ export function parseDriver(raw: string | null): RiskDriver | null {
   }
 }
 
-const FALLBACK_DISTRICTS = [
-  { code: "GASABO", nameEn: "Gasabo", nameRw: "Gasabo", province: "Kigali City" },
-  { code: "KICUKIRO", nameEn: "Kicukiro", nameRw: "Kicukiro", province: "Kigali City" },
-  { code: "NYARUGENGE", nameEn: "Nyarugenge", nameRw: "Nyarugenge", province: "Kigali City" },
-  { code: "BURERA", nameEn: "Burera", nameRw: "Burera", province: "Northern" },
-  { code: "GAKENKE", nameEn: "Gakenke", nameRw: "Gakenke", province: "Northern" },
-  { code: "GICUMBI", nameEn: "Gicumbi", nameRw: "Gicumbi", province: "Northern" },
-  { code: "MUSANZE", nameEn: "Musanze", nameRw: "Musanze", province: "Northern" },
-  { code: "RULINDO", nameEn: "Rulindo", nameRw: "Rulindo", province: "Northern" },
-  { code: "GISAGARA", nameEn: "Gisagara", nameRw: "Gisagara", province: "Southern" },
-  { code: "HUYE", nameEn: "Huye", nameRw: "Huye", province: "Southern" },
-  { code: "KAMONYI", nameEn: "Kamonyi", nameRw: "Kamonyi", province: "Southern" },
-  { code: "MUHANGA", nameEn: "Muhanga", nameRw: "Muhanga", province: "Southern" },
-  { code: "NYAMAGABE", nameEn: "Nyamagabe", nameRw: "Nyamagabe", province: "Southern" },
-  { code: "NYANZA", nameEn: "Nyanza", nameRw: "Nyanza", province: "Southern" },
-  { code: "NYARUGURU", nameEn: "Nyaruguru", nameRw: "Nyaruguru", province: "Southern" },
-  { code: "RUHANGO", nameEn: "Ruhango", nameRw: "Ruhango", province: "Southern" },
-  { code: "KARONGI", nameEn: "Karongi", nameRw: "Karongi", province: "Western" },
-  { code: "NGORORERO", nameEn: "Ngororero", nameRw: "Ngororero", province: "Western" },
-  { code: "NYABIHU", nameEn: "Nyabihu", nameRw: "Nyabihu", province: "Western" },
-  { code: "NYAMASHEKE", nameEn: "Nyamasheke", nameRw: "Nyamasheke", province: "Western" },
-  { code: "RUBAVU", nameEn: "Rubavu", nameRw: "Rubavu", province: "Western" },
-  { code: "RUSIZI", nameEn: "Rusizi", nameRw: "Rusizi", province: "Western" },
-  { code: "RUTSIRO", nameEn: "Rutsiro", nameRw: "Rutsiro", province: "Western" },
-  { code: "BUGESERA", nameEn: "Bugesera", nameRw: "Bugesera", province: "Eastern" },
-  { code: "GATSIBO", nameEn: "Gatsibo", nameRw: "Gatsibo", province: "Eastern" },
-  { code: "KAYONZA", nameEn: "Kayonza", nameRw: "Kayonza", province: "Eastern" },
-  { code: "KIREHE", nameEn: "Kirehe", nameRw: "Kirehe", province: "Eastern" },
-  { code: "NGOMA", nameEn: "Ngoma", nameRw: "Ngoma", province: "Eastern" },
-  { code: "NYAGATARE", nameEn: "Nyagatare", nameRw: "Nyagatare", province: "Eastern" },
-  { code: "RWAMAGANA", nameEn: "Rwamagana", nameRw: "Rwamagana", province: "Eastern" },
-];
-
+/** All 30 official administrative districts of Rwanda queried directly from database. */
 export async function getAllDistricts() {
-  try {
-    const rows = await db
-      .select({
-        code: districts.code,
-        nameEn: districts.nameEn,
-        nameRw: districts.nameRw,
-        province: districts.province,
-      })
-      .from(districts)
-      .orderBy(asc(districts.province), asc(districts.nameEn));
-    if (rows.length > 0) return rows;
-  } catch {
-    // Graceful offline fallback
-  }
-  return FALLBACK_DISTRICTS;
+  return await db
+    .select({
+      code: districts.code,
+      nameEn: districts.nameEn,
+      nameRw: districts.nameRw,
+      province: districts.province,
+    })
+    .from(districts)
+    .orderBy(asc(districts.province), asc(districts.nameEn));
 }
 
 /** Current risk signal per district for one crop. Only current rows are returned. */
@@ -121,7 +83,7 @@ export async function getDistrictPriceEvidence(districtCode: string, commodityCo
           eq(observations.metricCode, PRICE_METRIC),
           eq(rawImports.status, "approved"),
           isNotNull(observations.districtCode),
-          excludeSampleWhereRealExists,
+          verifiedObservationsOnly,
         ),
       )
       .orderBy(asc(observations.periodStart));

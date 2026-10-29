@@ -10,7 +10,6 @@
     "db:generate": "node --env-file=.env.local ./node_modules/drizzle-kit/bin.cjs generate",
     "db:migrate": "node --env-file=.env.local ./node_modules/drizzle-kit/bin.cjs migrate",
     "db:seed": "tsx --env-file=.env.local src/db/seed-reference.ts",
-    "db:seed:sample": "tsx --env-file=.env.local src/db/load-sample-prices.ts",
     "db:load:wfp": "tsx --env-file=.env.local src/db/load-wfp-prices.ts",
     "db:load:tangabid": "tsx --env-file=.env.local src/db/load-tangabid-prices.ts",
     "db:load:sas": "tsx --env-file=.env.local src/db/load-sas-production.ts"
