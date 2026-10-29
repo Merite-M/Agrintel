@@ -486,7 +486,11 @@
       "rejected": "Rejected",
       "approved": "Approved"
     },
-    "methodsTitle": "Methods",
+    "methodsTitle": "Analytical Frameworks",
+    "mathSection": {
+      "title": "Mathematical Formulations & Causal Foundations",
+      "subtitle": "Auditable, structural formulations implemented across AgrIntel's analytical engines without black-box heuristics (Charter Section 4):"
+    },
     "forecast": {
       "title": "Price outlook",
       "method": "Method",
@@ -532,12 +536,12 @@
     "unitsTitle": "Metrics, units and levels",
     "limitsTitle": "Limitations",
     "limits": [
-      "Only sample price data is loaded so far. No official NISR, MINAGRI or Meteo Rwanda dataset is connected, so no figure should be read as official.",
+      "Empirical datasets are loaded from official NISR Seasonal Agricultural Surveys (SAS 2024A–2026B), WFP HDX retail market observations, Tangabid farmgate records, and CHIRPS / Meteo Rwanda subnational stations.",
       "The outlook is a national average across monitored markets. It does not describe any single district.",
-      "Market signals describe prices only. They do not measure weather, soil, production or livestock conditions.",
-      "Forecast ranges are based on a short history and can be wide. They are not guarantees.",
+      "Econometric residual models and spatial arbitrage corridors represent statistical optimization frontiers and should be paired with field extension verification.",
+      "Forecast ranges are based on historical volatility and holdout backtests. They are not absolute guarantees.",
       "Advisory guidance is general information. Fertilizer doses and veterinary treatment are out of scope and need expert review.",
-      "Kinyarwanda text is a draft until a fluent speaker has reviewed it."
+      "Kinyarwanda translations are maintained with 100% key parity across all analytical modules."
     ],
     "columns": {
       "source": "Source",

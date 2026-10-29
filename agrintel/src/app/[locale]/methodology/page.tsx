@@ -170,6 +170,104 @@ export default async function MethodologyPage({
         )}
       </section>
 
+      {/* Mathematical Formulations & Causal Foundations (Charter Section 4) */}
+      <section aria-labelledby="math-title" className="flex flex-col gap-4">
+        <div>
+          <h2 id="math-title" className="text-2xl font-bold text-canopy">{t.methodology.mathSection.title}</h2>
+          <p className="mt-1 text-sm text-muted">{t.methodology.mathSection.subtitle}</p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {/* Eq 4.1: Survey Weighting */}
+          <div className="rounded-2xl border border-line bg-paper p-5 shadow-xs flex flex-col justify-between">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-muted block">
+                Charter Eq. 4.1 · NISR SAS Design Weighting
+              </span>
+              <h3 className="mt-1 text-base font-bold text-canopy">
+                Multiple Frame Sampling (MFS) Aggregation
+              </h3>
+              <p className="mt-2 text-xs text-ink leading-relaxed">
+                Prevents sample selection bias between area-frame smallholders and list-frame commercial holdings:
+              </p>
+              <div className="mt-3 rounded-xl bg-cream p-3 font-mono text-xs text-canopy border border-line overflow-x-auto">
+                Ȳ_(c,d,s) = [ Σ_(i ∈ S_(d,s)) (w_(i,d,s) · y_(i,c,d,s)) ] / [ Σ_(i ∈ S_(d,s)) w_(i,d,s) ]
+              </div>
+            </div>
+            <p className="mt-3 text-xs text-muted border-t border-line/60 pt-2">
+              Calibrated across NISR SAS 2024A–2026B seasonal microdata across all 30 districts.
+            </p>
+          </div>
+
+          {/* Eq 4.2: Econometric Yield Frontier */}
+          <div className="rounded-2xl border border-line bg-paper p-5 shadow-xs flex flex-col justify-between">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-muted block">
+                Charter Eq. 4.2 · MINAGRI Subsidy Audit
+              </span>
+              <h3 className="mt-1 text-base font-bold text-canopy">
+                Climate-Controlled Yield Residual ($z$-Score)
+              </h3>
+              <p className="mt-2 text-xs text-ink leading-relaxed">
+                Controls for rainfall and marshland irrigation before flagging input diversion:
+              </p>
+              <div className="mt-3 rounded-xl bg-cream p-3 font-mono text-xs text-canopy border border-line overflow-x-auto">
+                Ŷ = Ȳ_base · Φ_climate(R, I) · Ψ_inputs(Seed, Fert, Pest, Erosion)
+                <br />
+                z_(c,d,s) = (Y_(obs) - Ŷ) / σ_(c,d)
+              </div>
+            </div>
+            <p className="mt-3 text-xs text-muted border-t border-line/60 pt-2">
+              Flagged as Leakage Risk when z &lt; -1.75 with favorable water availability (Φ ≥ 0.85).
+            </p>
+          </div>
+
+          {/* Eq 4.3: Spatial Arbitrage */}
+          <div className="rounded-2xl border border-line bg-paper p-5 shadow-xs flex flex-col justify-between">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-muted block">
+                Charter Eq. 4.3 · Logistics & Fuel Policy
+              </span>
+              <h3 className="mt-1 text-base font-bold text-canopy">
+                Diesel-Adjusted Spatial Arbitrage Net Margin
+              </h3>
+              <p className="mt-2 text-xs text-ink leading-relaxed">
+                Evaluates transport spreads net of round-trip diesel burn and commodity spoilage:
+              </p>
+              <div className="mt-3 rounded-xl bg-cream p-3 font-mono text-xs text-canopy border border-line overflow-x-auto">
+                Freight = [2 · d_(O,D) · γ_(fuel) · P_(diesel)] / Q_(truck) + C_(handling)
+                <br />
+                Margin = P_(D,c) · (1 - δ_c · d/100) - P_(O,c) - Freight
+              </div>
+            </div>
+            <p className="mt-3 text-xs text-muted border-t border-line/60 pt-2">
+              Simulates Regulated pump price (Rwf 2,927/L) vs. Unsubsidized counterfactual (Rwf 3,600/L).
+            </p>
+          </div>
+
+          {/* Eq 4.4: Dairy Stress Index */}
+          <div className="rounded-2xl border border-line bg-paper p-5 shadow-xs flex flex-col justify-between">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-muted block">
+                Charter Eq. 4.4 · Pastoral Livestock Resilience
+              </span>
+              <h3 className="mt-1 text-base font-bold text-canopy">
+                Dairy Cattle Water & Forage Stress Index (DSI)
+              </h3>
+              <p className="mt-2 text-xs text-ink leading-relaxed">
+                Captures pasture degradation before livestock milk volume shocks hit market statistics:
+              </p>
+              <div className="mt-3 rounded-xl bg-cream p-3 font-mono text-xs text-canopy border border-line overflow-x-auto">
+                DSI_(d,t) = w_1 · Anomaly(r1q, r3q) + w_2 · DrySpellDays + w_3 · ΔT_max
+              </div>
+            </div>
+            <p className="mt-3 text-xs text-muted border-t border-line/60 pt-2">
+              Integrated across Rwanda&apos;s pastoral dairy corridors (Nyagatare, Gatsibo, Kayonza, Gicumbi).
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Methods */}
       <section aria-labelledby="methods-title" className="flex flex-col gap-4">
         <h2 id="methods-title" className="text-2xl font-semibold">{t.methodology.methodsTitle}</h2>

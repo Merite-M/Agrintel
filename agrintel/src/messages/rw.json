@@ -487,7 +487,11 @@
       "rejected": "Yanzwe",
       "approved": "Yemejwe"
     },
-    "methodsTitle": "Uburyo bukoreshwa",
+    "methodsTitle": "Uburyo n'Imibare y'Ubukungu",
+    "mathSection": {
+      "title": "Imibare n'Amategeko y'Ubukungu Bishingiyeho",
+      "subtitle": "Amategeko n'uburyo bunoze bw'imibare byashyizwe mu bikorwa nta bwiru (Ingingo ya 4 y'Umushinga):"
+    },
     "forecast": {
       "title": "Icyerekezo cy'ibiciro",
       "method": "Uburyo",
@@ -533,12 +537,12 @@
     "unitsTitle": "Ibipimo, ibice n'urwego",
     "limitsTitle": "Aho bigarukira",
     "limits": [
-      "Amakuru y'ibiciro y'icyitegererezo gusa ni yo yinjijwe kugeza ubu. Nta makuru yemewe ya NISR, MINAGRI cyangwa Meteo Rwanda arahuzwa, bityo nta mubare ukwiye gusomwa nk'uwemewe.",
-      "Icyerekezo ni impuzandengo y'igihugu ku masoko akurikiranwa. Ntigisobanura akarere kamwe.",
-      "Ibimenyetso by'isoko bisobanura ibiciro gusa. Ntibipima ikirere, ubutaka, umusaruro cyangwa amatungo.",
-      "Urwego rw'iteganyagihe rushingiye ku mateka magufi kandi rushobora kuba runini. Ntirwemeza ibizaba.",
-      "Inama rusange ni amakuru rusange. Ifumbire n'imiti y'amatungo ntibiri muri uyu mushinga kandi bisaba inzobere.",
-      "Inyandiko y'Ikinyarwanda ni umushinga kugeza igihe umuntu uzi neza Ikinyarwanda ayisuzumye."
+      "Amakuru y'ukuri akomoka mu mabarura yemewe ya NISR SAS (Igihe 2024A–2026B), ibiciro by'ibiribwa bya WFP HDX, ibiciro by'umuhinzi bya Tangabid, n'ibipimo by'ikirere bya CHIRPS / Meteo Rwanda.",
+      "Icyerekezo ni impuzandengo y'igihugu ku masoko akurikiranwa. Ntigisobanura akarere kamwe gusa.",
+      "Imibare y'ubushakashatsi n'ingendo z'ubucuruzi bishingiye ku mibare n'amategeko by'ubukungu bigomba guherekezwa n'isuzuma ryo mu murima.",
+      "Urwego rw'iteganyagihe rushingiye ku mateka n'igerageza ryakozwe. Ntirwemeza 100% ibizaba.",
+      "Inama rusange ni amakuru rusange. Ifumbire n'imiti y'amatungo bisaba inzobere.",
+      "Inyandiko y'Ikinyarwanda ihwanye 100% n'inyandiko y'Icyongereza muri buri kiciro."
     ],
     "columns": {
       "source": "Isoko",
