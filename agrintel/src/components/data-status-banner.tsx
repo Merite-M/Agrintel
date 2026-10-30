@@ -27,7 +27,15 @@ export function DataStatusBanner({ verifiedCount, sampleCount, labels }: Props) 
       </h2>
       <p className="mt-1 text-sm text-ink">
         <span className="font-semibold">{verifiedCount}</span> {labels.verifiedCount} ·{" "}
-        <span className="font-semibold">{sampleCount}</span> {labels.sampleCount}
+        {sampleCount > 0 ? (
+          <>
+            <span className="font-semibold">{sampleCount}</span> {labels.sampleCount}
+          </>
+        ) : (
+          <span className="font-semibold text-forest">
+            {labels.empiricalOnly ?? "100% empirical official data"}
+          </span>
+        )}
       </p>
       {noneVerified ? <p className="mt-1 text-sm text-ink">{labels.noneVerified}</p> : null}
     </section>

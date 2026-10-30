@@ -105,34 +105,11 @@ async function seedMetrics() {
   console.log(`Metrics loaded: ${rows.length}`);
 }
 
-/**
- * Registers the demo sample source so every demo value can point to it.
- * Its access status is "sample", so the UI labels any value from it as sample data.
- */
-async function seedSampleSource() {
-  await db
-    .insert(sources)
-    .values({
-      code: "DEMO-SAMPLE-2026",
-      name: "Clearly labeled demonstration sample",
-      owner: "Project team (not an official source)",
-      sourceType: "sample",
-      accessStatus: "sample",
-      accessMethod: "sample",
-      licenceNote: "Illustrative values only. Not official statistics.",
-      allowedUse: "Demonstration and testing only",
-      updateFrequency: "Manual",
-    })
-    .onConflictDoNothing({ target: sources.code });
-  console.log("Sample source registered: DEMO-SAMPLE-2026");
-}
-
 async function main() {
   await seedDistricts();
   await seedCommodities();
   await seedMetrics();
-  await seedSampleSource();
-  console.log("Reference seed complete.");
+  console.log("Reference seed complete (100% empirical official sources).");
 }
 
 main().catch((error) => {

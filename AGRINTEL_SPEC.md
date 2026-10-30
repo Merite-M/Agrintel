@@ -179,12 +179,10 @@ Agritech-main/nisr-agro-early-warning/
 │   ├── clean/
 │   │   ├── tangabid_farmgate_monthly_district.csv   # Verified district farm-gate price series (P_O)
 │   │   └── wfp_prices_irish_potato_tomato_rwa.csv   # Verified WFP market price series (P_D)
-│   ├── reference/
-│   │   ├── commodities.csv                          # Reference commodity catalog
-│   │   ├── districts.csv                            # Reference Rwanda districts catalog
-│   │   └── metrics.csv                              # Monitored indicator definitions
-│   └── sample/
-│       └── market_prices_sample.csv                 # Clearly labeled fallback/simulation data
+│   └── reference/
+│       ├── commodities.csv                          # Reference commodity catalog
+│       ├── districts.csv                            # Reference Rwanda districts catalog
+│       └── metrics.csv                              # Monitored indicator definitions
 ├── pipeline/
 │   ├── forecast_core.py                             # Statistical price forecasting baseline
 │   ├── prepare_tangabid_prices.py                   # Tangabid ETL & normalization script
@@ -199,8 +197,7 @@ Agritech-main/nisr-agro-early-warning/
 │   │   ├── schema.ts                                # Drizzle ORM table definitions
 │   │   ├── seed-reference.ts                        # Reference table seeder
 │   │   ├── load-tangabid-prices.ts                  # Tangabid -> Neon DB loader
-│   │   ├── load-wfp-prices.ts                       # WFP -> Neon DB loader
-│   │   └── load-sample-prices.ts                    # Sample data -> Neon DB loader
+│   │   └── load-wfp-prices.ts                       # WFP -> Neon DB loader
 │   ├── lib/
 │   │   ├── advisory.ts & risk-rule.ts & trend.ts    # Core business logic & trend evaluators
 │   │   ├── i18n.ts                                  # Localization routing & dictionary helpers

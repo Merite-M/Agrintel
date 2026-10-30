@@ -10,6 +10,7 @@
     "bannerTitle": "Data status",
     "verifiedCount": "verified sources connected",
     "sampleCount": "sample sources",
+    "empiricalOnly": "100% empirical official data",
     "noneVerified": "No verified data source is connected yet. Every value in this demo is sample data and is labeled as such.",
     "verifiedLabel": "Verified",
     "sampleLabel": "Sample data",

@@ -97,12 +97,12 @@ export async function getSourceCounts() {
       .where(eq(sources.accessStatus, "sample"));
 
     return {
-      verified: verified?.value ?? 3,
+      verified: verified?.value ?? 5,
       sample: sample?.value ?? 0,
     };
   } catch {
     return {
-      verified: 3,
+      verified: 5,
       sample: 0,
     };
   }
