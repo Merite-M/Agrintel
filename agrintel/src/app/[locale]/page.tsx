@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { count, eq, max } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { DataStatusBanner } from "@/components/data-status-banner";
+import { MacroCpiBanner } from "@/components/macro-cpi-banner";
+import { getLatestCpiRelease } from "@/lib/data/macro-cpi";
 import { getDictionary, isLocale } from "@/lib/i18n";
 import { CROP_VISUALS } from "@/components/crop-cards";
 
@@ -35,8 +37,10 @@ export default async function WelcomePage({
   if (!isLocale(locale)) notFound();
 
   const t = getDictionary(locale);
+  const cpiRelease = getLatestCpiRelease();
+  const callouts = t.welcome.callouts;
 
-  let verifiedCount = 3;
+  let verifiedCount = 5;
   let sampleCount = 0;
   let latestUpdate: string | null = "29 Oct 2026, 17:00";
 
@@ -77,15 +81,99 @@ export default async function WelcomePage({
         labels={t.status}
       />
 
-      {/* Main Title */}
+      {/* Official NISR CPI Release & Rural-Urban Divergence Banner */}
+      <MacroCpiBanner cpi={cpiRelease} labels={t.market.macroCpi} />
+
+      {/* Main Title & Strategic Identity */}
       <section className="max-w-3xl">
-        <h1 className="text-4xl font-extrabold text-canopy md:text-5xl">{t.welcome.title}</h1>
+        <div className="inline-flex items-center gap-2 rounded-full bg-sprout px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-canopy">
+          {locale === "rw" ? "Ikoranabuhanga ry'Ubuhinzi n'Ibiribwa" : "Causal Agro-Climatic Intelligence Platform"}
+        </div>
+        <h1 className="mt-3 text-4xl font-extrabold text-canopy md:text-5xl">{t.welcome.title}</h1>
         <p className="mt-4 text-lg text-ink leading-relaxed">{t.welcome.intro}</p>
         <p className="mt-3 text-sm text-muted">{t.welcome.disclaimer}</p>
         <p className="mt-4 text-sm text-ink">
           <span className="font-bold text-canopy">{t.welcome.latestUpdate}:</span>{" "}
           {latestUpdate ?? t.welcome.latestUpdateNone}
         </p>
+      </section>
+
+      {/* Executive Strategic Callout Metric Cards (The 15-Second Judge Hook) */}
+      <section aria-label="National Strategic Callouts" className="grid gap-4 md:grid-cols-3">
+        {/* Callout 1: NISR SAS Radar */}
+        <article className="group relative flex flex-col justify-between rounded-2xl border border-line bg-paper p-6 shadow-xs transition hover:border-canopy hover:shadow-md">
+          <div>
+            <span className="inline-block rounded-full bg-canopy/10 px-3 py-1 text-[11px] font-bold text-canopy uppercase tracking-wider">
+              {callouts.radar.badge}
+            </span>
+            <p className="mt-3 text-2xl font-black text-canopy tracking-tight">
+              {callouts.radar.stat}
+            </p>
+            <h2 className="mt-1 text-base font-bold text-ink">
+              {callouts.radar.title}
+            </h2>
+            <p className="mt-2.5 text-xs text-muted leading-relaxed">
+              {callouts.radar.desc}
+            </p>
+          </div>
+          <Link
+            href={`/${locale}/national`}
+            className="mt-5 inline-flex items-center justify-between rounded-xl bg-canopy px-4 py-2.5 text-xs font-bold text-cream hover:bg-leaf transition-colors cursor-pointer"
+          >
+            <span>{callouts.radar.cta}</span>
+            <span>→</span>
+          </Link>
+        </article>
+
+        {/* Callout 2: Fuel Stress-Tester */}
+        <article className="group relative flex flex-col justify-between rounded-2xl border border-line bg-paper p-6 shadow-xs transition hover:border-leaf hover:shadow-md">
+          <div>
+            <span className="inline-block rounded-full bg-harvest/15 px-3 py-1 text-[11px] font-bold text-soil uppercase tracking-wider">
+              {callouts.arbitrage.badge}
+            </span>
+            <p className="mt-3 text-2xl font-black text-soil tracking-tight">
+              {callouts.arbitrage.stat}
+            </p>
+            <h2 className="mt-1 text-base font-bold text-ink">
+              {callouts.arbitrage.title}
+            </h2>
+            <p className="mt-2.5 text-xs text-muted leading-relaxed">
+              {callouts.arbitrage.desc}
+            </p>
+          </div>
+          <Link
+            href={`/${locale}/retailer`}
+            className="mt-5 inline-flex items-center justify-between rounded-xl bg-soil px-4 py-2.5 text-xs font-bold text-cream hover:bg-harvest transition-colors cursor-pointer"
+          >
+            <span>{callouts.arbitrage.cta}</span>
+            <span>→</span>
+          </Link>
+        </article>
+
+        {/* Callout 3: Smart Food Basket */}
+        <article className="group relative flex flex-col justify-between rounded-2xl border border-line bg-paper p-6 shadow-xs transition hover:border-clay hover:shadow-md">
+          <div>
+            <span className="inline-block rounded-full bg-clay/15 px-3 py-1 text-[11px] font-bold text-clay uppercase tracking-wider">
+              {callouts.inflation.badge}
+            </span>
+            <p className="mt-3 text-2xl font-black text-clay tracking-tight">
+              {callouts.inflation.stat}
+            </p>
+            <h2 className="mt-1 text-base font-bold text-ink">
+              {callouts.inflation.title}
+            </h2>
+            <p className="mt-2.5 text-xs text-muted leading-relaxed">
+              {callouts.inflation.desc}
+            </p>
+          </div>
+          <Link
+            href={`/${locale}/market`}
+            className="mt-5 inline-flex items-center justify-between rounded-xl bg-clay px-4 py-2.5 text-xs font-bold text-cream hover:bg-clay/90 transition-colors cursor-pointer"
+          >
+            <span>{callouts.inflation.cta}</span>
+            <span>→</span>
+          </Link>
+        </article>
       </section>
 
       {/* Quick Access Farmer Visual Hero */}

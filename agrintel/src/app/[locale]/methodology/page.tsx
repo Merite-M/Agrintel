@@ -396,6 +396,24 @@ export default async function MethodologyPage({
           ))}
         </ul>
       </section>
+
+      {/* Tooling & AI Assistance Disclosure per NISR 2026 Hackathon Guidelines */}
+      <section aria-labelledby="ai-disclosure-title" className="rounded-2xl border-2 border-canopy/30 bg-paper p-6 shadow-xs">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="rounded-full bg-canopy/10 px-3 py-1 text-xs font-bold text-canopy uppercase tracking-wider">
+            {t.methodology.aiDisclosureBadge}
+          </span>
+        </div>
+        <h2 id="ai-disclosure-title" className="mt-3 text-2xl font-bold text-canopy">
+          {t.methodology.aiDisclosureTitle}
+        </h2>
+        <p className="mt-3 text-base text-ink leading-relaxed">
+          {t.methodology.aiDisclosureText}
+        </p>
+        <p className="mt-3 text-xs text-muted font-medium">
+          {t.methodology.aiDisclosureNote}
+        </p>
+      </section>
     </div>
   );
 }

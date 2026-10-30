@@ -46,6 +46,29 @@
       "subtitle": "Designed for rural farmers: visual photo cards, audio guidance in Kinyarwanda, and clear Sell/Store badges.",
       "cta": "Open Farmer Advisory",
       "quickCrops": "Select your crop:"
+    },
+    "callouts": {
+      "radar": {
+        "badge": "NISR SAS Econometric Audit",
+        "title": "Rwf 75B Fiscal Subsidy Protection Radar",
+        "stat": "30 Districts · Rwf 75B Subsidies",
+        "desc": "Climate-controlled structural yield frontiers (z-score residuals) separating weather shocks from certified seed degradation & fertilizer leakage.",
+        "cta": "Inspect National Radar"
+      },
+      "arbitrage": {
+        "badge": "Spatial Freight Optimization",
+        "title": "Middle-Distillate Freight & Fuel Stress-Tester",
+        "stat": "Rwf 2,927/L vs Rwf 3,600/L",
+        "desc": "Simulates round-trip diesel freight burn (0.32 L/km) and perishability shrinkage across all 1,570 trade routes, stress-testing the Rwf 673/L public fuel shield.",
+        "cta": "Launch Fuel Simulator"
+      },
+      "inflation": {
+        "badge": "Citizen Food Security Shield",
+        "title": "Citizen Smart Food Basket & Inflation Shield",
+        "stat": "17.2% YoY · +49.5 Divergence",
+        "desc": "Live household budget modeling with calorie/protein-equivalent nutritional substitutions to cushion urban and rural families against 17.2% food inflation.",
+        "cta": "Open Smart Basket"
+      }
     }
   },
   "skipToContent": "Skip to content",
@@ -554,6 +577,10 @@
       "Advisory guidance is general information. Fertilizer doses and veterinary treatment are out of scope and need expert review.",
       "Kinyarwanda translations are maintained with 100% key parity across all analytical modules."
     ],
+    "aiDisclosureTitle": "Tooling & AI Assistance Disclosure",
+    "aiDisclosureBadge": "NISR 2026 Hackathon Compliance",
+    "aiDisclosureText": "Disclosure per NISR 2026 Hackathon Guidelines: AI coding assistants were utilized as productivity accelerators for TypeScript interface scaffolding, bilingual localization formatting (en/rw), and unit-test boilerplate. All econometric problem formulations, NISR SAS Multiple Frame Sampling weight applications, climate-controlled yield residual equations, and spatial arbitrage models were conceived, verified, and audited by the authors, who take full responsibility for the submitted work.",
+    "aiDisclosureNote": "Submitted in strict accordance with the official NISR Big Data Hackathon 2026 Requirements for Participation.",
     "dataLifecycle": {
       "title": "3-Tier Data Velocity Lifecycle & Production Automation",
       "subtitle": "How AgrIntel ingests live subnational data across differing velocity cadences without manual code intervention or app redeployment.",

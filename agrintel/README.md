@@ -127,8 +127,16 @@ npm run start # or npm run dev
 
 | Verification Check | Target / Command | Result |
 | :--- | :--- | :---: |
-| **Python Unit Tests** | `pytest pipeline/tests/` | **60 / 60 Passed** |
+| **Python Unit Tests** | `pytest pipeline/tests/` | **61 / 61 Passed** |
 | **Next.js Production Build** | `npm run build` | **Exit Code 0 (17/17 Routes Prerendered)** |
 | **Bilingual Key Parity** | `en.json` vs. `rw.json` | **100% Synchronized** |
 | **Live Production Health** | `https://agrintel-rho.vercel.app` | **HTTP 200 OK across all routes** |
-| **Git Remote Sync** | Fork `Merite-M/Agritech` | **Pushed to `main` (PR #1 Updated)** |
+| **Git Remote Sync** | Upstream & Fork | **Pushed to `main`** |
+
+---
+
+## 7. Tooling & AI Assistance Disclosure
+
+> **Disclosure per NISR 2026 Hackathon Guidelines:**  
+> AI coding assistants were utilized as productivity accelerators for TypeScript interface scaffolding, bilingual localization formatting (en/rw), and unit-test boilerplate. All econometric problem formulations, NISR SAS Multiple Frame Sampling weight applications, climate-controlled yield residual equations, and spatial arbitrage models were conceived, verified, and audited by the authors, who take full responsibility for the submitted work.
+

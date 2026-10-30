@@ -85,15 +85,21 @@ export default async function FarmerAdvisoryPage({
     : null;
 
   // Build audio text for automated speech synthesis
+  const hasValidDsi = typeof climate?.dairy_stress_index === "number" && !Number.isNaN(climate.dairy_stress_index);
+  const dsiVal = hasValidDsi ? climate.dairy_stress_index : null;
+
   let speechSummary = "";
   if (locale === "rw") {
     if (isLivestock) {
-      const dsiVal = climate?.dairy_stress_index ?? 0;
-      speechSummary = `Inama ku borozi b'inka z'amata mu karere ka ${districtName}. Ikipimo cy'ibibazo by'urwuri ni amanota ${dsiVal} ku ijana. ${
-        dsiVal > 50
-          ? "Hari ikibazo cy'izuba n'ubwatsi buke. Bika ubwatsi bwa Napier hakiri kare, utere ifumbire ya yureya ku bisigazwa by'ibigori, kandi utwikire ibibumbiro by'amazi."
-          : "Urwuri rwifashe neza, ariko kora ububiko bw'ubwatsi bwo guhangana n'impeshyi."
-      }`;
+      if (hasValidDsi && dsiVal !== null) {
+        speechSummary = `Inama ku borozi b'inka z'amata mu karere ka ${districtName}. Ikipimo cy'ibibazo by'urwuri ni amanota ${Math.round(dsiVal)} ku ijana. ${
+          dsiVal > 50
+            ? "Hari ikibazo cy'izuba n'ubwatsi buke. Bika ubwatsi bwa Napier hakiri kare, utere ifumbire ya yureya ku bisigazwa by'ibigori, kandi utwikire ibibumbiro by'amazi."
+            : "Urwuri rwifashe neza, ariko kora ububiko bw'ubwatsi bwo guhangana n'impeshyi."
+        }`;
+      } else {
+        speechSummary = `Inama ku borozi mu karere ka ${districtName}. Aka karere gashyira imbere ubuhinzi bw'ibihingwa; ibipimo by'ubwatsi n'ibibazo by'inka z'amata byibanda ku turere 8 tw'urwuri (Nyagatare, Gicumbi, Musanze, Nyanza, Kayonza, Bugesera, Rwamagana, Gatsibo).`;
+      }
     } else if (driver && driver.changePct >= 0.08) {
       speechSummary = `Inama ku bahinzi. Akarere ka ${districtName}, igihingwa cy' ${cropName}. Icyemezo: GURISHA UBU. Ibiciro birazamuka ku isoko, impuzandengo ni amafaranga ${priceFormat(driver.recentAverage)} kuri kilo. ${t.advisory.action.sellAdvice.replace("{percent}", percent(driver.changePct))}`;
     } else if (driver && driver.changePct <= -0.05) {
@@ -105,12 +111,15 @@ export default async function FarmerAdvisoryPage({
     }
   } else {
     if (isLivestock) {
-      const dsiVal = climate?.dairy_stress_index ?? 0;
-      speechSummary = `Pastoral dairy advisory for ${districtName} district. Dairy Cattle Stress Index is ${dsiVal} out of 100. ${
-        dsiVal > 50
-          ? "Acute pasture deficit and water stress detected. Prioritize Napier grass silage conservation, urea-treated residue feeding, and water trough shading."
-          : "Pasture and forage conditions are optimal. Maintain rotational grazing and silage reserves."
-      }`;
+      if (hasValidDsi && dsiVal !== null) {
+        speechSummary = `Pastoral dairy advisory for ${districtName} district. Dairy Cattle Stress Index is ${Math.round(dsiVal)} out of 100. ${
+          dsiVal > 50
+            ? "Acute pasture deficit and water stress detected. Prioritize Napier grass silage conservation, urea-treated residue feeding, and water trough shading."
+            : "Pasture and forage conditions are optimal. Maintain rotational grazing and silage reserves."
+        }`;
+      } else {
+        speechSummary = `Pastoral dairy advisory for ${districtName} district. This is a crop-dominated agro-ecological zone; high-frequency dairy cattle telemetry monitors the 8 designated dairy milk shed basins (Nyagatare, Gicumbi, Musanze, Nyanza, Kayonza, Bugesera, Rwamagana, Gatsibo).`;
+      }
     } else if (driver && driver.changePct >= 0.08) {
       speechSummary = `Farmer advisory for ${districtName} district, ${cropName}. Recommendation: SELL NOW. Market prices are rising, current average is ${priceFormat(driver.recentAverage)} Rwandan Francs per kilo. ${t.advisory.action.sellAdvice.replace("{percent}", percent(driver.changePct))}`;
     } else if (driver && driver.changePct <= -0.05) {
@@ -251,14 +260,20 @@ export default async function FarmerAdvisoryPage({
               </span>
               <div className="mt-2 flex items-baseline gap-2">
                 <span className="text-3xl font-extrabold text-canopy">
-                  {climate?.dairy_stress_index !== null ? `${climate?.dairy_stress_index ?? 0}` : "N/A"}
+                  {hasValidDsi && dsiVal !== null ? `${Math.round(dsiVal * 10) / 10}` : "—"}
                 </span>
-                <span className="text-xs text-muted">/ 100</span>
+                <span className="text-xs text-muted">
+                  {hasValidDsi ? "/ 100" : locale === "rw" ? "(Akarere k'ubuhinzi)" : "(Non-Pastoral)"}
+                </span>
               </div>
               <p className="mt-2 text-xs text-muted">
-                {climate?.dairy_stress_index && climate.dairy_stress_index > 50
-                  ? t.advisory.dairy.severities.high
-                  : t.advisory.dairy.severities.low}
+                {!hasValidDsi
+                  ? locale === "rw"
+                    ? "Aka karere gashyira imbere ubuhinzi; ibipimo by'ubwatsi byibanda ku turere 8 tw'urwuri."
+                    : "Predominantly crop zone; pastoral telemetry monitors the 8 designated milk basins."
+                  : dsiVal !== null && dsiVal > 50
+                    ? t.advisory.dairy.severities.high
+                    : t.advisory.dairy.severities.low}
               </p>
             </div>
           ) : (

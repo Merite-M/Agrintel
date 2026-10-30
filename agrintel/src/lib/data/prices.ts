@@ -33,7 +33,8 @@ export async function getCropOptions() {
  */
 export async function getApprovedPriceObservations(commodityCode: string) {
   try {
-    return await db
+    // 1. First attempt consumer retail price observations (e.g. WFP retail series)
+    const retailRows = await db
       .select({
         periodStart: observations.periodStart,
         value: observations.value,
@@ -49,6 +50,33 @@ export async function getApprovedPriceObservations(commodityCode: string) {
         and(
           eq(observations.commodityCode, commodityCode),
           eq(observations.metricCode, PRICE_METRIC),
+          eq(rawImports.status, "approved"),
+          verifiedObservationsOnly,
+        ),
+      )
+      .orderBy(asc(observations.periodStart));
+
+    if (retailRows.length > 0) {
+      return retailRows;
+    }
+
+    // 2. Seamlessly fall back to verified farm-gate price observations (E-Soko / TangaBid series)
+    return await db
+      .select({
+        periodStart: observations.periodStart,
+        value: observations.value,
+        dataStatus: observations.dataStatus,
+        sourceName: sources.name,
+        sourceAccess: sources.accessStatus,
+        approvedAt: rawImports.approvedAt,
+      })
+      .from(observations)
+      .innerJoin(rawImports, eq(observations.importId, rawImports.id))
+      .innerJoin(sources, eq(observations.sourceId, sources.id))
+      .where(
+        and(
+          eq(observations.commodityCode, commodityCode),
+          eq(observations.metricCode, "farmgate_price_rwf_per_kg"),
           eq(rawImports.status, "approved"),
           verifiedObservationsOnly,
         ),

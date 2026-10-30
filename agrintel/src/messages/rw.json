@@ -47,6 +47,29 @@
       "subtitle": "Byateguriwe abaturage n'abahinzi: amafoto manini, inama isomwa mu majwi, n'ikimenyetso cyoroshye cyo kugurisha cyangwa kubika.",
       "cta": "Injira mu Nama z'Abahinzi",
       "quickCrops": "Hitamo igihingwa cyawe:"
+    },
+    "callouts": {
+      "radar": {
+        "badge": "Igenzura ry'Umusaruro wa NISR SAS",
+        "title": "Guhangana n'Isesagura rya Nkunganire ya Miliyari 75 Rwf",
+        "stat": "Uturere 30 · Nkunganire Miliyari 75",
+        "desc": "Gupima umusaruro ugereranyije n'ikirere hakoreshejwe imibare y'ubukungu (z-score), bitandukanya amapfa n'isesagura ry'ifumbire n'imbuto z'indobanure.",
+        "cta": "Reba Igenzura ry'Igihugu"
+      },
+      "arbitrage": {
+        "badge": "Ubwishingizi bw'Ubwikorezi",
+        "title": "Gusesengura Ibiciro by'Ubwikorezi n'Ihungabana rya Mazutu",
+        "stat": "2,927 Rwf/L vs 3,600 Rwf/L",
+        "desc": "Gusesengura igiciro cy'ubwikorezi (litiro 0.32/km), ibyangirika mu nzira 1,570, no gupima uruhare rwa nkunganire ya litiro ku mafaranga 673.",
+        "cta": "Gerageza Ihungabana rya Mazutu"
+      },
+      "inflation": {
+        "badge": "Ingabo ku Bahaha n'Imiryango",
+        "title": "Igatebo y'Ibiribwa n'Ingabo ku Izamuka ry'Ibiciro",
+        "stat": "17.2% ku Mwaka · Itandukaniro +49.5",
+        "desc": "Gufasha ingo z'abaturage mu mijyi n'icyaro guhaha ibiribwa bisimbura ibindi bifite intungamubiri zihwanye n'igiciro gito cyane.",
+        "cta": "Fungura Igatebo y'Ibiribwa"
+      }
     }
   },
   "skipToContent": "Jump to content [DRAFT: review]",
@@ -555,6 +578,10 @@
       "Inama rusange ni amakuru rusange. Ifumbire n'imiti y'amatungo bisaba inzobere.",
       "Inyandiko y'Ikinyarwanda ihwanye 100% n'inyandiko y'Icyongereza muri buri kiciro."
     ],
+    "aiDisclosureTitle": "Itangazo ry'Ikoreshwa ry'Ibikoresho na AI",
+    "aiDisclosureBadge": "Amabwiriza ya NISR Hackathon 2026",
+    "aiDisclosureText": "Itangazo rikurikije amabwiriza ya NISR Hackathon 2026: Imfashanyarivubiro za AI zifashishijwe mu kwihutisha imyandikire ya tekiniki (TypeScript scaffolding, ubusobanuro bw'indimi ebyiri en/rw, n'uburyo bwo gupima imirimo / unit tests). Ibibazo byose by'ubukungu n'imibare y'ubuhinzi, ikoreshwa ry'uburemere bwa sampuli ya NISR SAS (Multiple Frame Sampling), ibipimo byo gusuzuma umusaruro ugereranyije n'ikirere, n'uburyo bwo gusesengura ubucuruzi bwambukiranya uturere byatekerejwe, byasuzumwe, kandi byemezwa n'abanditsi b'uyu mushinga, bafite inshingano zose z'umurimo watanzwe.",
+    "aiDisclosureNote": "Byatanzwe mu kubahiriza byimazeyo ibisabwa byo kwitabira amarushanwa ya NISR Big Data Hackathon 2026.",
     "dataLifecycle": {
       "title": "Ibyiciro 3 by'Urugendo rw'Amakuru n'Ikoranabuhanga Rikora Ryonyine",
       "subtitle": "Uko AgrIntel yakira amakuru y'uturere mu bihe bitandukanye nta guhindura kodi cyangwa kubaka porogaramu bundi bushya.",

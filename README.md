@@ -210,3 +210,11 @@ Visit `http://localhost:3000` to explore the platform.
 * **Authorship:** This project was developed as our original submission for the NISR Big Data Hackathon 2026.
 * **Open Science & Lineage:** All econometric formulas, data cleaning scripts, and statistical test suites are fully open, reproducible, and verifiable.
 * **Intellectual Property:** We assign all project intellectual property rights to the National Institute of Statistics of Rwanda (NISR) in accordance with official competition guidelines.
+
+---
+
+## 9. Tooling & AI Assistance Disclosure
+
+> **Disclosure per NISR 2026 Hackathon Guidelines:**  
+> AI coding assistants were utilized as productivity accelerators for TypeScript interface scaffolding, bilingual localization formatting (en/rw), and unit-test boilerplate. All econometric problem formulations, NISR SAS Multiple Frame Sampling weight applications, climate-controlled yield residual equations, and spatial arbitrage models were conceived, verified, and audited by the authors, who take full responsibility for the submitted work.
+
