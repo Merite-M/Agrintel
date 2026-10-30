@@ -1,0 +1,87 @@
+name: AgrIntel Automated Data Velocity Ingestion Pipeline
+
+on:
+  schedule:
+    # Tier 1: Scheduled weekly every Monday at 05:00 UTC
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+    inputs:
+      tier:
+        description: "Data Velocity Tier to execute (all, tier1_weekly, tier2_monthly, tier3_seasonal)"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - tier1_weekly
+          - tier2_monthly
+          - tier3_seasonal
+
+jobs:
+  ingest-and-sync:
+    name: Execute Data Lifecycle Ingestion & Forward Inference
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r pipeline/requirements.txt
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      # Tier 1: High-Frequency (Weekly / 10-Day Dekadal)
+      - name: Run Tier 1 Ingestion (Market Prices & CHIRPS Climate Anomalies)
+        if: ${{ github.event.inputs.tier == 'all' || github.event.inputs.tier == 'tier1_weekly' || github.event_name == 'schedule' }}
+        run: |
+          python pipeline/prepare_tangabid_prices.py
+          python pipeline/prepare_climate_anomalies.py
+          python pipeline/spatial_arbitrage_engine.py
+
+      # Tier 2: Medium-Frequency (Monthly)
+      - name: Run Tier 2 Ingestion (NISR CPI & Macro Inflation Series)
+        if: ${{ github.event.inputs.tier == 'all' || github.event.inputs.tier == 'tier2_monthly' }}
+        run: |
+          python pipeline/prepare_cpi_series.py
+
+      # Tier 3: Structural Baseline (Seasonal)
+      - name: Run Tier 3 Ingestion (NISR SAS Agricultural Survey & Yield Frontiers)
+        if: ${{ github.event.inputs.tier == 'all' || github.event.inputs.tier == 'tier3_seasonal' }}
+        run: |
+          python pipeline/prepare_nisr_sas.py
+          python pipeline/econometric_audit_engine.py
+
+      - name: Export Analytical TypeScript Data Layers
+        run: |
+          python pipeline/export_analytical_data.py
+
+      - name: Run Test Suite Verification
+        env:
+          PYTHONPATH: "."
+        run: |
+          pytest pipeline/tests/
+
+      - name: Idempotent Sync to Neon Serverless PostgreSQL
+        if: env.DATABASE_URL != ''
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          npm run db:seed
+          npm run db:load:sas
+          npm run db:load:climate
+          npm run db:load:cpi

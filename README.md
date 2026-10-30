@@ -2,7 +2,7 @@
 
 [![NISR Big Data Hackathon 2026](https://img.shields.io/badge/NISR_Hackathon-2026_Submission-0B4F37?style=for-the-badge)](https://statistics.gov.rw)
 [![Live Production](https://img.shields.io/badge/Live_App-agrintel--rho.vercel.app-28D17C?style=for-the-badge&logo=vercel)](https://agrintel-rho.vercel.app)
-[![Tests Passing](https://img.shields.io/badge/Pytest-60%2F60_Passed-success?style=for-the-badge&logo=pytest)](https://github.com/Merite-M/Agritech)
+[![Tests Passing](https://img.shields.io/badge/Pytest-61%2F61_Passed-success?style=for-the-badge&logo=pytest)](https://github.com/Merite-M/Agritech)
 [![Bilingual Parity](https://img.shields.io/badge/Localization-100%25_EN_%2F_RW-blue?style=for-the-badge)](https://agrintel-rho.vercel.app/rw)
 [![Database](https://img.shields.io/badge/Neon_Postgres-Serverless_Live-00E699?style=for-the-badge&logo=postgresql)](https://neon.tech)
 
@@ -28,7 +28,7 @@ AgrIntel Rwanda unifies high-resolution official statistics, subnational climate
 1. **Fiscal Subsidy Protection:** Directly monitors MINAGRI's **$\text{Rwf } 75\text{ Billion}$** annual input subsidy program, using climate-controlled yield frontiers ($z$-score residuals) to differentiate localized droughts from counterfeit seeds or fertilizer diversion.
 2. **Energy Pass-Through Modeling:** Simulates the domestic freight impact of the Government of Rwanda's **$\text{Rwf } 48\text{ Billion}$** middle-distillate fuel subsidy ($\text{Rwf } 2,927/\text{L}$ regulated vs. $\text{Rwf } 3,600/\text{L}$ unsubsidized counterfactual) across $1,570$ inter-district transit corridors.
 3. **Citizen Inflation Shield:** Empowers urban and rural households navigating **$17.2\%$ YoY food inflation** with the *Citizen Smart Food Basket*, enabling dynamic household budget modeling and calorie/protein-equivalent nutritional substitutions.
-4. **Zero Mock / Hardcoded Data Guarantee:** Every single metric, price, and corridor is computed live from verified empirical databases (**$11,300$** verified Neon PostgreSQL observations, $0$ sample fallbacks).
+4. **Zero Mock / Hardcoded Data Guarantee:** Every single metric, price, and corridor is computed live from verified empirical databases (**$14,722+$** verified Neon PostgreSQL observations, $0$ sample fallbacks).
 
 ---
 

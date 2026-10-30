@@ -101,6 +101,16 @@
       "scenario": "Icyerekezo"
     },
     "monthlyAverage": "impuzandengo y'ukwezi",
+    "macroCpi": {
+      "title": "Ibipimo by'Izamuka ry'Ibiciro bya NISR (CPI) n'Itandukaniro ry'Icyaro n'Umujyi",
+      "badge": "Imibare Yemewe ya Leta",
+      "foodInflation": "Izamuka ry'Ibiciro by'Ibiribwa (YoY)",
+      "ruralCpi": "CPI y'Icyaro ku Biribwa",
+      "urbanCpi": "CPI y'Umujyi ku Biribwa",
+      "divergence": "Itandukaniro ry'Ibiciro",
+      "divergenceExplanation": "Abaturage bo mu cyaro bahura n'izamuka ry'ibiciro riri hejuruho amanota 49.5 ugereranyije n'Umujyi wa Kigali (273.2 kuri 223.7). Kugabanuka kw'amasoko mu cyaro, ikiguzi cy'ubwikorezi, no kubura ibiribwa bituma ibiciro mu cyaro bizamuka cyane, bikagaragaza akamaro k'ubwikorezi bunoze n'ubuhunikiro bw'uturere.",
+      "sourcePrefix": "Imibare Fatizo ya Leta"
+    },
     "smartBasket": {
       "title": "Iteguriro ry'Ibiribwa n'Uburyo bwo Kuzigama ku Biribwa Bihenze",
       "intro": "Ibiciro by'ibiribwa byazamutseho 17.2% mu Rwanda. Genzura igiciro cy'ibiribwa by'urugo by'ukwezi no gushaka ibiribwa bisimbura bihendutse bifite intungamubiri zihwanye.",
@@ -544,6 +554,42 @@
       "Inama rusange ni amakuru rusange. Ifumbire n'imiti y'amatungo bisaba inzobere.",
       "Inyandiko y'Ikinyarwanda ihwanye 100% n'inyandiko y'Icyongereza muri buri kiciro."
     ],
+    "dataLifecycle": {
+      "title": "Ibyiciro 3 by'Urugendo rw'Amakuru n'Ikoranabuhanga Rikora Ryonyine",
+      "subtitle": "Uko AgrIntel yakira amakuru y'uturere mu bihe bitandukanye nta guhindura kodi cyangwa kubaka porogaramu bundi bushya.",
+      "juryQuestion": "Ikibazo cy'Abagize Akanama Nkemurampaka Gisubizwa",
+      "juryQuestionText": "NISR itangaza CPI buri kwezi, WFP ikavugurura imvura buri minsi 10, na SAS igasohoka buri gihe cy'ihinga. Bigenda bite iyo amakuru mashya aje?",
+      "columns": {
+        "tier": "Icyiciro cy'Urugendo rw'Amakuru",
+        "frequency": "Igihe Akirwa",
+        "datasets": "Amakuru Arimo",
+        "automation": "Uko Amakuru Mashya Yakirwa ku Buryo Bwikora"
+      },
+      "tiers": [
+        {
+          "name": "Icyiciro cya 1: Amakuru Yihuta",
+          "frequency": "Buri Cyumweru / Buri Minsi 10",
+          "datasets": "Ibiciro bya WFP na TangaBid (P_O, P_D), ibipimo by'imvura bya CHIRPS (rfq), n'igiciro cya lisansi kigenwa na RURA.",
+          "automation": "Gahunda ya GitHub Action (.github/workflows/data-sync.yml) ikora buri wa Mbere saa 05:00 UTC. Ikurura amakuru mashya, igakora imibare y'inyungu y'ubwikorezi mu nzira 1,570 n'ibipimo by'izuba n'amapfa, ikabyandika muri Neon PostgreSQL nta gutangira bundi bushya.",
+          "badgeColor": "forest"
+        },
+        {
+          "name": "Icyiciro cya 2: Amakuru y'Ukwezi",
+          "frequency": "Buri Kwezi",
+          "datasets": "Imibare ya NISR y'Izamuka ry'Ibiciro (CPI) na PPI igabanyije mu mujyi no mu cyaro.",
+          "automation": "Yakirwa ku itariki ya 10 ya buri kwezi iyo NISR isohoye raporo, ikavugurura impuzandengo y'izamuka ry'ibiciro (17.2% YoY) n'itandukaniro ry'icyaro n'umujyi (Icyaro 273.2 kuri Umujyi 223.7).",
+          "badgeColor": "canopy"
+        },
+        {
+          "name": "Icyiciro cya 3: Amakuru y'Igihe cy'Ihinga",
+          "frequency": "Igihe cy'Ihinga (Inshuro 3 ku Mwaka)",
+          "datasets": "Amabarura y'Ubuhinzi ya NISR SAS (Igihe A, B, C) ku musaruro, ubuso bwahinzwe, n'ikoreshwa ry'inyongeramusaruro (imbuto zatoranyijwe, ifumbire, kuhira, amaterasi).",
+          "automation": "Iyo NISR isohoye amabarura mashya y'ihinga (Igihe A muri Mata/Gicurasi, Igihe B mu Kwakira), sisitemu yongeramo amakuru y'uturere, ikongera gukora imibare y'umusaruro witezwe (Φ_climate, Ψ_inputs), ikagaragaza uturere dufite ibyago by'uko ifumbire na gahunda ya MINAGRI itageze ku musaruro (z < -1.75).",
+          "badgeColor": "clay"
+        }
+      ],
+      "liveDemoNote": "Agakoresho ko 'Kugerageza Amakuru Mashya' ku rukuta rw'Ibiburira kerekana uku gukora kw'ikoranabuhanga mu buryo bwa nyabwo imbona nkubone."
+    },
     "columns": {
       "source": "Isoko",
       "owner": "Nyir'amakuru",

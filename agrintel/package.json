@@ -12,7 +12,9 @@
     "db:seed": "tsx --env-file=.env.local src/db/seed-reference.ts",
     "db:load:wfp": "tsx --env-file=.env.local src/db/load-wfp-prices.ts",
     "db:load:tangabid": "tsx --env-file=.env.local src/db/load-tangabid-prices.ts",
-    "db:load:sas": "tsx --env-file=.env.local src/db/load-sas-production.ts"
+    "db:load:sas": "tsx --env-file=.env.local src/db/load-sas-production.ts",
+    "db:load:cpi": "tsx --env-file=.env.local src/db/load-cpi.ts",
+    "db:load:climate": "tsx --env-file=.env.local src/db/load-climate-anomalies.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",
