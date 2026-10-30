@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DataStatusBanner } from "@/components/data-status-banner";
+import { MacroCpiBanner } from "@/components/macro-cpi-banner";
 import { PriceChart, type ChartPoint } from "@/components/price-chart";
 import { SmartFoodBasket } from "@/components/smart-basket";
 import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
+import { getLatestCpiRelease } from "@/lib/data/macro-cpi";
 import { calculateTrend, monthlyAverages } from "@/lib/trend";
 import {
   getApprovedPriceObservations,
@@ -150,6 +152,9 @@ export default async function MarketPricesPage({
         <h1 className="text-4xl font-semibold md:text-5xl">{t.market.title}</h1>
         <p className="mt-4 text-lg text-ink">{t.market.intro}</p>
       </section>
+
+      {/* Official NISR CPI Release & Rural-Urban Divergence Banner */}
+      <MacroCpiBanner cpi={getLatestCpiRelease()} labels={t.market.macroCpi} />
 
       {/* Crop selector: plain links, so it works without JavaScript */}
       <nav aria-label={t.market.selectCommodity} className="flex flex-col gap-2">

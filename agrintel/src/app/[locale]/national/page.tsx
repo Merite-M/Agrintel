@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import { DataStatusBanner } from "@/components/data-status-banner";
 import { RiskBadge } from "@/components/risk-badge";
 import { DistrictGeographicMatrix } from "@/components/district-risk-map";
+import { MacroCpiBanner } from "@/components/macro-cpi-banner";
 import { getDictionary, isLocale } from "@/lib/i18n";
+import { getLatestCpiRelease } from "@/lib/data/macro-cpi";
 import { calculateTrend, monthlyAverages } from "@/lib/trend";
 import { getCropOptions, getSourceCounts } from "@/lib/data/prices";
 import {
@@ -116,6 +118,9 @@ export default async function NationalDashboardPage({
         <p className="mt-4 text-lg text-ink">{t.national.intro}</p>
         <p className="mt-2 text-sm text-muted">{t.national.scopeNote}</p>
       </section>
+
+      {/* Official NISR Macro CPI Release & Rural-Urban Divergence Spread */}
+      <MacroCpiBanner cpi={getLatestCpiRelease()} labels={t.market.macroCpi} />
 
       {/* Commodity Selector Bar */}
       <nav aria-label={t.national.selectCommodity} className="flex flex-col gap-2">

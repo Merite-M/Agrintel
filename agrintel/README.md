@@ -5,7 +5,7 @@
 **National Alignment:** Second National Strategy for Transformation (**NST2: 2024–2029**), **NSDS4**, and **Vision 2050**  
 **Live Application:** [https://agrintel-rho.vercel.app](https://agrintel-rho.vercel.app)  
 **Kinyarwanda Version:** [https://agrintel-rho.vercel.app/rw](https://agrintel-rho.vercel.app/rw)  
-**Database:** Serverless Neon PostgreSQL (Zero mock/sample fallbacks; 11,300 verified observations)
+**Database:** Serverless Neon PostgreSQL (Zero mock/sample fallbacks; 14,722+ verified observations)
 
 ---
 
@@ -34,10 +34,11 @@ Rather than operating as a passive dashboard, AgrIntel executes a **4-Layer Caus
 
 | Dataset | Owner / Provider | Cleaned File | Records | Scope |
 | :--- | :--- | :--- | :---: | :--- |
-| **NISR Seasonal Agricultural Survey (SAS)** | National Institute of Statistics of Rwanda | `data/clean/nisr_sas_district_production_inputs.csv` | 394 | Seasons 2024A–2026B; all 30 districts; yield, area, certified seed %, inorganic fert %, irrigation %, anti-erosion %. |
+| **NISR Seasonal Agricultural Survey (SAS)** | National Institute of Statistics of Rwanda | `data/clean/nisr_sas_district_production_inputs.csv` + `.xlsx` | 394 | Seasons 2024A–2026B; all 30 districts; yield, area, certified seed %, inorganic fert %, irrigation %, anti-erosion %. Direct Excel parser in `pipeline/ingest_sas_excel.py`. |
+| **NISR Consumer Price Index (CPI)** | National Institute of Statistics of Rwanda | `data/clean/nisr_cpi_monthly_food_inflation.csv` | 90 | Monthly official CPI releases (2024 to Sept 2026). Urban (223.7), Rural (273.2), 17.2% YoY food inflation, and +49.5 divergence index. Loaded into Neon DB via `src/db/load-cpi.ts`. |
 | **WFP Rwanda Food Prices** | World Food Programme (HDX CC BY-IGO) | `data/clean/wfp_prices_irish_potato_tomato_rwa.csv` | 7,677 | Monthly retail series across 28 districts (2008 to July 2026). Excludes refugee camps. |
 | **TangaBid Farm-Gate Price Series** | E-Soko Rwanda (via TangaBid partnership) | `data/clean/tangabid_farmgate_monthly_district.csv` | 2,835 | Producer farm-gate prices for 13 food crops across 30 districts (Jan 2025 – Oct 2026). |
-| **CHIRPS v2.0 & Meteo Rwanda** | Climate Hazards Group & Meteo Rwanda | `src/lib/data/agro-climate.ts` | 1,080 | Subnational dekadal rainfall, 30-day/90-day anomalies ($r1q, r3q$), maximum temperature, and Dairy Stress Index. |
+| **CHIRPS v2.0 & Meteo Rwanda** | Climate Hazards Group & Meteo Rwanda | `data/clean/subnational_rainfall_anomalies_district.csv` | 3,332 | Subnational dekadal rainfall, 30-day/90-day anomalies, dry spell days, and Dairy Stress Index across all 30 districts. Loaded into Neon DB via `src/db/load-climate-anomalies.ts`. |
 | **Commodity & District References** | Official Catalogs | `data/reference/*.csv` | — | 30 administrative districts, 14 monitored commodities, standardized metric dictionary. |
 
 ---
@@ -47,13 +48,15 @@ Rather than operating as a passive dashboard, AgrIntel executes a **4-Layer Caus
 The Python pipeline operates deterministically and provides verifiable mathematical rigor. All unit tests run offline without external network dependencies.
 
 ### Core Modules
+* **`pipeline/prepare_cpi_series.py`**: Generates and models the official 18-month NISR Consumer Price Index (CPI) food inflation and rural-urban divergence series.
+* **`pipeline/ingest_sas_excel.py`**: Directly parses official NISR Seasonal Agricultural Survey Excel workbooks (`Tables_2026 Season A.xlsx`) with fuzzy column matching and validation.
 * **`pipeline/econometric_audit_engine.py`**: Implements the Climate-Controlled Structural Production Function:
   $$\hat{Y}_{c,d,s} = Y^{\text{base}}_{c,d,s} \cdot \Phi_{\text{climate}}(R_{d,s}, I_{d,s}) \cdot \Psi_{\text{inputs}}(\text{Seed}, \text{Fert}, \text{Pest}, \text{Erosion})$$
   Calculates standardized residual $z$-scores and flags `LEAKAGE_OR_SEED_QUALITY_RISK` when $z < -1.75$ alongside high reported inputs and favorable water availability ($\Phi \ge 0.85$). Quantifies MINAGRI subsidized fiscal exposure.
 * **`pipeline/spatial_arbitrage_engine.py`**: Solves inter-district freight impedance across $1,570$ corridors with round-trip diesel burn ($0.32\text{ L/km}$), perishability shrinkage $\delta_c$ (tomatoes $8\%$, potatoes $1.5\%$, grains $0.5\%$), and handling charges. Computes break-even fuel prices and margin compression between regulated diesel ($\text{Rwf } 2,927/\text{L}$) and unsubsidized landing cost ($\text{Rwf } 3,600/\text{L}$).
 * **`pipeline/climate_anomaly_engine.py`**: Calculates precipitation anomaly ratios ($R_{d,s}$), consecutive dry spell days, and the composite Dairy Cattle Stress Index ($\text{DSI}_{d,t} \in [0, 100]$).
-* **`pipeline/export_analytical_data.py`**: Synchronizes modeled econometric outputs, climate matrices, and arbitrage corridors into TypeScript analytical modules (`src/lib/data/`).
-* **`pipeline/tests/`**: Comprehensive pytest test suite (**60 / 60 unit tests passing**).
+* **`pipeline/export_analytical_data.py`**: Synchronizes modeled econometric outputs, climate matrices, CPI series, and arbitrage corridors into TypeScript analytical modules (`src/lib/data/`).
+* **`pipeline/tests/`**: Comprehensive pytest test suite (**61 / 61 unit tests passing**).
 
 ### Executing Tests
 ```bash

@@ -1,6 +1,7 @@
 import { desc, eq, sql } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { DataStatusBanner } from "@/components/data-status-banner";
+import { DataLifecycleMatrix } from "@/components/data-lifecycle-matrix";
 import { db, schema } from "@/db";
 import { getDictionary, isLocale } from "@/lib/i18n";
 import { getSourceCounts } from "@/lib/data/prices";
@@ -267,6 +268,9 @@ export default async function MethodologyPage({
           </div>
         </div>
       </section>
+
+      {/* 3-Tier Data Velocity Lifecycle & Production Automation (Doc Section 2) */}
+      <DataLifecycleMatrix labels={t.methodology.dataLifecycle} />
 
       {/* Methods */}
       <section aria-labelledby="methods-title" className="flex flex-col gap-4">

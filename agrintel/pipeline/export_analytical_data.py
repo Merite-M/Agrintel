@@ -21,6 +21,7 @@ SRC_DATA_DIR = BASE_DIR / "src" / "lib" / "data"
 from prepare_nisr_sas import main as build_sas
 from prepare_climate_anomalies import main as build_climate
 from prepare_road_distances import main as build_distances
+from prepare_cpi_series import main as build_cpi
 from econometric_audit_engine import main as run_audit
 from spatial_arbitrage_engine import main as run_arbitrage
 
@@ -72,6 +73,17 @@ export function getAuditRecordsForDistrict(districtCode: string): DistrictAuditR
 
 export function getAuditRecordsForCrop(commodityCode: string): DistrictAuditRecord[] {{
   return ECONOMETRIC_AUDIT_DATA.filter((r) => r.commodity_code === commodityCode);
+}}
+
+export function getAuditRecordForDistrictAndCommodity(
+  districtCode: string,
+  commodityCode: string
+): DistrictAuditRecord | null {{
+  const records = getAuditRecordsForDistrict(districtCode);
+  const matching = records.filter((r) => r.commodity_code === commodityCode);
+  if (matching.length === 0) return null;
+  matching.sort((a, b) => b.period_start.localeCompare(a.period_start));
+  return matching[0];
 }}
 
 export function getLatestAuditRecords(): DistrictAuditRecord[] {{
@@ -249,6 +261,42 @@ export function getPastoralDistrictsSummary() {{
     (SRC_DATA_DIR / "agro-climate.ts").write_text(climate_ts, encoding="utf-8")
     print(f"Exported TypeScript module: {SRC_DATA_DIR / 'agro-climate.ts'}")
 
+    # 4. Export Macro CPI Series
+    cpi_csv = CLEAN_DIR / "nisr_cpi_monthly_food_inflation.csv"
+    cpi_df = pd.read_csv(cpi_csv)
+    cpi_records = cpi_df.to_dict(orient="records")
+
+    cpi_ts = f"""/**
+ * NISR Consumer Price Index (CPI) Series & Rural-Urban Inflation Divergence
+ * Generated autonomously by pipeline/export_analytical_data.py
+ * Source: National Institute of Statistics of Rwanda (NISR) Monthly CPI Releases
+ */
+
+export interface MacroCpiRecord {{
+  period: string;
+  period_start: string;
+  period_end: string;
+  national_cpi: number;
+  urban_cpi: number;
+  rural_cpi: number;
+  food_inflation_yoy: number;
+  rural_urban_divergence: number;
+  source: string;
+}}
+
+export const MACRO_CPI_SERIES: MacroCpiRecord[] = {json.dumps(cpi_records, indent=2)};
+
+export function getLatestCpiRelease(): MacroCpiRecord {{
+  return MACRO_CPI_SERIES[0];
+}}
+
+export function getCpiHistory(): MacroCpiRecord[] {{
+  return [...MACRO_CPI_SERIES].reverse();
+}}
+"""
+    (SRC_DATA_DIR / "macro-cpi.ts").write_text(cpi_ts, encoding="utf-8")
+    print(f"Exported TypeScript module: {SRC_DATA_DIR / 'macro-cpi.ts'}")
+
 
 def main():
     print("=== Step 1: Generating NISR SAS District Agricultural Survey Benchmark ===")
@@ -257,11 +305,13 @@ def main():
     build_climate()
     print("=== Step 3: Generating RTDA Inter-District Distance Matrix ===")
     build_distances()
-    print("=== Step 4: Running MINAGRI Econometric Yield Residual Audit ===")
+    print("=== Step 4: Generating NISR Consumer Price Index (CPI) Inflation Series ===")
+    build_cpi()
+    print("=== Step 5: Running MINAGRI Econometric Yield Residual Audit ===")
     run_audit()
-    print("=== Step 5: Solving Spatial Arbitrage Corridors under Diesel Regimes ===")
+    print("=== Step 6: Solving Spatial Arbitrage Corridors under Diesel Regimes ===")
     run_arbitrage()
-    print("=== Step 6: Exporting Typed Analytical Data Layers to src/lib/data/ ===")
+    print("=== Step 7: Exporting Typed Analytical Data Layers to src/lib/data/ ===")
     export_typescript_modules()
     print("=== All Pipeline Modules Executed Successfully! ===")
 

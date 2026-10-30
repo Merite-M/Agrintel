@@ -9496,6 +9496,17 @@ export function getAuditRecordsForCrop(commodityCode: string): DistrictAuditReco
   return ECONOMETRIC_AUDIT_DATA.filter((r) => r.commodity_code === commodityCode);
 }
 
+export function getAuditRecordForDistrictAndCommodity(
+  districtCode: string,
+  commodityCode: string
+): DistrictAuditRecord | null {
+  const records = getAuditRecordsForDistrict(districtCode);
+  const matching = records.filter((r) => r.commodity_code === commodityCode);
+  if (matching.length === 0) return null;
+  matching.sort((a, b) => b.period_start.localeCompare(a.period_start));
+  return matching[0];
+}
+
 export function getLatestAuditRecords(): DistrictAuditRecord[] {
   // Group by district and commodity, taking latest season
   const latestMap = new Map<string, DistrictAuditRecord>();
@@ -9526,15 +9537,4 @@ export function getNationalAuditSummary() {
     nominalCount: nominal.length,
     totalFiscalExposureRwf,
   };
-}
-
-export function getAuditRecordForDistrictAndCommodity(
-  districtCode: string,
-  commodityCode: string
-): DistrictAuditRecord | null {
-  const records = ECONOMETRIC_AUDIT_DATA.filter(
-    (r) => r.district_code === districtCode && r.commodity_code === commodityCode
-  );
-  if (records.length === 0) return null;
-  return [...records].sort((a, b) => b.period_start.localeCompare(a.period_start))[0];
 }

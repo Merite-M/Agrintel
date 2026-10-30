@@ -18,3 +18,8 @@ yield_residual_z_score,Standardized yield residual,z-score,district,Climate-cont
 arbitrage_margin_regulated_rwf_per_kg,Regulated arbitrage margin,RWF/kg,market,Net spatial arbitrage margin per kg under regulated diesel (Rwf 2927/L)
 arbitrage_margin_unsubsidized_rwf_per_kg,Unsubsidized arbitrage margin,RWF/kg,market,Net spatial arbitrage margin per kg under unsubsidized diesel (Rwf 3600/L)
 dairy_stress_index,Dairy cattle stress index,index 0-100,district,Composite pasture forage and water deficit stress index for pastoral districts
+cpi_national,National Consumer Price Index,index,national,Official NISR headline Consumer Price Index (Base 2014=100)
+cpi_urban,Urban Consumer Price Index,index,national,Official NISR Urban Consumer Price Index for urban consumption basket
+cpi_rural,Rural Consumer Price Index,index,national,Official NISR Rural Consumer Price Index showing smallholder rural cost of living
+food_inflation_yoy,Food inflation YoY,%,national,Year-over-year percentage change in food and non-alcoholic beverages index
+rural_urban_cpi_divergence,Rural-Urban CPI divergence,points,national,Spread between rural and urban price indices (Rural CPI minus Urban CPI)
