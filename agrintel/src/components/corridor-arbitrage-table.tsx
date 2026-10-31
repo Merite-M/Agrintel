@@ -94,6 +94,33 @@ export function CorridorArbitrageTable({
     { dispatch: 0, moderate: 0, hold: 0 }
   );
 
+  // Macro Margin Decomposition across all monitored corridors
+  const macroBreakdown = initialCorridors.reduce(
+    (acc, corridor) => {
+      const sim = simulateCustomFuelPrice(corridor, fuelPrice, truckPayload);
+      const retail = corridor.retail_price_dest;
+      const farm = corridor.farmgate_price_origin;
+      const freight = sim.freightCost;
+      const spoilage = retail * (corridor.spoilage_loss_pct / 100);
+      const margin = Math.max(0, sim.netMargin);
+
+      acc.totalRetail += retail;
+      acc.totalFarm += farm;
+      acc.totalFreight += freight;
+      acc.totalSpoilage += spoilage;
+      acc.totalMargin += margin;
+      acc.count += 1;
+      return acc;
+    },
+    { totalRetail: 0, totalFarm: 0, totalFreight: 0, totalSpoilage: 0, totalMargin: 0, count: 0 }
+  );
+
+  const avgRetail = macroBreakdown.totalRetail / (macroBreakdown.count || 1);
+  const macroFarmPct = Math.min(100, Math.max(0, ((macroBreakdown.totalFarm / (macroBreakdown.count || 1)) / avgRetail) * 100));
+  const macroFreightPct = Math.min(100, Math.max(0, ((macroBreakdown.totalFreight / (macroBreakdown.count || 1)) / avgRetail) * 100));
+  const macroSpoilagePct = Math.min(100, Math.max(0, ((macroBreakdown.totalSpoilage / (macroBreakdown.count || 1)) / avgRetail) * 100));
+  const macroMarginPct = Math.max(0, 100 - macroFarmPct - macroFreightPct - macroSpoilagePct);
+
   return (
     <div className="flex flex-col gap-6">
       {/* Interactive Fuel & Truck Stress Slider Island */}
@@ -259,6 +286,34 @@ export function CorridorArbitrageTable({
             <span className="text-xs text-clay font-bold">&lt; 10 Rwf/kg</span>
           </div>
         </div>
+
+        {/* Live Macro Margin Decomposition Bar */}
+        <div className="mt-5 rounded-2xl border border-line/80 bg-cream/30 p-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2.5">
+            <div>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-muted font-bold">
+                Live Price Spread Decomposition (All Corridors)
+              </span>
+              <p className="text-xs font-bold text-canopy">
+                How Retail Kigali Price ({priceFormat(avgRetail)} Rwf/kg) splits at Rwf {priceFormat(fuelPrice)}/L Diesel
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 text-[11px] font-mono tabular-nums">
+              <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-soil/75" /> Farm: <strong>{macroFarmPct.toFixed(1)}%</strong></span>
+              <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-clay" /> Freight: <strong>{macroFreightPct.toFixed(1)}%</strong></span>
+              <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-harvest" /> Spoilage: <strong>{macroSpoilagePct.toFixed(1)}%</strong></span>
+              <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-leaf" /> Net: <strong>{macroMarginPct.toFixed(1)}%</strong></span>
+            </div>
+          </div>
+
+          {/* Animated Proportional Stacked Bar */}
+          <div className="h-3.5 w-full rounded-full overflow-hidden flex bg-stone-100 border border-line/60 shadow-2xs">
+            <div style={{ width: `${macroFarmPct}%` }} className="bg-soil/80 transition-all duration-300" title={`Farm-gate Cost: ${macroFarmPct.toFixed(1)}%`} />
+            <div style={{ width: `${macroFreightPct}%` }} className="bg-clay transition-all duration-300" title={`Diesel Freight Cost: ${macroFreightPct.toFixed(1)}%`} />
+            <div style={{ width: `${macroSpoilagePct}%` }} className="bg-harvest transition-all duration-300" title={`Transit Spoilage Loss: ${macroSpoilagePct.toFixed(1)}%`} />
+            <div style={{ width: `${macroMarginPct}%` }} className="bg-leaf transition-all duration-300" title={`Net Trader Margin: ${macroMarginPct.toFixed(1)}%`} />
+          </div>
+        </div>
       </section>
 
       {/* Corridors Table */}
@@ -311,18 +366,29 @@ export function CorridorArbitrageTable({
                     {sim.freightCost.toFixed(1)} Rwf/kg
                   </td>
                   <td className="px-4 py-3.5 font-mono tabular-nums">
-                    <span
-                      className={`font-black text-base ${
-                        isDispatch
-                          ? "text-leaf"
-                          : isModerate
-                          ? "text-harvest"
-                          : "text-clay"
-                      }`}
-                    >
-                      {sim.netMargin > 0 ? `+${sim.netMargin.toFixed(1)}` : sim.netMargin.toFixed(1)}
-                    </span>{" "}
-                    <span className="text-xs text-muted">Rwf/kg</span>
+                    <div className="flex flex-col gap-1 min-w-[9.5rem]">
+                      <div className="flex items-baseline justify-between">
+                        <span
+                          className={`font-black text-base ${
+                            isDispatch
+                              ? "text-leaf"
+                              : isModerate
+                              ? "text-harvest"
+                              : "text-clay"
+                          }`}
+                        >
+                          {sim.netMargin > 0 ? `+${sim.netMargin.toFixed(1)}` : sim.netMargin.toFixed(1)}
+                        </span>
+                        <span className="text-[11px] text-muted">Rwf/kg</span>
+                      </div>
+                      {/* Live Stacked Margin Bar for this specific Corridor */}
+                      <div className="h-1.5 w-full rounded-full overflow-hidden flex bg-stone-200/80 border border-line/40">
+                        <div style={{ width: `${Math.min(100, Math.max(0, (corridor.farmgate_price_origin / corridor.retail_price_dest) * 100))}%` }} className="bg-soil/75 transition-all duration-300" />
+                        <div style={{ width: `${Math.min(100, Math.max(0, (sim.freightCost / corridor.retail_price_dest) * 100))}%` }} className="bg-clay transition-all duration-300" />
+                        <div style={{ width: `${Math.min(100, Math.max(0, corridor.spoilage_loss_pct))}%` }} className="bg-harvest transition-all duration-300" />
+                        <div style={{ width: `${Math.min(100, Math.max(0, (Math.max(0, sim.netMargin) / corridor.retail_price_dest) * 100))}%` }} className={`transition-all duration-300 ${isDispatch ? "bg-leaf" : isModerate ? "bg-harvest" : "bg-clay"}`} />
+                      </div>
+                    </div>
                   </td>
                   <td className="px-4 py-3.5 text-xs text-muted font-mono tabular-nums">
                     {corridor.breakeven_diesel_price > 0 && corridor.breakeven_diesel_price < 20000

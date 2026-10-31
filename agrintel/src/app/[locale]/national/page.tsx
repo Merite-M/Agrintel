@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { DataStatusBanner } from "@/components/data-status-banner";
 import { RiskBadge } from "@/components/risk-badge";
 import { DistrictGeographicMatrix } from "@/components/district-risk-map";
+import { YieldFrontierChart } from "@/components/yield-frontier-chart";
 import { MacroCpiBanner } from "@/components/macro-cpi-banner";
 import { ActionSummaryDeck, type ActionCardItem } from "@/components/action-summary-deck";
 import { getDictionary, isLocale } from "@/lib/i18n";
@@ -276,6 +277,33 @@ export default async function NationalDashboardPage({
               Anchored to MINAGRI&apos;s Rwf 75 Billion public input subsidy allocation and NISR SAS 2024-2026 Multiple Frame Sampling survey weights.
             </div>
           </div>
+
+          {/* ML Structural Production Frontier & Feature Driver Attribution */}
+          <YieldFrontierChart
+            auditRecords={auditRecords}
+            commodityName={cropName(crop)}
+            locale={locale}
+            selectedDistrictCode={selectedAuditDistrict?.district_code}
+            labels={{
+              title: locale === "rw"
+                ? "Icyitegererezo cy'Umusaruro n'Ubusesenguzi bw'Ubutaka (Production Frontier)"
+                : "ML Climate-Controlled Yield Production Frontier & Outlier Isolation",
+              subtitle: locale === "rw"
+                ? `Isesengura ry'umusaruro witezwe ugereranyije n'uwabonetse kuri ${cropName(crop)} mu turere 30 tw'u Rwanda.`
+                : `Plots all 30 districts against expected harvest yields conditioned on SAS fertilizer/seed inputs and CHIRPS rainfall.`,
+              expectedAxis: locale === "rw"
+                ? "Umusaruro Witezwe (kg/ha) [Ifumbire + Imbuto + Imvura]"
+                : "Expected Frontier Yield (kg/ha) [SAS Fertilizer + Certified Seeds + CHIRPS Rain]",
+              observedAxis: locale === "rw"
+                ? "Umusaruro Wabonetse mu Ibarura rya SAS (kg/ha)"
+                : "Observed SAS Survey Yield (kg/ha)",
+              frontierLine: locale === "rw" ? "Umurongo w'Umusaruro Witezwe (Y = X)" : "Predicted Production Frontier (Y = X)",
+              leakageZone: locale === "rw" ? "Ahari Icyuho (z < -1.75)" : "Negative Residual Anomaly (z < -1.75)",
+              featureAttributionTitle: locale === "rw"
+                ? "Uburemere n'Uruhare rw'Ibipimo mu Cyitegererezo (Feature Attribution)"
+                : "Econometric Elasticity & Driver Attribution Weights",
+            }}
+          />
 
           {/* All 30 Districts Geographic Matrix */}
           <DistrictGeographicMatrix
