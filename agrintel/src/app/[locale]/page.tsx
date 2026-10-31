@@ -8,6 +8,7 @@ import { MacroCpiBanner } from "@/components/macro-cpi-banner";
 import { getLatestCpiRelease } from "@/lib/data/macro-cpi";
 import { getDictionary, isLocale } from "@/lib/i18n";
 import { CROP_VISUALS } from "@/components/crop-cards";
+import { OntologyPipelineStrip } from "@/components/ontology-pipeline-strip";
 
 // The welcome page reads live counts from Neon, so it must render per request.
 export const dynamic = "force-dynamic";
@@ -97,6 +98,9 @@ export default async function WelcomePage({
           {latestUpdate ?? t.welcome.latestUpdateNone}
         </p>
       </section>
+
+      {/* 6-Stage Palantir Foundry-Grade Decision Intelligence Ontology */}
+      <OntologyPipelineStrip ontology={t.welcome.ontology} />
 
       {/* Executive Strategic Callout Metric Cards (The 15-Second Judge Hook) */}
       <section aria-label="National Strategic Callouts" className="grid gap-4 md:grid-cols-3">

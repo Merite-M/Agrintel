@@ -1,5 +1,6 @@
 {
-  "siteName": "Rwanda Agro-Climatic Early Warning",
+  "siteName": "AgrIntel Rwanda",
+  "siteSubtitle": "Agro-Fiscal Audit & Spatial Arbitrage Engine",
   "tagline": "Earlier, clearer information for food-security decisions",
   "language": {
     "label": "Language",
@@ -23,6 +24,43 @@
     "disclaimer": "Outlooks are estimates that support decisions. They are not guarantees or policy advice.",
     "latestUpdate": "Latest update",
     "latestUpdateNone": "No data update yet",
+    "ontology": {
+      "eyebrow": "Palantir Foundry-Grade Decision Architecture",
+      "title": "6-Stage Decision Intelligence Ontology",
+      "subtitle": "How AgrIntel transforms multi-silo empirical surveys into real-time operational field interventions",
+      "stages": [
+        {
+          "step": "01",
+          "name": "Multi-Source Data",
+          "subtext": "NISR SAS/CPI + CHIRPS + WFP/Tangabid"
+        },
+        {
+          "step": "02",
+          "name": "Linked Ontology",
+          "subtext": "District ↔ Input Lot ↔ Trade Corridor"
+        },
+        {
+          "step": "03",
+          "name": "Causal Models",
+          "subtext": "Climate-Controlled Yield Residual (z) & Spatial Equilibrium"
+        },
+        {
+          "step": "04",
+          "name": "Counterfactual Analytics",
+          "subtext": "Rwf 2,927 vs Rwf 3,600/L Diesel Stress-Test"
+        },
+        {
+          "step": "05",
+          "name": "Operational Workflows",
+          "subtext": "MINAGRI Audit & Cooperative Dispatch Directives"
+        },
+        {
+          "step": "06",
+          "name": "Last-Mile Integrations",
+          "subtext": "Bilingual GSM SMS, Web Speech Audio & Neon Sync"
+        }
+      ]
+    },
     "cards": {
       "national": {
         "title": "National outlook",

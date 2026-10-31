@@ -1,6 +1,7 @@
 {
   "_note": "DRAFT Kinyarwanda. Must be reviewed by a fluent Kinyarwanda speaker, especially agricultural terms, before release.",
-  "siteName": "Kuburira hakiri mu buhinzi n'ikirere, Rwanda",
+  "siteName": "AgrIntel Rwanda",
+  "siteSubtitle": "Isuzuma ry'Inyongeramusaruro n'Isesengura ry'Isoko",
   "tagline": "Amakuru yihuse kandi asobanutse yo gufata ibyemezo by'ibiribwa",
   "language": {
     "label": "Ururimi",
@@ -24,6 +25,43 @@
     "disclaimer": "Ibyavuye mu isesengura ni ibigereranyo bifasha gufata ibyemezo. Ntabwo ari icyizere cyuzuye cyangwa inama za politiki.",
     "latestUpdate": "Ivugurura riheruka",
     "latestUpdateNone": "Nta vugurura rirahari",
+    "ontology": {
+      "eyebrow": "Uburyo Bwimbitse bwo Gusesengura nka Palantir Foundry",
+      "title": "Ibyiciro 6 by'Ubwenge n'Isesengura ry'Ibyemezo",
+      "subtitle": "Uko AgrIntel ihindura amakuru y'ibarurishamibare mu bikorwa bifatika mu mirima n'amasoko",
+      "stages": [
+        {
+          "step": "01",
+          "name": "Amakuru y'Amasoko Menshi",
+          "subtext": "NISR SAS & CPI · Imvura ya CHIRPS · WFP & TangaBid"
+        },
+        {
+          "step": "02",
+          "name": "Isano y'Ibyiciro (Ontology)",
+          "subtext": "Akarere ↔ Inyongeramusaruro ↔ Inzira y'Ubwikorezi"
+        },
+        {
+          "step": "03",
+          "name": "Icyitegererezo cy'Impamvu n'Ingaruka",
+          "subtext": "Umusaruro Ugenzuwe n'Ikirere (z) & Uburinganire bw'Isoko"
+        },
+        {
+          "step": "04",
+          "name": "Isesengura ry'Ibishoboka",
+          "subtext": "Ibiciro bya Mazutu: Rwf 2,927 vs 3,600/L"
+        },
+        {
+          "step": "05",
+          "name": "Uburyo bw'Ibikorwa (Workflows)",
+          "subtext": "Isuzuma rya MINAGRI & Ibyemezo by'Amakoperative"
+        },
+        {
+          "step": "06",
+          "name": "Ibiheruka n'Uburyo bwo Kugeza ku Baturage",
+          "subtext": "Ubutumwa bwa SMS mu ndimi 2 · Majwi · Isano ya Neon"
+        }
+      ]
+    },
     "cards": {
       "national": {
         "title": "Incamake y'igihugu",

@@ -30,7 +30,7 @@ export async function generateMetadata({
   if (!isLocale(locale)) return {};
   const t = getDictionary(locale);
   return {
-    title: t.siteName,
+    title: `${t.siteName} | ${t.siteSubtitle}`,
     description: t.tagline,
   };
 }
@@ -61,10 +61,18 @@ export default async function LocaleLayout({
           {t.skipToContent}
         </a>
 
-        <header className="bg-canopy text-cream">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4">
-            <Link href={`/${typedLocale}`} className="font-display text-xl font-semibold">
-              {t.siteName}
+        <header className="bg-canopy text-cream shadow-sm">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-3 sm:py-4">
+            <Link
+              href={`/${typedLocale}`}
+              className="group flex flex-col transition-opacity hover:opacity-95"
+            >
+              <span className="font-display text-xl font-bold tracking-tight text-cream group-hover:text-harvest transition-colors">
+                {t.siteName}
+              </span>
+              <span className="text-[11px] font-semibold tracking-wider text-sprout uppercase opacity-90">
+                {t.siteSubtitle}
+              </span>
             </Link>
 
             <nav aria-label={t.language.label} className="flex items-center gap-2 text-sm">
