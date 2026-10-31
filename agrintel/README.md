@@ -3,8 +3,8 @@
 **System Identity:** AgrIntel Rwanda (`agrintel`)  
 **Competition Context:** National Institute of Statistics of Rwanda (NISR) Big Data Hackathon 2026  
 **National Alignment:** Second National Strategy for Transformation (**NST2: 2024–2029**), **NSDS4**, and **Vision 2050**  
-**Live Application:** [https://agrintel-rho.vercel.app](https://agrintel-rho.vercel.app)  
-**Kinyarwanda Version:** [https://agrintel-rho.vercel.app/rw](https://agrintel-rho.vercel.app/rw)  
+**Live Application:** [https://agrintel-rwanda.vercel.app](https://agrintel-rwanda.vercel.app)  
+**Kinyarwanda Version:** [https://agrintel-rwanda.vercel.app/rw](https://agrintel-rwanda.vercel.app/rw)  
 **Database:** Serverless Neon PostgreSQL (Zero mock/sample fallbacks; 14,722+ verified observations)
 
 ---
@@ -130,7 +130,7 @@ npm run start # or npm run dev
 | **Python Unit Tests** | `pytest pipeline/tests/` | **61 / 61 Passed** |
 | **Next.js Production Build** | `npm run build` | **Exit Code 0 (17/17 Routes Prerendered)** |
 | **Bilingual Key Parity** | `en.json` vs. `rw.json` | **100% Synchronized** |
-| **Live Production Health** | `https://agrintel-rho.vercel.app` | **HTTP 200 OK across all routes** |
+| **Live Production Health** | `https://agrintel-rwanda.vercel.app` | **HTTP 200 OK across all routes** |
 | **Git Remote Sync** | Upstream & Fork | **Pushed to `main`** |
 
 ---

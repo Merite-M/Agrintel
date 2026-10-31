@@ -1,9 +1,9 @@
 # AgrIntel Rwanda: Causal Agro-Climatic Intelligence & Food Security Platform
 
 [![NISR Big Data Hackathon 2026](https://img.shields.io/badge/NISR_Hackathon-2026_Submission-0B4F37?style=for-the-badge)](https://statistics.gov.rw)
-[![Live Production](https://img.shields.io/badge/Live_App-agrintel--rho.vercel.app-28D17C?style=for-the-badge&logo=vercel)](https://agrintel-rho.vercel.app)
-[![Tests Passing](https://img.shields.io/badge/Pytest-61%2F61_Passed-success?style=for-the-badge&logo=pytest)](https://github.com/Merite-M/Agritech)
-[![Bilingual Parity](https://img.shields.io/badge/Localization-100%25_EN_%2F_RW-blue?style=for-the-badge)](https://agrintel-rho.vercel.app/rw)
+[![Live Production](https://img.shields.io/badge/Live_App-agrintel--rwanda.vercel.app-28D17C?style=for-the-badge&logo=vercel)](https://agrintel-rwanda.vercel.app)
+[![Tests Passing](https://img.shields.io/badge/Pytest-61%2F61_Passed-success?style=for-the-badge&logo=pytest)](https://github.com/Merite-M/Agrintel)
+[![Bilingual Parity](https://img.shields.io/badge/Localization-100%25_EN_%2F_RW-blue?style=for-the-badge)](https://agrintel-rwanda.vercel.app/rw)
 [![Database](https://img.shields.io/badge/Neon_Postgres-Serverless_Live-00E699?style=for-the-badge&logo=postgresql)](https://neon.tech)
 
 > **Official Submission for the NISR Big Data Hackathon 2026**  
@@ -13,10 +13,10 @@
 
 ## 🌐 Live System & Repositories
 
-* **Live Production Platform:** [https://agrintel-rho.vercel.app](https://agrintel-rho.vercel.app)
-* **Kinyarwanda Interface:** [https://agrintel-rho.vercel.app/rw](https://agrintel-rho.vercel.app/rw)
-* **Teammate Upstream Pull Request:** [niyogushimwaremypatient19-ai/Agritech#1](https://github.com/niyogushimwaremypatient19-ai/Agritech/pull/1)
-* **Active Working Fork:** [Merite-M/Agritech](https://github.com/Merite-M/Agritech)
+* **Live Production Platform:** [https://agrintel-rwanda.vercel.app](https://agrintel-rwanda.vercel.app)
+* **Kinyarwanda Interface:** [https://agrintel-rwanda.vercel.app/rw](https://agrintel-rwanda.vercel.app/rw)
+* **Teammate Upstream Pull Request:** [niyogushimwaremypatient19-ai/Agrintel#1](https://github.com/niyogushimwaremypatient19-ai/Agrintel/pull/1)
+* **Active Working Fork:** [Merite-M/Agrintel](https://github.com/Merite-M/Agrintel)
 
 ---
 
@@ -143,7 +143,7 @@ $$\text{Net Arbitrage Margin}_{O \to D, c}(P_{\text{diesel}}) = P_{D,c} \cdot \l
 ## 6. Repository Layout & Quickstart
 
 ```
-Agritech/
+Agrintel/
 ├── agrintel/                         # Next.js 15 App Router Frontend & Database
 │   ├── src/
 │   │   ├── app/[locale]/             # 7 Dedicated Role Routes (RSC)
@@ -152,6 +152,8 @@ Agritech/
 │   │   │   ├── district-risk-map.tsx # 30-District Econometric Matrix
 │   │   │   ├── district-agronomic-card.tsx # SAS Input Adoption Card
 │   │   │   ├── corridor-arbitrage-table.tsx # Fuel Policy Stress-Tester
+│   │   │   ├── action-summary-deck.tsx      # Executive Action Deck
+│   │   │   ├── operational-directive-card.tsx # Operational Field Wire Island
 │   │   │   └── audio-advisory.tsx    # Spoken Audio Speech Player
 │   │   ├── lib/data/                 # Direct Neon Database Access Layer
 │   │   └── messages/                 # 100% Bilingual Parity (en.json & rw.json)
@@ -159,9 +161,8 @@ Agritech/
 │   │   ├── econometric_audit_engine.py  # Yield Residual & Subsidy Radar
 │   │   ├── spatial_arbitrage_engine.py  # Diesel Transport Impedance Solver
 │   │   ├── climate_anomaly_engine.py    # CHIRPS & Pastoral DSI Engine
-│   │   └── tests/                    # Pytest Suite (60/60 Tests Passing)
+│   │   └── tests/                    # Pytest Suite (61/61 Tests Passing)
 │   └── data/clean/                   # Normalized Empirical Datasets
-├── agrintel_master_specification.md  # Living Architecture Charter
 └── README.md                         # This Document
 ```
 
@@ -169,8 +170,8 @@ Agritech/
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/Merite-M/Agritech.git
-cd Agritech/agrintel
+git clone https://github.com/Merite-M/Agrintel.git
+cd Agrintel/agrintel
 
 # 2. Install dependencies
 npm install
