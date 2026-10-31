@@ -237,7 +237,7 @@ export function DistrictGeographicMatrix({
 
                         <div className="mt-2 flex items-center justify-between text-xs">
                           <span className="text-muted">{labels.residualScore}:</span>
-                          <span className={`font-mono ${zColor}`}>
+                          <span className={`font-mono tabular-nums ${zColor}`}>
                             {rec ? `${rec.residual_z_score >= 0 ? "+" : ""}${rec.residual_z_score.toFixed(2)}` : "0.00"}
                           </span>
                         </div>
@@ -245,7 +245,7 @@ export function DistrictGeographicMatrix({
                         {rec && (
                           <div className="mt-1 flex items-center justify-between text-[11px] text-muted">
                             <span>{labels.yieldLabel}:</span>
-                            <span className="font-mono">
+                            <span className="font-mono tabular-nums">
                               {new Intl.NumberFormat("en-GB", { maximumFractionDigits: 0 }).format(rec.observed_yield_kg_per_ha)} kg/ha
                             </span>
                           </div>
@@ -267,8 +267,8 @@ export function DistrictGeographicMatrix({
 
                         {rec?.classification === "LEAKAGE_OR_SEED_QUALITY_RISK" && (
                           <Link
-                            href={`/${locale}/alerts?district=${d.code}&crop=${selectedCommodity}&z=${rec.residual_z_score.toFixed(2)}&exposure=${rec.estimated_fiscal_exposure_rwf}&intent=audit`}
-                            className="mt-1 flex items-center justify-center gap-1 rounded-lg bg-clay px-2.5 py-1.5 text-center text-xs font-bold text-cream shadow-xs transition-all hover:bg-clay/90 active:scale-95"
+                            href={`/${locale}/alerts?district=${d.code}&commodity=${selectedCommodity}&crop=${selectedCommodity}&z=${rec.residual_z_score.toFixed(2)}&exposure=${rec.estimated_fiscal_exposure_rwf}&intent=audit`}
+                            className="mt-1 flex items-center justify-center gap-1 rounded-lg bg-clay px-2.5 py-1.5 text-center text-xs font-bold text-cream shadow-xs transition-all hover:bg-clay/90 active:scale-95 cursor-pointer"
                           >
                             <span>{labels.dispatchAuditBtn ?? "Dispatch MINAGRI Audit →"}</span>
                           </Link>

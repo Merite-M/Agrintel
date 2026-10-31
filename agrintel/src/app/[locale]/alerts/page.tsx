@@ -29,6 +29,7 @@ export default async function AlertsPage({
   searchParams: Promise<{
     district?: string;
     crop?: string;
+    commodity?: string;
     intent?: string;
     origin?: string;
     dest?: string;
@@ -91,8 +92,18 @@ export default async function AlertsPage({
   const statusLabel = (value: string) => t.alerts.status[value as keyof typeof t.alerts.status] ?? value;
   const stepStatusLabel = (value: string) => t.alerts.stepStatus[value as keyof typeof t.alerts.stepStatus] ?? value;
 
-  const hasDirective =
-    query.intent === "audit" || query.intent === "ship" || query.intent === "hold";
+  const commodityParam = query.crop ?? query.commodity;
+  const inferredIntent =
+    (query.intent as "audit" | "ship" | "hold" | undefined) ??
+    (query.origin || query.dest
+      ? query.margin && Number(query.margin) < 10
+        ? "hold"
+        : "ship"
+      : query.district
+      ? "audit"
+      : undefined);
+
+  const hasDirective = Boolean(inferredIntent && (query.district || query.origin || query.dest));
 
   return (
     <div className="flex flex-col gap-8">
@@ -102,11 +113,11 @@ export default async function AlertsPage({
       </section>
 
       {/* Dispatched Operational Directive Banner if routed from National or Retailer */}
-      {hasDirective && query.intent && (
+      {hasDirective && inferredIntent && (
         <OperationalDirectiveCard
-          intent={query.intent as "audit" | "ship" | "hold"}
+          intent={inferredIntent}
           district={query.district}
-          crop={query.crop}
+          crop={commodityParam}
           origin={query.origin}
           dest={query.dest}
           margin={query.margin}

@@ -352,6 +352,7 @@ export default async function FarmerAdvisoryPage({
           auditRecord={auditRecord}
           cropName={cropName}
           districtName={districtName}
+          locale={locale}
           labels={t.advisory.agronomic}
         />
       )}

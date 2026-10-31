@@ -321,7 +321,12 @@
       "intensificationAdvice": "Ubufatanye bwiza hagati y'imbuto z'indobanure, ifumbire, no kurwanya isuri byatanze umusaruro mwinshi. Komeza kwanika neza umusaruro no kuwurinda ibihumyo.",
       "nominalTitle": "Ubuhinzi bufite ubuziranenge busanzwe",
       "nominalAdvice": "Umusaruro n'ikoreshwa ry'ifumbire bihuje n'ibisanzwe byitezwe. Komeza amabwiriza asanzwe y'ubuhinzi no gushyira hamwe umusaruro muri koperative.",
-      "noData": "Nta makuru y'ibarura rya SAS arandikwa kuri iki gihingwa muri aka karere."
+      "noData": "Nta makuru y'ibarura rya SAS arandikwa kuri iki gihingwa muri aka karere.",
+      "viewStatisticalProof": "Reba Ibihamya by'Imibare n'Ibarurishamibare rya NISR",
+      "dispatchAuditAction": "Ohereza Iteka ry'Igenzura mu Mirima →",
+      "reviewIrrigationAction": "Reba Gahunda yo Kuhira →",
+      "benchmarkAction": "Reba Amabwiriza y'Urugero Rwiza →",
+      "samplingWeightsNote": "Ibarurishamibare rya NISR SAS rishingiye ku duce 1,200 twatoranyijwe mu gihugu"
     },
     "outlook": {
       "title": "Icyerekezo cy'ibiciro mu gihugu",

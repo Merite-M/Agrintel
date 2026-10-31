@@ -156,7 +156,7 @@ export function ActionRecommendationCard({
             {labels.currentPrice}
           </span>
           <div className="mt-1 flex items-baseline gap-1.5">
-            <span className="text-3xl font-extrabold text-canopy sm:text-4xl">
+            <span className="text-3xl font-black text-canopy sm:text-4xl font-mono tabular-nums">
               {driver ? formatRwf(driver.recentAverage) : "—"}
             </span>
             <span className="text-sm font-semibold text-soil">{labels.rwfUnit}</span>
@@ -175,7 +175,7 @@ export function ActionRecommendationCard({
             {driver ? (
               <>
                 <span
-                  className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-base font-bold ${currentConfig.changeColor}`}
+                  className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-base font-bold font-mono tabular-nums ${currentConfig.changeColor}`}
                 >
                   <span>{isPositive ? "+" : "−"}</span>
                   <span>{formatRwf(Math.abs(rwfDiff))} RWF</span>

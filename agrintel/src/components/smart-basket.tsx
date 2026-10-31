@@ -204,11 +204,11 @@ export function SmartFoodBasket({ prices, labels, locale }: SmartBasketProps) {
             {labels.monthlyTotal}
           </span>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="font-mono text-3xl font-extrabold text-canopy">
+            <span className="font-mono tabular-nums text-3xl font-extrabold text-canopy">
               Rwf {numFormat(currentCost)}
             </span>
             {totalSavings > 0 && (
-              <span className="font-mono text-sm text-muted line-through">
+              <span className="font-mono tabular-nums text-sm text-muted line-through">
                 Rwf {numFormat(baselineCost)}
               </span>
             )}
@@ -223,11 +223,11 @@ export function SmartFoodBasket({ prices, labels, locale }: SmartBasketProps) {
             {labels.potentialSavings}
           </span>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="font-mono text-3xl font-extrabold text-leaf">
+            <span className="font-mono tabular-nums text-3xl font-extrabold text-leaf">
               - Rwf {numFormat(totalSavings)}
             </span>
             {savingsPct > 0 && (
-              <span className="rounded-full bg-leaf px-2 py-0.5 text-xs font-bold text-cream">
+              <span className="rounded-full bg-leaf px-2 py-0.5 text-xs font-bold text-cream font-mono tabular-nums">
                 -{savingsPct.toFixed(1)}%
               </span>
             )}
@@ -280,7 +280,7 @@ export function SmartFoodBasket({ prices, labels, locale }: SmartBasketProps) {
                         labels.notApplied
                       )}
                     </span>
-                    <span className="font-mono text-xs font-bold text-leaf bg-leaf/10 px-2 py-0.5 rounded-full">
+                    <span className="font-mono tabular-nums text-xs font-bold text-leaf bg-leaf/10 px-2 py-0.5 rounded-full">
                       Save Rwf {numFormat(unitSaving)}/kg
                     </span>
                   </div>
@@ -290,7 +290,7 @@ export function SmartFoodBasket({ prices, labels, locale }: SmartBasketProps) {
                       <p className="text-sm font-semibold text-ink line-through opacity-70">
                         {fromName}
                       </p>
-                      <p className="font-mono text-xs text-muted">
+                      <p className="font-mono tabular-nums text-xs text-muted">
                         Rwf {numFormat(fromPrice)}/kg
                       </p>
                     </div>
@@ -299,7 +299,7 @@ export function SmartFoodBasket({ prices, labels, locale }: SmartBasketProps) {
                       <p className="text-sm font-bold text-canopy">
                         {toName}
                       </p>
-                      <p className="font-mono text-xs font-semibold text-leaf">
+                      <p className="font-mono tabular-nums text-xs font-semibold text-leaf">
                         Rwf {numFormat(toPrice)}/kg
                       </p>
                     </div>
@@ -313,7 +313,7 @@ export function SmartFoodBasket({ prices, labels, locale }: SmartBasketProps) {
                 <div className="mt-4 pt-3 border-t border-line/60 flex items-center justify-between">
                   <div>
                     <span className="text-[11px] text-muted block">{labels.monthlySavings}:</span>
-                    <span className="font-mono text-sm font-bold text-leaf">
+                    <span className="font-mono tabular-nums text-sm font-bold text-leaf">
                       Rwf {numFormat(monthlySaving)}
                     </span>
                   </div>

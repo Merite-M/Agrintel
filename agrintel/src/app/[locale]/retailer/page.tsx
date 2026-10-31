@@ -92,7 +92,7 @@ export default async function RetailerSupplyPage({
       metricLabel: "Net Freight Margin",
       context: t.retailer.decisions?.topSpreadContext ?? "Net wholesale spread exceeds 40 Rwf/kg after diesel fuel and transit spoilage. Transport surplus harvest immediately to capture urban margins.",
       ctaText: t.retailer.decisions?.shipCta ?? "Alert Cooperative to Ship →",
-      ctaHref: `/${locale}/alerts?origin=${topCorridorItem.corridor.origin_district_code}&dest=${topCorridorItem.corridor.destination_code}&crop=${crop.code}&margin=${Math.round(topCorridorItem.simRegulated.netMargin)}&intent=ship`,
+      ctaHref: `/${locale}/alerts?origin=${topCorridorItem.corridor.origin_district_code}&dest=${topCorridorItem.corridor.destination_code}&commodity=${crop.code}&crop=${crop.code}&margin=${Math.round(topCorridorItem.simRegulated.netMargin)}&intent=ship`,
     },
     {
       id: "action-fuel-lifeline",
@@ -114,7 +114,7 @@ export default async function RetailerSupplyPage({
       metricLabel: "Freight Loss",
       context: t.retailer.decisions?.localAbsorptionContext ?? "Transporting to urban center yields negative net returns due to transport overhead. Hold stock locally in dry cooperative storage.",
       ctaText: t.retailer.decisions?.storageCta ?? "Issue Local Storage Notice →",
-      ctaHref: `/${locale}/alerts?origin=${lowCorridorItem.corridor.origin_district_code}&dest=${lowCorridorItem.corridor.destination_code}&crop=${crop.code}&margin=${Math.round(lowCorridorItem.simRegulated.netMargin)}&intent=hold`,
+      ctaHref: `/${locale}/alerts?origin=${lowCorridorItem.corridor.origin_district_code}&dest=${lowCorridorItem.corridor.destination_code}&commodity=${crop.code}&crop=${crop.code}&margin=${Math.round(lowCorridorItem.simRegulated.netMargin)}&intent=hold`,
     },
   ];
 

@@ -139,7 +139,7 @@ export default async function NationalDashboardPage({
       metricLabel: `Rwf ${numFormat(topLeakage?.estimated_fiscal_exposure_rwf ?? 0)} exposure`,
       context: t.national.decisions?.urgentAuditContext ?? "Subsidized input uptake exceeds 70%, but yield residual severely underperformed expectations. Potential seed degeneration or informal fertilizer diversion.",
       ctaText: t.national.decisions?.auditCta ?? "Dispatch MINAGRI Audit →",
-      ctaHref: `/${locale}/alerts?district=${topLeakage?.district_code}&crop=${crop.code}&z=${topLeakage?.residual_z_score.toFixed(2)}&exposure=${topLeakage?.estimated_fiscal_exposure_rwf}&intent=audit`,
+      ctaHref: `/${locale}/alerts?district=${topLeakage?.district_code}&commodity=${crop.code}&crop=${crop.code}&z=${topLeakage?.residual_z_score.toFixed(2)}&exposure=${topLeakage?.estimated_fiscal_exposure_rwf}&intent=audit`,
     },
     {
       id: "action-benchmark",
@@ -324,14 +324,14 @@ export default async function NationalDashboardPage({
                           <th scope="row" className="px-4 py-3.5 font-semibold text-canopy">
                             {r.district_code}
                           </th>
-                          <td className="px-4 py-3 text-ink font-mono text-xs">{r.season}</td>
-                          <td className="px-4 py-3 text-ink font-mono">
+                          <td className="px-4 py-3 text-ink font-mono text-xs tabular-nums">{r.season}</td>
+                          <td className="px-4 py-3 text-ink font-mono tabular-nums">
                             {numFormat(r.observed_yield_kg_per_ha)}
                           </td>
-                          <td className="px-4 py-3 text-muted font-mono">
+                          <td className="px-4 py-3 text-muted font-mono tabular-nums">
                             {numFormat(r.expected_yield_kg_per_ha)}
                           </td>
-                          <td className="px-4 py-3 font-mono font-semibold">
+                          <td className="px-4 py-3 font-mono font-semibold tabular-nums">
                             <span
                               className={
                                 isLeakage
@@ -346,7 +346,7 @@ export default async function NationalDashboardPage({
                               {r.residual_z_score > 0 ? `+${r.residual_z_score.toFixed(2)}` : r.residual_z_score.toFixed(2)}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-xs text-muted">
+                          <td className="px-4 py-3 text-xs text-muted font-mono tabular-nums">
                             {r.improved_seed_pct.toFixed(0)}% seed / {r.inorganic_fert_pct.toFixed(0)}% fert
                           </td>
                           <td className="px-4 py-3">
@@ -367,8 +367,8 @@ export default async function NationalDashboardPage({
                           <td className="px-4 py-3 text-right">
                             {isLeakage ? (
                               <Link
-                                href={`/${locale}/alerts?district=${r.district_code}&crop=${crop.code}&z=${r.residual_z_score.toFixed(2)}&exposure=${r.estimated_fiscal_exposure_rwf}&intent=audit`}
-                                className="inline-flex items-center gap-1 rounded-xl bg-clay px-3 py-1.5 text-xs font-bold text-cream shadow-xs transition-all hover:bg-clay/90 active:scale-95 whitespace-nowrap"
+                                href={`/${locale}/alerts?district=${r.district_code}&commodity=${crop.code}&crop=${crop.code}&z=${r.residual_z_score.toFixed(2)}&exposure=${r.estimated_fiscal_exposure_rwf}&intent=audit`}
+                                className="inline-flex items-center gap-1 rounded-xl bg-clay px-3 py-1.5 text-xs font-bold text-cream shadow-xs transition-all hover:bg-clay/90 active:scale-95 whitespace-nowrap cursor-pointer"
                               >
                                 {t.national.decisions?.auditCta ?? "Dispatch Audit →"}
                               </Link>
@@ -410,39 +410,50 @@ export default async function NationalDashboardPage({
                     <dl className="divide-y divide-line/60 text-sm">
                       <div className="py-2.5 flex justify-between">
                         <dt className="text-muted">{t.national.audit.evidence.climateCushion}:</dt>
-                        <dd className="font-mono font-semibold">{selectedAuditDistrict.climate_factor.toFixed(2)}x</dd>
+                        <dd className="font-mono font-semibold tabular-nums">{selectedAuditDistrict.climate_factor.toFixed(2)}x</dd>
                       </div>
                       <div className="py-2.5 flex justify-between">
                         <dt className="text-muted">{t.national.audit.evidence.inputResponse}:</dt>
-                        <dd className="font-mono font-semibold">{selectedAuditDistrict.input_factor.toFixed(2)}x</dd>
+                        <dd className="font-mono font-semibold tabular-nums">{selectedAuditDistrict.input_factor.toFixed(2)}x</dd>
                       </div>
                       <div className="py-2.5 flex justify-between">
                         <dt className="text-muted">{t.national.audit.evidence.rainfallAnomaly}:</dt>
-                        <dd className="font-mono font-semibold">{selectedAuditDistrict.rainfall_anomaly_ratio.toFixed(2)}x</dd>
+                        <dd className="font-mono font-semibold tabular-nums">{selectedAuditDistrict.rainfall_anomaly_ratio.toFixed(2)}x</dd>
                       </div>
                       <div className="py-2.5 flex justify-between">
                         <dt className="text-muted">{t.national.audit.evidence.irrigationCoverage}:</dt>
-                        <dd className="font-mono font-semibold">{selectedAuditDistrict.irrigation_pct.toFixed(1)}%</dd>
+                        <dd className="font-mono font-semibold tabular-nums">{selectedAuditDistrict.irrigation_pct.toFixed(1)}%</dd>
                       </div>
                       <div className="py-2.5 flex justify-between">
                         <dt className="text-muted">{t.national.audit.evidence.certifiedSeed}:</dt>
-                        <dd className="font-mono font-semibold">{selectedAuditDistrict.improved_seed_pct.toFixed(1)}%</dd>
+                        <dd className="font-mono font-semibold tabular-nums">{selectedAuditDistrict.improved_seed_pct.toFixed(1)}%</dd>
                       </div>
                       <div className="py-2.5 flex justify-between">
                         <dt className="text-muted">{t.national.audit.evidence.fertilizerUsage}:</dt>
-                        <dd className="font-mono font-semibold">{selectedAuditDistrict.inorganic_fert_pct.toFixed(1)}%</dd>
+                        <dd className="font-mono font-semibold tabular-nums">{selectedAuditDistrict.inorganic_fert_pct.toFixed(1)}%</dd>
                       </div>
                       <div className="py-2.5 flex justify-between">
                         <dt className="text-muted">{t.national.audit.evidence.plantedArea}:</dt>
-                        <dd className="font-mono font-semibold">{numFormat(selectedAuditDistrict.planted_area_ha)} ha</dd>
+                        <dd className="font-mono font-semibold tabular-nums">{numFormat(selectedAuditDistrict.planted_area_ha)} ha</dd>
                       </div>
                       {selectedAuditDistrict.estimated_fiscal_exposure_rwf > 0 && (
                         <div className="py-2.5 flex justify-between text-clay font-bold">
                           <dt>{t.national.audit.columns.fiscalExposure}:</dt>
-                          <dd className="font-mono">Rwf {numFormat(selectedAuditDistrict.estimated_fiscal_exposure_rwf)}</dd>
+                          <dd className="font-mono tabular-nums">Rwf {numFormat(selectedAuditDistrict.estimated_fiscal_exposure_rwf)}</dd>
                         </div>
                       )}
                     </dl>
+
+                    {selectedAuditDistrict.classification === "LEAKAGE_OR_SEED_QUALITY_RISK" && (
+                      <div className="mt-3 pt-3 border-t border-line/60">
+                        <Link
+                          href={`/${locale}/alerts?district=${selectedAuditDistrict.district_code}&commodity=${crop.code}&crop=${crop.code}&z=${selectedAuditDistrict.residual_z_score.toFixed(2)}&exposure=${selectedAuditDistrict.estimated_fiscal_exposure_rwf}&intent=audit`}
+                          className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-clay px-4 py-2.5 text-xs font-bold text-cream shadow-xs hover:bg-clay/90 active:scale-95 cursor-pointer"
+                        >
+                          <span>{t.national.decisions?.auditCta ?? "Dispatch MINAGRI Audit →"}</span>
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <p className="mt-4 text-sm text-muted">Select a district to inspect its econometric decomposition.</p>

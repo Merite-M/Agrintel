@@ -39,7 +39,7 @@ export function MacroCpiBanner({ cpi, labels }: MacroCpiBannerProps) {
         <div className="rounded-xl bg-cream/60 p-3 border border-line/40">
           <span className="text-xs font-medium text-muted block">{labels.foodInflation}</span>
           <div className="mt-1 flex items-baseline gap-1.5">
-            <span className="text-2xl font-extrabold text-clay">+{cpi.food_inflation_yoy.toFixed(1)}%</span>
+            <span className="text-2xl font-black text-clay font-mono tabular-nums">+{cpi.food_inflation_yoy.toFixed(1)}%</span>
             <span className="text-xs text-clay/80 font-medium">YoY</span>
           </div>
           <span className="mt-1 text-[11px] text-muted block">National food price jump</span>
@@ -49,7 +49,7 @@ export function MacroCpiBanner({ cpi, labels }: MacroCpiBannerProps) {
         <div className="rounded-xl bg-cream/60 p-3 border border-line/40">
           <span className="text-xs font-medium text-muted block">{labels.ruralCpi}</span>
           <div className="mt-1 flex items-baseline gap-1.5">
-            <span className="text-2xl font-extrabold text-canopy">{cpi.rural_cpi.toFixed(1)}</span>
+            <span className="text-2xl font-black text-canopy font-mono tabular-nums">{cpi.rural_cpi.toFixed(1)}</span>
             <span className="text-xs text-muted">pts</span>
           </div>
           <span className="mt-1 text-[11px] text-clay font-medium block">Smallholder living cost index</span>
@@ -59,7 +59,7 @@ export function MacroCpiBanner({ cpi, labels }: MacroCpiBannerProps) {
         <div className="rounded-xl bg-cream/60 p-3 border border-line/40">
           <span className="text-xs font-medium text-muted block">{labels.urbanCpi}</span>
           <div className="mt-1 flex items-baseline gap-1.5">
-            <span className="text-2xl font-extrabold text-ink">{cpi.urban_cpi.toFixed(1)}</span>
+            <span className="text-2xl font-black text-ink font-mono tabular-nums">{cpi.urban_cpi.toFixed(1)}</span>
             <span className="text-xs text-muted">pts</span>
           </div>
           <span className="mt-1 text-[11px] text-muted block">Kigali & secondary cities</span>
@@ -69,7 +69,7 @@ export function MacroCpiBanner({ cpi, labels }: MacroCpiBannerProps) {
         <div className="rounded-xl bg-forest/5 p-3 border border-forest/20">
           <span className="text-xs font-medium text-forest block">{labels.divergence}</span>
           <div className="mt-1 flex items-baseline gap-1.5">
-            <span className="text-2xl font-extrabold text-forest">+{cpi.rural_urban_divergence.toFixed(1)}</span>
+            <span className="text-2xl font-black text-forest font-mono tabular-nums">+{cpi.rural_urban_divergence.toFixed(1)}</span>
             <span className="text-xs text-forest/80 font-semibold">pts spread</span>
           </div>
           <span className="mt-1 text-[11px] text-forest/90 font-medium block">Rural price index penalty</span>

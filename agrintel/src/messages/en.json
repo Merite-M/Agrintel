@@ -320,7 +320,12 @@
       "intensificationAdvice": "Strong synergy between certified seeds, balanced fertilizer, and hillside erosion control. Maintain post-harvest drying standards to prevent aflatoxin contamination.",
       "nominalTitle": "Nominal Agronomic Conditions",
       "nominalAdvice": "Yield and input utilization align with historical structural baselines. Continue standard agronomic practices and cooperative market aggregation.",
-      "noData": "NISR SAS input-to-yield baseline is not recorded for this specific crop and district combination."
+      "noData": "NISR SAS input-to-yield baseline is not recorded for this specific crop and district combination.",
+      "viewStatisticalProof": "View NISR Statistical Proof & Survey Lineage",
+      "dispatchAuditAction": "Dispatch Field Audit Alert →",
+      "reviewIrrigationAction": "Review Irrigation Action →",
+      "benchmarkAction": "Inspect Extension Protocol →",
+      "samplingWeightsNote": "NISR SAS Multiple Frame Sampling Survey (1,200 segments nationwide)"
     },
     "outlook": {
       "title": "National price outlook",
