@@ -1,6 +1,7 @@
 import { desc, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { DataStatusBanner } from "@/components/data-status-banner";
+import { OperationalDirectiveCard } from "@/components/operational-directive-card";
 import { db, schema } from "@/db";
 import { getDictionary, isLocale } from "@/lib/i18n";
 import { getSourceCounts } from "@/lib/data/prices";
@@ -22,12 +23,24 @@ type SimStep = { step: string; status: "done" | "skipped" | "failed"; detail: st
 
 export default async function AlertsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{
+    district?: string;
+    crop?: string;
+    intent?: string;
+    origin?: string;
+    dest?: string;
+    margin?: string;
+    z?: string;
+    exposure?: string;
+  }>;
 }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
 
+  const query = await searchParams;
   const t = getDictionary(locale);
   const counts = await getSourceCounts();
 
@@ -78,14 +91,31 @@ export default async function AlertsPage({
   const statusLabel = (value: string) => t.alerts.status[value as keyof typeof t.alerts.status] ?? value;
   const stepStatusLabel = (value: string) => t.alerts.stepStatus[value as keyof typeof t.alerts.stepStatus] ?? value;
 
+  const hasDirective =
+    query.intent === "audit" || query.intent === "ship" || query.intent === "hold";
+
   return (
     <div className="flex flex-col gap-8">
-      <DataStatusBanner verifiedCount={counts.verified} sampleCount={counts.sample} labels={t.status} />
-
       <section className="max-w-3xl">
         <h1 className="text-4xl font-semibold md:text-5xl">{t.alerts.title}</h1>
         <p className="mt-4 text-lg text-ink">{t.alerts.intro}</p>
       </section>
+
+      {/* Dispatched Operational Directive Banner if routed from National or Retailer */}
+      {hasDirective && query.intent && (
+        <OperationalDirectiveCard
+          intent={query.intent as "audit" | "ship" | "hold"}
+          district={query.district}
+          crop={query.crop}
+          origin={query.origin}
+          dest={query.dest}
+          margin={query.margin}
+          z={query.z}
+          exposure={query.exposure}
+          locale={locale}
+          labels={t.alerts.directive}
+        />
+      )}
 
       {/* Simulator */}
       <section aria-labelledby="simulator-title" className="rounded-xl border-2 border-dashed border-harvest bg-paper p-6">
@@ -185,6 +215,9 @@ export default async function AlertsPage({
           })
         )}
       </section>
+
+      {/* Data provenance status footer */}
+      <DataStatusBanner verifiedCount={counts.verified} sampleCount={counts.sample} labels={t.status} />
     </div>
   );
 }

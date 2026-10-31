@@ -258,7 +258,21 @@
       "leakageBadge": "Leakage Risk",
       "climateBadge": "Water Deficit",
       "highBadge": "Intensified",
-      "nominalBadge": "Nominal"
+      "nominalBadge": "Nominal",
+      "dispatchAuditBtn": "Dispatch MINAGRI Audit →"
+    },
+    "decisions": {
+      "title": "Decisions Required Today",
+      "subtitle": "Algorithmic triage prioritizing immediate ministerial audits and agronomic interventions:",
+      "urgentAuditBadge": "Immediate MINAGRI Audit",
+      "urgentAuditContext": "Subsidized input uptake exceeds 70%, but yield residual severely underperformed expectations. Potential seed degeneration or informal fertilizer diversion.",
+      "auditCta": "Dispatch MINAGRI Audit →",
+      "benchmarkBadge": "National Yield Frontier",
+      "benchmarkContext": "Exemplary synergy between certified seed, inorganic fertilizer, and anti-erosion terraces. Recommended model for neighboring sector extension.",
+      "benchmarkCta": "Inspect Agronomic Protocol →",
+      "climateBadge": "Agro-Climatic Moisture Deficit",
+      "climateContext": "Yield depression strongly tracks negative subnational rainfall anomalies. Prioritize marshland furrow irrigation and organic mulching.",
+      "climateCta": "Review Irrigation Action →"
     }
   },
   "advisory": {
@@ -399,6 +413,19 @@
     "intro": "Compare origin farm-gate prices against terminal market prices net of diesel freight impedance and commodity perishability shrinkage.",
     "readOnly": "Read-only view. It shows no private farmer, retailer or contact information.",
     "selectCommodity": "Choose a commodity",
+    "decisions": {
+      "title": "Decisions Required Today",
+      "subtitle": "Real-time dispatch optimization for cooperative logistics trucks and rural collection centers:",
+      "topSpreadBadge": "Highest Arbitrage Spread",
+      "topSpreadContext": "Net wholesale spread exceeds 40 Rwf/kg after diesel fuel and transit spoilage. Transport surplus harvest immediately to capture urban margins.",
+      "shipCta": "Alert Cooperative to Ship →",
+      "vulnerableFuelBadge": "Fuel Vulnerability Lifeline",
+      "vulnerableFuelContext": "Long-haul route with fragile margins. Flips to a logistical loss if fuel subsidies are removed or trucks run half-empty.",
+      "stressCta": "Stress-Test Corridor →",
+      "localAbsorptionBadge": "Saturated Local Market",
+      "localAbsorptionContext": "Transporting to urban center yields negative net returns due to transport overhead. Hold stock locally in dry cooperative storage.",
+      "storageCta": "Issue Local Storage Notice →"
+    },
     "outlook": {
       "title": "National price outlook",
       "note": "National average across monitored markets, for context only.",
@@ -431,6 +458,16 @@
       "currentFuelPrice": "Simulated Diesel Pump Price",
       "perLitre": "RWF / Litre",
       "subsidyImpact": "Fiscal Fuel Subsidy Shield",
+      "truckSize": "Truck Freight Load Capacity",
+      "truckSizes": {
+        "pickup": "1.5T (Pickup)",
+        "canter": "3.5T (Canter)",
+        "fuso": "5.0T (Fuso)",
+        "heavy": "10.0T (Heavy)"
+      },
+      "alertShipBtn": "Alert Cooperative to Ship →",
+      "holdBtn": "Issue Storage Notice →",
+      "reviewBtn": "Monitor & Ship →",
       "columns": {
         "corridor": "Corridor (Origin → Dest)",
         "distance": "Distance & Spoilage",
@@ -456,6 +493,24 @@
   "alerts": {
     "title": "Alerts and simulator",
     "intro": "Alerts tell farmers, extension workers and analysts when something needs attention. Right now every alert here is a simulation for demonstration. Nothing is sent to any phone.",
+    "directive": {
+      "titleAudit": "MINAGRI Field Audit Inspection Directive",
+      "titleShip": "Cooperative Logistics Dispatch Directive",
+      "titleHold": "Local Post-Harvest Preservation Directive",
+      "targetDistrict": "Target District",
+      "targetCorridor": "Target Corridor",
+      "commodity": "Commodity",
+      "zScore": "Residual z-Score",
+      "fiscalExposure": "Fiscal Exposure",
+      "netMargin": "Net Freight Margin",
+      "draftSmsEn": "Official English SMS Advisory",
+      "draftSmsRw": "Official Kinyarwanda SMS Advisory",
+      "dispatchBtn": "Dispatch Directive to Field Network",
+      "dispatchedBadge": "DIRECTIVE DISPATCHED TO FIELD NETWORK",
+      "copyBtn": "Copy SMS Text",
+      "copied": "Copied to Clipboard!",
+      "clearBtn": "Dismiss Directive"
+    },
     "severity": {
       "info": "Information",
       "watch": "Watch",

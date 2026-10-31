@@ -259,7 +259,21 @@
       "leakageBadge": "Icyitonderwa",
       "climateBadge": "Ikibazo cy'Imvura",
       "highBadge": "Byazamutse",
-      "nominalBadge": "Bisanzwe"
+      "nominalBadge": "Bisanzwe",
+      "dispatchAuditBtn": "Ohereza Igenzura rya MINAGRI →"
+    },
+    "decisions": {
+      "title": "Ibyemezo Bikenewe Uyu Munsi",
+      "subtitle": "Gushyira imbere igenzura ryihutirwa rya minisiteri n'ingamba z'ubuhinzi:",
+      "urgentAuditBadge": "Igenzura Ryihutirwa rya MINAGRI",
+      "urgentAuditContext": "Ifumbire n'imbuto byatewe inkunga byarenze 70%, ariko umusaruro wari hasi cyane y'ibiteganyijwe. Hakekwa imbuto itujuje ubuziranenge cyangwa ifumbire yacurujwe mu buryo butemewe.",
+      "auditCta": "Ohereza Igenzura rya MINAGRI →",
+      "benchmarkBadge": "Icyitegererezo cy'Umusaruro mu Gihugu",
+      "benchmarkContext": "Guhuza neza imbuto yatoranyijwe, ifumbire mvaruganda, n'amaterasi y'ishingiro. Urugero rwo gukwirakwiza mu yindi mirenge.",
+      "benchmarkCta": "Suzuma Amabwiriza y'Umuhingire →",
+      "climateBadge": "Ikibazo cy'Imvura Nke",
+      "climateContext": "Igabanuka ry'umusaruro rihura neza n'ikibazo cy'imvura nke mu karere. Gushyira imbere kuhira mu bishanga no gutwikira ubutaka.",
+      "climateCta": "Suzuma Gahunda yo Kuhira →"
     }
   },
   "advisory": {
@@ -400,6 +414,19 @@
     "intro": "Gereranya ibiciro ku murima (P_O) n'ibiciro ku masoko manini (P_D) ukuyemo ibiciro bya mazutu n'ibyangirika mu nzira.",
     "readOnly": "Ni icyerekezo cyo gusoma gusa. Nta makuru y'abahinzi, abacuruzi cyangwa abavugana yo kugaragaza.",
     "selectCommodity": "Hitamo icyo ushaka kureba",
+    "decisions": {
+      "title": "Ibyemezo Bikenewe Uyu Munsi",
+      "subtitle": "Kugena uburyo bwoherezwa umusaruro w'amakoperatiba n'ububiko bwo mu byaro:",
+      "topSpreadBadge": "Inzira Ifite Inyungu Nini",
+      "topSpreadContext": "Inyungu isigaye irenze 40 Rwf/kg nyuma yo gukuramo lisansi n'ibyangirika. Kohereza umusaruro w'umurengera ako kanya ku masoko y'umujyi.",
+      "shipCta": "Bwira Koperative Kohereza →",
+      "vulnerableFuelBadge": "Inzira Yugarijwe na Mazutu",
+      "vulnerableFuelContext": "Inzira ndende ifite inyungu yoroshye. Yahita igwa mu gihombo niba nkunganire ya lisansi ivuyeho cyangwa imodoka idapakiye yuzuye.",
+      "stressCta": "Suzuma Ibirombe by'Icyangombwa →",
+      "localAbsorptionBadge": "Isoko Ryo Hafi Ryuzuye",
+      "localAbsorptionContext": "Kohereza mu mujyi bitanga igihombo kubera ikiguzi cy'ubwikorezi. Guhunika umusaruro mu bigega by'amakoperatiba mu karere.",
+      "storageCta": "Tanga Gahunda yo Guhunika →"
+    },
     "outlook": {
       "title": "Icyerekezo cy'ibiciro mu gihugu",
       "note": "Impuzandengo y'igihugu ku masoko akurikiranwa, ni ukugira ngo bifashe gusobanukirwa gusa.",
@@ -432,6 +459,16 @@
       "currentFuelPrice": "Igiciro cya Mazutu Kigeragezwa",
       "perLitre": "RWF / Litiro",
       "subsidyImpact": "Ingaruka ya Nkunganire ya Mazutu",
+      "truckSize": "Ubushobozi bw'Imodoka yo Gupakira",
+      "truckSizes": {
+        "pickup": "Toni 1.5 (Pickup)",
+        "canter": "Toni 3.5 (Canter)",
+        "fuso": "Toni 5.0 (Fuso)",
+        "heavy": "Toni 10.0 (Iremereye)"
+      },
+      "alertShipBtn": "Bwira Koperative Kohereza →",
+      "holdBtn": "Tanga Gahunda yo Guhunika →",
+      "reviewBtn": "Kugenzura no Kohereza →",
       "columns": {
         "corridor": "Inzira (Aho Byerekejwe)",
         "distance": "Intera n'Ibyangirika",
@@ -457,6 +494,24 @@
   "alerts": {
     "title": "Ibiburira n'icyigana",
     "intro": "Ibiburira bibwira abahinzi, abakozi b'ubuhinzi n'abasesenguzi igihe hari ikintu gikeneye kwitabwaho. Ubu buri nteguza iri hano ni icyigana cyo kwerekana. Nta butumwa bujya kuri telefoni iyo ari yo yose.",
+    "directive": {
+      "titleAudit": "Iteka ry'Igenzura rya MINAGRI mu Mirima",
+      "titleShip": "Iteka ryo Kohereza Umusaruro w'Amakoperatiba",
+      "titleHold": "Iteka ryo Guhunika Umusaruro mu Karere",
+      "targetDistrict": "Akarere Karebwa",
+      "targetCorridor": "Inzira y'Ubucuruzi",
+      "commodity": "Igihingwa",
+      "zScore": "Amanota z-Score",
+      "fiscalExposure": "Agaciro k'Impungenge",
+      "netMargin": "Inyungu Isigaye",
+      "draftSmsEn": "Ubutumwa bw'Icyongereza (SMS)",
+      "draftSmsRw": "Ubutumwa bw'Ikinyarwanda (SMS)",
+      "dispatchBtn": "Ohereza Iteka mu Ntara n'Uturere",
+      "dispatchedBadge": "ITEKA RYOHEREJWE MU MIRIMA N'UTURERE",
+      "copyBtn": "Koporora Ubutumwa (SMS)",
+      "copied": "Byakoporowe!",
+      "clearBtn": "Funga Iri Teka"
+    },
     "severity": {
       "info": "Amakuru",
       "watch": "Kwitegereza",

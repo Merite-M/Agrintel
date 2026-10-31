@@ -31,6 +31,7 @@ export type DistrictGeographicMatrixProps = {
     climateBadge: string;
     highBadge: string;
     nominalBadge: string;
+    dispatchAuditBtn?: string;
   };
 };
 
@@ -213,9 +214,8 @@ export function DistrictGeographicMatrix({
                   }
 
                   return (
-                    <Link
+                    <div
                       key={d.code}
-                      href={`/${locale}/national?commodity=${selectedCommodity}&district=${d.code}&tab=audit`}
                       className={`flex flex-col justify-between rounded-xl border p-3.5 transition-all hover:scale-101 hover:shadow-xs ${
                         isSelected
                           ? "border-2 border-canopy bg-cream/60 shadow-xs ring-2 ring-canopy/20"
@@ -224,9 +224,12 @@ export function DistrictGeographicMatrix({
                     >
                       <div>
                         <div className="flex items-center justify-between gap-1">
-                          <span className="font-bold text-canopy text-sm truncate">
+                          <Link
+                            href={`/${locale}/national?commodity=${selectedCommodity}&district=${d.code}&tab=audit`}
+                            className="font-bold text-canopy text-sm truncate hover:underline"
+                          >
                             {districtName}
-                          </span>
+                          </Link>
                           <span className="font-mono text-xs text-muted uppercase">
                             {d.code}
                           </span>
@@ -249,15 +252,29 @@ export function DistrictGeographicMatrix({
                         )}
                       </div>
 
-                      <div className="mt-3 pt-2.5 border-t border-line/40 flex items-center justify-between">
-                        <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] ${badgeColor}`}>
-                          {badgeText}
-                        </span>
-                        <span className="text-[11px] font-semibold text-leaf hover:underline">
-                          Inspect →
-                        </span>
+                      <div className="mt-3 pt-2.5 border-t border-line/40 flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                          <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] ${badgeColor}`}>
+                            {badgeText}
+                          </span>
+                          <Link
+                            href={`/${locale}/national?commodity=${selectedCommodity}&district=${d.code}&tab=audit`}
+                            className="text-[11px] font-semibold text-leaf hover:underline"
+                          >
+                            {labels.viewEvidence} →
+                          </Link>
+                        </div>
+
+                        {rec?.classification === "LEAKAGE_OR_SEED_QUALITY_RISK" && (
+                          <Link
+                            href={`/${locale}/alerts?district=${d.code}&crop=${selectedCommodity}&z=${rec.residual_z_score.toFixed(2)}&exposure=${rec.estimated_fiscal_exposure_rwf}&intent=audit`}
+                            className="mt-1 flex items-center justify-center gap-1 rounded-lg bg-clay px-2.5 py-1.5 text-center text-xs font-bold text-cream shadow-xs transition-all hover:bg-clay/90 active:scale-95"
+                          >
+                            <span>{labels.dispatchAuditBtn ?? "Dispatch MINAGRI Audit →"}</span>
+                          </Link>
+                        )}
                       </div>
-                    </Link>
+                    </div>
                   );
                 })}
               </div>

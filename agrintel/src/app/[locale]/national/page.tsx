@@ -4,6 +4,7 @@ import { DataStatusBanner } from "@/components/data-status-banner";
 import { RiskBadge } from "@/components/risk-badge";
 import { DistrictGeographicMatrix } from "@/components/district-risk-map";
 import { MacroCpiBanner } from "@/components/macro-cpi-banner";
+import { ActionSummaryDeck, type ActionCardItem } from "@/components/action-summary-deck";
 import { getDictionary, isLocale } from "@/lib/i18n";
 import { getLatestCpiRelease } from "@/lib/data/macro-cpi";
 import { calculateTrend, monthlyAverages } from "@/lib/trend";
@@ -109,15 +110,75 @@ export default async function NationalDashboardPage({
   const cropName = (c: { nameEn: string; nameRw: string }) => (locale === "rw" ? c.nameRw : c.nameEn);
   const districtName = (d: { nameEn: string; nameRw: string }) => (locale === "rw" ? d.nameRw : d.nameEn);
 
+  // Top 3 Action Decisions for National Deck
+  const leakageRecords = auditRecords
+    .filter((r) => r.classification === "LEAKAGE_OR_SEED_QUALITY_RISK")
+    .sort((a, b) => a.residual_z_score - b.residual_z_score);
+  const highRecords = auditRecords
+    .filter((r) => r.classification === "HIGH_PERFORMING_INTENSIFICATION")
+    .sort((a, b) => b.residual_z_score - a.residual_z_score);
+  const climateRecords = auditRecords
+    .filter((r) => r.classification === "CLIMATIC_OR_WATER_STRESS")
+    .sort((a, b) => a.residual_z_score - b.residual_z_score);
+
+  const topLeakage = leakageRecords[0] ?? auditRecords[0];
+  const topHigh = highRecords[0] ?? auditRecords[1] ?? auditRecords[0];
+  const topClimate = climateRecords[0] ?? auditRecords[2] ?? auditRecords[0];
+
+  const topLeakageDistrict = districts.find((d) => d.code === topLeakage?.district_code);
+  const topHighDistrict = districts.find((d) => d.code === topHigh?.district_code);
+  const topClimateDistrict = districts.find((d) => d.code === topClimate?.district_code);
+
+  const nationalDecisionCards: ActionCardItem[] = [
+    {
+      id: "action-audit",
+      badge: t.national.decisions?.urgentAuditBadge ?? "Immediate MINAGRI Audit",
+      badgeType: "danger",
+      title: `${topLeakageDistrict ? districtName(topLeakageDistrict) : topLeakage?.district_code} · ${cropName(crop)}`,
+      metric: `z = ${topLeakage?.residual_z_score.toFixed(2)}`,
+      metricLabel: `Rwf ${numFormat(topLeakage?.estimated_fiscal_exposure_rwf ?? 0)} exposure`,
+      context: t.national.decisions?.urgentAuditContext ?? "Subsidized input uptake exceeds 70%, but yield residual severely underperformed expectations. Potential seed degeneration or informal fertilizer diversion.",
+      ctaText: t.national.decisions?.auditCta ?? "Dispatch MINAGRI Audit →",
+      ctaHref: `/${locale}/alerts?district=${topLeakage?.district_code}&crop=${crop.code}&z=${topLeakage?.residual_z_score.toFixed(2)}&exposure=${topLeakage?.estimated_fiscal_exposure_rwf}&intent=audit`,
+    },
+    {
+      id: "action-benchmark",
+      badge: t.national.decisions?.benchmarkBadge ?? "National Yield Frontier",
+      badgeType: "success",
+      title: `${topHighDistrict ? districtName(topHighDistrict) : topHigh?.district_code} · ${cropName(crop)}`,
+      metric: `+${topHigh?.residual_z_score.toFixed(2)} SD`,
+      metricLabel: `${numFormat(topHigh?.observed_yield_kg_per_ha ?? 0)} kg/ha frontier`,
+      context: t.national.decisions?.benchmarkContext ?? "Exemplary synergy between certified seed, inorganic fertilizer, and anti-erosion terraces. Recommended model for neighboring sector extension.",
+      ctaText: t.national.decisions?.benchmarkCta ?? "Inspect Agronomic Protocol →",
+      ctaHref: `/${locale}/national?commodity=${crop.code}&district=${topHigh?.district_code}&tab=audit`,
+    },
+    {
+      id: "action-climate",
+      badge: t.national.decisions?.climateBadge ?? "Agro-Climatic Moisture Deficit",
+      badgeType: "warning",
+      title: `${topClimateDistrict ? districtName(topClimateDistrict) : topClimate?.district_code} · ${cropName(crop)}`,
+      metric: `z = ${topClimate?.residual_z_score.toFixed(2)}`,
+      metricLabel: "Drought Constrained Zone",
+      context: t.national.decisions?.climateContext ?? "Yield depression strongly tracks negative subnational rainfall anomalies. Prioritize marshland furrow irrigation and organic mulching.",
+      ctaText: t.national.decisions?.climateCta ?? "Review Irrigation Action →",
+      ctaHref: `/${locale}/farmer?district=${topClimate?.district_code}&commodity=${crop.code}`,
+    },
+  ];
+
   return (
     <div className="flex flex-col gap-8">
-      <DataStatusBanner verifiedCount={counts.verified} sampleCount={counts.sample} labels={t.status} />
-
       <section className="max-w-3xl">
         <h1 className="text-4xl font-semibold md:text-5xl">{t.national.title}</h1>
         <p className="mt-4 text-lg text-ink">{t.national.intro}</p>
         <p className="mt-2 text-sm text-muted">{t.national.scopeNote}</p>
       </section>
+
+      {/* Decisions Required Today Action Header Deck */}
+      <ActionSummaryDeck
+        sectionTitle={t.national.decisions?.title ?? "Decisions Required Today"}
+        sectionSubtitle={t.national.decisions?.subtitle ?? "Algorithmic triage prioritizing immediate ministerial audits and agronomic interventions:"}
+        cards={nationalDecisionCards}
+      />
 
       {/* Official NISR Macro CPI Release & Rural-Urban Divergence Spread */}
       <MacroCpiBanner cpi={getLatestCpiRelease()} labels={t.market.macroCpi} />
@@ -304,12 +365,21 @@ export default async function NationalDashboardPage({
                             </span>
                           </td>
                           <td className="px-4 py-3 text-right">
-                            <Link
-                              href={`/${locale}/national?commodity=${crop.code}&district=${r.district_code}&tab=audit`}
-                              className="text-xs font-semibold text-leaf hover:underline"
-                            >
-                              {t.national.viewEvidence}
-                            </Link>
+                            {isLeakage ? (
+                              <Link
+                                href={`/${locale}/alerts?district=${r.district_code}&crop=${crop.code}&z=${r.residual_z_score.toFixed(2)}&exposure=${r.estimated_fiscal_exposure_rwf}&intent=audit`}
+                                className="inline-flex items-center gap-1 rounded-xl bg-clay px-3 py-1.5 text-xs font-bold text-cream shadow-xs transition-all hover:bg-clay/90 active:scale-95 whitespace-nowrap"
+                              >
+                                {t.national.decisions?.auditCta ?? "Dispatch Audit →"}
+                              </Link>
+                            ) : (
+                              <Link
+                                href={`/${locale}/national?commodity=${crop.code}&district=${r.district_code}&tab=audit`}
+                                className="text-xs font-semibold text-leaf hover:underline"
+                              >
+                                {t.national.viewEvidence}
+                              </Link>
+                            )}
                           </td>
                         </tr>
                       );
@@ -483,6 +553,9 @@ export default async function NationalDashboardPage({
           </div>
         </div>
       )}
+
+      {/* Data provenance status footer */}
+      <DataStatusBanner verifiedCount={counts.verified} sampleCount={counts.sample} labels={t.status} />
     </div>
   );
 }

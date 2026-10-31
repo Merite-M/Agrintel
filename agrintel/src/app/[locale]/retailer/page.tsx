@@ -3,10 +3,11 @@ import { notFound } from "next/navigation";
 import { DataStatusBanner } from "@/components/data-status-banner";
 import { RiskBadge } from "@/components/risk-badge";
 import { CorridorArbitrageTable } from "@/components/corridor-arbitrage-table";
+import { ActionSummaryDeck, type ActionCardItem } from "@/components/action-summary-deck";
 import { getDictionary, isLocale } from "@/lib/i18n";
 import { getCropOptions, getCurrentNationalPriceForecasts, getSourceCounts } from "@/lib/data/prices";
 import { getAllDistricts, getCurrentRiskSignals, parseDriver, type RiskCategory } from "@/lib/data/risk";
-import { getCorridorsForCrop, SPATIAL_ARBITRAGE_CORRIDORS } from "@/lib/data/spatial-arbitrage";
+import { getCorridorsForCrop, SPATIAL_ARBITRAGE_CORRIDORS, simulateCustomFuelPrice, FUEL_PRICES } from "@/lib/data/spatial-arbitrage";
 
 export const dynamic = "force-dynamic";
 
@@ -59,15 +60,78 @@ export default async function RetailerSupplyPage({
 
   const activeTab = query.tab ?? "arbitrage";
 
+  // Top 3 Action Decisions for Retailer Deck
+  const analyzedCorridors = activeCorridors.map((c) => ({
+    corridor: c,
+    simRegulated: simulateCustomFuelPrice(c, FUEL_PRICES.regulated, 5000),
+    simUnsubsidized: simulateCustomFuelPrice(c, FUEL_PRICES.unsubsidized, 5000),
+  }));
+
+  const sortedByMargin = [...analyzedCorridors].sort(
+    (a, b) => b.simRegulated.netMargin - a.simRegulated.netMargin
+  );
+
+  const topCorridorItem = sortedByMargin[0] ?? analyzedCorridors[0];
+  const lowCorridorItem = sortedByMargin[sortedByMargin.length - 1] ?? analyzedCorridors[0];
+
+  // Vulnerable corridor: profitable at regulated (>20), but compressed or negative at unsubsidized
+  const vulnerableCorridorItem =
+    analyzedCorridors.find(
+      (c) =>
+        c.simRegulated.netMargin >= 20 &&
+        (c.simUnsubsidized.netMargin < 15 || c.corridor.breakeven_diesel_price < 4000)
+    ) ?? sortedByMargin[Math.floor(sortedByMargin.length / 2)] ?? analyzedCorridors[0];
+
+  const retailerDecisionCards: ActionCardItem[] = [
+    {
+      id: "action-top-arbitrage",
+      badge: t.retailer.decisions?.topSpreadBadge ?? "Highest Arbitrage Spread",
+      badgeType: "success",
+      title: `${topCorridorItem.corridor.origin_district_code} → ${topCorridorItem.corridor.destination_code} (${cropName(crop)})`,
+      metric: `+${Math.round(topCorridorItem.simRegulated.netMargin)} Rwf/kg`,
+      metricLabel: "Net Freight Margin",
+      context: t.retailer.decisions?.topSpreadContext ?? "Net wholesale spread exceeds 40 Rwf/kg after diesel fuel and transit spoilage. Transport surplus harvest immediately to capture urban margins.",
+      ctaText: t.retailer.decisions?.shipCta ?? "Alert Cooperative to Ship →",
+      ctaHref: `/${locale}/alerts?origin=${topCorridorItem.corridor.origin_district_code}&dest=${topCorridorItem.corridor.destination_code}&crop=${crop.code}&margin=${Math.round(topCorridorItem.simRegulated.netMargin)}&intent=ship`,
+    },
+    {
+      id: "action-fuel-lifeline",
+      badge: t.retailer.decisions?.vulnerableFuelBadge ?? "Fuel Vulnerability Lifeline",
+      badgeType: "warning",
+      title: `${vulnerableCorridorItem.corridor.origin_district_code} → ${vulnerableCorridorItem.corridor.destination_code} (${cropName(crop)})`,
+      metric: `Breakeven ${priceFormat(vulnerableCorridorItem.corridor.breakeven_diesel_price)} Rwf`,
+      metricLabel: "Diesel Threshold",
+      context: t.retailer.decisions?.vulnerableFuelContext ?? "Long-haul route with fragile margins. Flips to a logistical loss if fuel subsidies are removed or trucks run half-empty.",
+      ctaText: t.retailer.decisions?.stressCta ?? "Stress-Test Corridor →",
+      ctaHref: `/${locale}/retailer?commodity=${crop.code}&tab=arbitrage`,
+    },
+    {
+      id: "action-local-storage",
+      badge: t.retailer.decisions?.localAbsorptionBadge ?? "Saturated Local Market",
+      badgeType: "danger",
+      title: `${lowCorridorItem.corridor.origin_district_code} → ${lowCorridorItem.corridor.destination_code} (${cropName(crop)})`,
+      metric: `${lowCorridorItem.simRegulated.netMargin > 0 ? "+" : ""}${lowCorridorItem.simRegulated.netMargin.toFixed(1)} Rwf/kg`,
+      metricLabel: "Freight Loss",
+      context: t.retailer.decisions?.localAbsorptionContext ?? "Transporting to urban center yields negative net returns due to transport overhead. Hold stock locally in dry cooperative storage.",
+      ctaText: t.retailer.decisions?.storageCta ?? "Issue Local Storage Notice →",
+      ctaHref: `/${locale}/alerts?origin=${lowCorridorItem.corridor.origin_district_code}&dest=${lowCorridorItem.corridor.destination_code}&crop=${crop.code}&margin=${Math.round(lowCorridorItem.simRegulated.netMargin)}&intent=hold`,
+    },
+  ];
+
   return (
     <div className="flex flex-col gap-8">
-      <DataStatusBanner verifiedCount={counts.verified} sampleCount={counts.sample} labels={t.status} />
-
       <section className="max-w-3xl">
         <h1 className="text-4xl font-semibold md:text-5xl">{t.retailer.title}</h1>
         <p className="mt-4 text-lg text-ink">{t.retailer.intro}</p>
         <p className="mt-2 text-sm text-muted">{t.retailer.readOnly}</p>
       </section>
+
+      {/* Decisions Required Today Action Header Deck */}
+      <ActionSummaryDeck
+        sectionTitle={t.retailer.decisions?.title ?? "Decisions Required Today"}
+        sectionSubtitle={t.retailer.decisions?.subtitle ?? "Real-time dispatch optimization for cooperative logistics trucks and rural collection centers:"}
+        cards={retailerDecisionCards}
+      />
 
       {/* Commodity Selector Bar */}
       <nav aria-label={t.retailer.selectCommodity} className="flex flex-col gap-2">
@@ -120,6 +184,7 @@ export default async function RetailerSupplyPage({
         <CorridorArbitrageTable
           initialCorridors={activeCorridors}
           commodityCode={crop.code}
+          locale={locale}
           labels={t.retailer.arbitrage}
         />
       ) : (
@@ -184,6 +249,9 @@ export default async function RetailerSupplyPage({
           </section>
         </div>
       )}
+
+      {/* Data provenance status footer */}
+      <DataStatusBanner verifiedCount={counts.verified} sampleCount={counts.sample} labels={t.status} />
     </div>
   );
 }
